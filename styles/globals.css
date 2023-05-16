@@ -55,25 +55,27 @@ input {
 
 .sideNav .list-group a {
   display: flex;
+  align-items: center;
 }
 
-nav {
+.header-nav {
   padding: 25px 0;
   border-bottom: 1px solid #ebecf1;
+  margin-bottom: 20px;
 }
 
-nav .dropdown button,
-nav .dropdown button:hover {
+.header-nav .dropdown button,
+.header-nav .dropdown button:hover {
   background: none !important;
   border: none;
   color: #212529;
 }
 
-nav .dropdown-toggle {
+.header-nav .dropdown-toggle {
   position: relative;
 }
 
-nav .dropdown-toggle::after {
+.header-nav .dropdown-toggle::after {
   border: none;
   content: "";
   background: url(/images/icons/dropdown-arrow.svg) center center no-repeat;
@@ -108,4 +110,72 @@ nav .dropdown-toggle::after {
   box-shadow: none;
   border: 1px solid #ebecf1;
   border-left: 0;
+}
+
+.rdt_TableHeadRow {
+  background: rgba(235, 236, 241, 0.3) !important;
+}
+
+.rdt_Pagination {
+  justify-content: center !important;
+}
+
+.react-form-builder .react-form-builder-toolbar {
+  margin-top: 0 !important;
+}
+
+.react-form-builder .react-form-builder-toolbar h4 {
+  display: none;
+}
+
+.preview-title h4 {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #212529;
+}
+
+.preview-title p {
+  font-size: 12px;
+  line-height: 20px;
+  color: rgba(33, 37, 41, 0.6);
+}
+
+.assessment-form label {
+  font-size: 14px;
+  line-height: 17px;
+  color: #333333;
+}
+
+.assessment-form label span {
+  color: red;
+}
+
+.assessment-form input,
+.assessment-form textarea,
+.assessment-form select {
+  border: 1px solid #ebecf1;
+}
+
+.assessment-form input {
+  min-height: 40px;
+  margin-bottom: 20px;
+}
+
+.assessment-form textarea {
+  min-height: 80px;
+}
+
+.assessment-form input::placeholder,
+.assessment-form textarea::placeholder {
+  color: #333333;
+
+  opacity: 0.4;
+}
+
+.assessment-form input:focus,
+.assessment-form textarea:focus,
+.assessment-form select:focus {
+  border: 1px solid #ebecf1;
+  box-shadow: none;
 }

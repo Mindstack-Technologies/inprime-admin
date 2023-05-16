@@ -8,6 +8,8 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { TouchTransition } from "react-dnd-multi-backend";
 import AdminLayout from "@/layouts/AdminLayout";
+import { Formik, Field } from "formik";
+import * as Yup from "yup";
 
 import Head from "next/head";
 
@@ -19,6 +21,16 @@ const postUrl = "/api/form";
 const onPost = (data) => {
   console.log("onPost=", data);
 };
+
+const Schema = Yup.object().shape({
+  amount: Yup.string().required("Amount is required"),
+});
+
+const initialValues = {
+  amount: "",
+};
+
+const _handleSubmit = () => {};
 
 export default function IncomeAssessmentTemplate() {
   return (
@@ -40,6 +52,114 @@ export default function IncomeAssessmentTemplate() {
         />
       </Head>
       <AdminLayout>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={Schema}
+          onSubmit={_handleSubmit}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            /* and other goodies */
+          }) => (
+            <form className="mb-5 pl-3 pr-4 assessment-form">
+              <div className="row">
+                <div className="col-lg-6">
+                  <label htmlFor="occupation">
+                    Occupation <span>*</span>
+                  </label>
+                  <Field
+                    name="occupation"
+                    component="select"
+                    className="form-control"
+                  >
+                    <option value="red">Marginal Farmer</option>
+                  </Field>
+
+                  {errors.occupation && touched.occupation}
+                </div>
+                <div className="col-lg-6">
+                  <label htmlFor="version">
+                    Version <span>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="occupation"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.occupation}
+                    className="form-control"
+                    placeholder="Enter Occupation"
+                  />
+                  {errors.version && touched.version}
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-lg-6">
+                  <label htmlFor="form_title">
+                    Form Title <span>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="form_title"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.form_title}
+                    className="form-control"
+                    placeholder="Enter form title"
+                  />
+                  {errors.form_title && touched.form_title}
+                </div>
+                <div className="col-lg-6">
+                  <label htmlFor="form_name">
+                    Form Name <span>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="form_name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.form_name}
+                    className="form-control"
+                    placeholder="Enter form Name"
+                  />
+                  {errors.form_name && touched.form_name}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-lg-12">
+                  <label htmlFor="form_name">
+                    Description <span>*</span>
+                  </label>
+                  <textarea
+                    type="text"
+                    name="description"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.description}
+                    className="form-control"
+                    placeholder="Enter Description"
+                  ></textarea>
+                  {errors.description && touched.description}
+                </div>
+              </div>
+
+              {/* <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary"
+              >
+                Submit
+              </button> */}
+            </form>
+          )}
+        </Formik>
         <DndProvider backend={TouchBackend}>
           <Demobar postUrl={postUrl} />
 

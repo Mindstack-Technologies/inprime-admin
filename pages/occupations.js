@@ -32,6 +32,10 @@ const data = [
 ];
 
 export default function Occupations() {
+  const [domLoaded, setDomLoaded] = useState(false);
+  useEffect(() => {
+    setDomLoaded(true);
+  }, []);
   return (
     <div>
       <Head>
@@ -63,7 +67,11 @@ export default function Occupations() {
             <Button variant="primary me-4 "> + Create New</Button>
           </div>
         </div>
-        <DataTable columns={columns} data={data} />
+        {domLoaded ? (
+          <DataTable columns={columns} data={data} pagination />
+        ) : (
+          ""
+        )}
       </AdminLayout>
     </div>
   );

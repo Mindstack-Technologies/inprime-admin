@@ -78,15 +78,24 @@ export default class Demobar extends React.Component {
     }
 
     return (
-      <div className="clearfix" style={{ margin: "10px", width: "70%" }}>
-        <h4 className="float-left">Preview</h4>
-        <button
-          className="btn btn-primary float-right"
-          style={{ marginRight: "10px" }}
-          onClick={this.showPreview.bind(this)}
-        >
-          Preview Form
-        </button>
+      <div className="row" style={{ margin: "10px" }}>
+        <div className="col-lg-6 preview-title">
+          <h4 className="">Generate Form Template</h4>
+          <p>
+            Choose and drag and drop the form elements from toolbox to create a
+            form
+          </p>
+        </div>
+        <div className="col-lg-6">
+          <button
+            className="btn btn-primary float-right"
+            style={{ marginRight: "10px" }}
+            onClick={this.showPreview.bind(this)}
+          >
+            Preview Form
+          </button>
+        </div>
+
         {/* <button
           className="btn btn-default float-right"
           style={{ marginRight: "10px" }}
