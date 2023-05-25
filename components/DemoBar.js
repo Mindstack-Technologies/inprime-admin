@@ -61,6 +61,16 @@ export default class Demobar extends React.Component {
     return false;
   }
 
+  // onSubmit(data) {
+  //   const { postUrl, onPost } = this.props;
+  //   onPost(data); // calls the onPost function and passes the form data as an argument
+  //   post(postUrl, data).then(() => {
+  //     // window.location.href = "/form";
+  //   });
+  //   return false;
+  // }
+  
+
   render() {
     let modalClass = "modal";
     if (this.state.previewVisible) {
@@ -213,3 +223,4 @@ export default class Demobar extends React.Component {
     );
   }
 }
+
