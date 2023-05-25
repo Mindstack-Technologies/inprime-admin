@@ -408,7 +408,7 @@ function MyForm() {
 
       {domLoaded && (
         <ReactFormGenerator
-          form_action="/sucess"
+          form_action="/success"
           form_method="POST"
           data={jsonFormData.task_data}
           className="my-form"
