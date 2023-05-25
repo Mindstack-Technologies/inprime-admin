@@ -10,7 +10,7 @@ export default function Navigation() {
         <Image src="/images/logo.png" width="79" height="70" alt=""></Image>
       </div>
       <ListGroup>
-        <ListGroup.Item action href="/" className={path == "/" ? "active" : ""}>
+        {/* <ListGroup.Item action href="/" className={path == "/" ? "active" : ""}>
           <Image
             src="/images/icons/dashboard.svg"
             width="15"
@@ -18,8 +18,8 @@ export default function Navigation() {
             alt=""
           ></Image>
           Dashboard
-        </ListGroup.Item>
-        <ListGroup.Item
+        </ListGroup.Item> */}
+        {/* <ListGroup.Item
           action
           href="/loan-files"
           className={path == "/loan-files" ? "active" : ""}
@@ -31,8 +31,8 @@ export default function Navigation() {
             alt=""
           ></Image>
           Loan Files
-        </ListGroup.Item>
-        <ListGroup.Item
+        </ListGroup.Item> */}
+        {/* <ListGroup.Item
           action
           href="/users"
           className={path == "/users" ? "active" : ""}
@@ -44,7 +44,7 @@ export default function Navigation() {
             height="16"
           ></Image>
           Manage Users
-        </ListGroup.Item>
+        </ListGroup.Item> */}
         <ListGroup.Item
           action
           href="/occupations"
@@ -71,7 +71,19 @@ export default function Navigation() {
           ></Image>
           Income Assessment Templates
         </ListGroup.Item>
-
+        <ListGroup.Item
+          action
+          href="/formgenerator"
+          className={path == "/formgenerator" ? "active" : ""}
+        >
+          <Image
+            src="/images/icons/assessment.svg"
+            alt=""
+            width="15"
+            height="16"
+          ></Image>
+          formgenerator
+        </ListGroup.Item>
         <ListGroup.Item action href="#link2">
           <Image
             src="/images/icons/logout.svg"
