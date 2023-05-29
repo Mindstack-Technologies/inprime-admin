@@ -390,6 +390,16 @@ const jsonFormData = {
 function MyForm() {
   const [domLoaded, setDomLoaded] = useState(false);
 
+//   const [formData, setFormData] = useState(null);
+
+//   useEffect(() => {
+//     const jsonData = localStorage.getItem('formData');
+//     if (jsonData) {
+//       setFormData(JSON.parse(jsonData));
+//     }
+//   }, []);
+//   console.log(formData)
+
   useEffect(() => {
     setDomLoaded(true);
   }, []);

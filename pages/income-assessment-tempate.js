@@ -3,8 +3,10 @@ import FormBuilder from "react-form-builder2";
 import "react-form-builder2/dist/app.css";
 import Demobar from "@/components/DemoBar";
 import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
+// import { HTML5Backend } from "react-dnd-html5-backend";
+
 import { MultiBackend } from "react-dnd-multi-backend";
 import { TouchTransition } from "react-dnd-multi-backend";
 import AdminLayout from "@/layouts/AdminLayout";
@@ -24,6 +26,11 @@ const postUrl = "/api/form";
 const onPost = (data) => {
   const jsonData = JSON.stringify(data);
   console.log("onPost=", jsonData);
+  // console.log(data)
+  // const jsonData = JSON.stringify(data);
+  // localStorage.setItem('formData', JSON.stringify(data));
+  // const jsonData = JSON.stringify(data);
+  // console.log("onPost=", jsonData);
   try {
     const parsedData = JSON.parse(jsonData);
     // console.log("onPost=", jsonData);
@@ -41,10 +48,41 @@ const initialValues = {
   amount: "",
 };
 
-const _handleSubmit = () => {};
+// const HTML5toTouch = {
+//   backends: [
+//     {
+//       backend: HTML5Backend,
+//     },
+//     {
+//       backend: TouchBackend,
+//       options: { enableMouseEvents: true },
+//       preview: true,
+//       transition: TouchTransition,
+//     },
+//   ],
+// };
+const HTML5toTouch = {
+  backend: TouchBackend,
+  options: { enableMouseEvents: true },
+  preview: true,
+  transition: TouchTransition,
+};
+
+const _handleSubmit = () => { };
 
 export default function IncomeAssessmentTemplate() {
-  
+  const [options, setOptions] = useState([]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("https://staging-api.inprime.in/crm/incomeAssessment/occupations");
+      const data = await response.json();
+      setOptions(data.data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Head>
@@ -90,7 +128,12 @@ export default function IncomeAssessmentTemplate() {
                     component="select"
                     className="form-control"
                   >
-                    <option value="red">Marginal Farmer</option>
+                    {options.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
+                      </option>
+                    ))}
+                    {/* <option value="red">Marginal Farmer</option> */}
                   </Field>
 
                   {errors.occupation && touched.occupation}
@@ -101,10 +144,10 @@ export default function IncomeAssessmentTemplate() {
                   </label>
                   <input
                     type="text"
-                    name="occupation"
+                    name="version"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.occupation}
+                    value={values.version}
                     className="form-control"
                     placeholder="Enter Occupation"
                   />
@@ -172,7 +215,7 @@ export default function IncomeAssessmentTemplate() {
             </form>
           )}
         </Formik>
-        <DndProvider backend={TouchBackend}>
+        <DndProvider backend={TouchBackend} options={HTML5toTouch}>
           <Demobar postUrl={postUrl} />
           {/* <Demobar postUrl={postUrl} onPost={onPost} /> */}
 
@@ -182,6 +225,13 @@ export default function IncomeAssessmentTemplate() {
             saveUrl={saveUrl}
           />
         </DndProvider>
+           {/* <button
+                type="submit"
+                // disabled={isSubmitting}
+                className="btn btn-primary"
+              >
+                Submit
+              </button> */}
       </AdminLayout>
     </div>
   );
