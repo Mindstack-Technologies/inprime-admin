@@ -406,14 +406,16 @@ function MyForm() {
   useEffect(() => {
     const OccupationID = localStorage.getItem('OccupationID');
     if (OccupationID) {
-      // console.log(OccupationID)
+      console.log(OccupationID)
       // setFormData(JSON.parse(jsonData));
       async function fetchData() {
         try {
           const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${OccupationID}`);
           const data = await response.json();
-          // console.log(data.data[0].json)
+          console.log(data.data[0].json)
           setFormData(data.data[0].json);
+              setDomLoaded(true);
+
         } catch (error) {
           console.error(error);
         }
@@ -422,11 +424,11 @@ function MyForm() {
       fetchData();
     }
   }, []);
-  console.log(formData)
+  // console.log(formData)
 
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
+  // useEffect(() => {
+  //   setDomLoaded(true);
+  // }, []);
   return (
     <>
       <link
