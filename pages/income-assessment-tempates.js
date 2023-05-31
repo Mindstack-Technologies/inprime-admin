@@ -41,7 +41,7 @@ function IncomeAssessmentPage() {
             variant=""
             // onClick={() => setSelectedOccupation(row)}
             onClick={() => {
-              console.log(row.occupationID);
+              // console.log(row.occupationID);
               localStorage.setItem('OccupationID', row.occupationID)
               router.push('/formgenerator');
               setSelectedOccupation(row);
