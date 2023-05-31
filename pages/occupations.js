@@ -131,11 +131,7 @@ export default function Occupations() {
           <Button variant="" onClick={() => setSelectedOccupation(row)} style={{ lineHeight: "0.5" }} className="occupationActionButton"
           >
             <div className=" d-flex">
-              {/* ... */}
-              {/* <span>.</span>
-          <span>.</span>
-          <span>.</span> */}
-              <Image src={OccupationAction} />
+              <Image src={OccupationAction} alt="" />
             </div>
           </Button>
         </div>
@@ -186,10 +182,10 @@ export default function Occupations() {
         //   },
         // }
       );
-      console.log(response)
-      console.log(response.status)
+      // console.log(response)
+      // console.log(response.status)
       const data = await response.json();
-      console.log(data.data)
+      // console.log(data.data)
       if (response.status === 200) {
         const newData = data.data.map((item) => ({
           ...item,
@@ -206,6 +202,8 @@ export default function Occupations() {
             : [],
           createdOn: new Date(item.createdAt),
         }));
+        console.log("Get is successful")
+
         setData(newData);
       } else {
         // Handle the error

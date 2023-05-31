@@ -50,7 +50,7 @@ function IncomeAssessmentPage() {
             className="occupationActionButton"
           >
             <div className=" d-flex">
-              <Image src={OccupationAction} />
+              <Image src={OccupationAction} alt=""/>
             </div>
           </Button>
         </div>
@@ -67,7 +67,7 @@ function IncomeAssessmentPage() {
       const data = await response.json();
       // console.log(data)
       if (response.status === 200) {
-        console.log(data.data)
+        // console.log(data.data)
         const newData = data.data.map((item) => ({
           id: item.id,
           templateName: item.formTitle,
@@ -80,7 +80,8 @@ function IncomeAssessmentPage() {
           // occupation: item.json.formName,
           // createdOn: new Date(item.createdAt),
         }));
-     console.log(newData)
+        //  console.log(newData)
+        console.log("Get is successful")
 
         setData(newData);
       } else {

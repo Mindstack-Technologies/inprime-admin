@@ -33,7 +33,7 @@ const onPost = (data) => {
   const jsonData = JSON.stringify(data);
   localStorage.setItem('formData', jsonData);
 
-  console.log("onPost=", jsonData);
+  // console.log("onPost=", jsonData);
   // console.log(data)
   // const jsonData = JSON.stringify(data);
   // localStorage.setItem('formData', JSON.stringify(data));
@@ -108,10 +108,11 @@ export default function IncomeAssessmentTemplate() {
         },
         body: JSON.stringify(data),
       });
-      console.log(response)
+      // console.log(response)
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
+        console.log("Post request is done")
       } else {
         throw new Error("Something went wrong");
       }
@@ -132,11 +133,11 @@ export default function IncomeAssessmentTemplate() {
       const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations`);
       const data = await response.json();
       setOptions(data.data);
+      console.log('Get is successful')
       // console.log(options)
     };
     fetchData();
   }, []);
-  // console.log(options.name)
 
   return (
     <div>

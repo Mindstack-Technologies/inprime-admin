@@ -35,8 +35,6 @@ const OTPScreen = (props) => {
             setcontinueLoading(true);
 
             try {
-                console.log(values.otp)
-                // const otpReasponse = await fetch(`${BASE_URL}/api/dsa/auth/verify-otp`, {
                 const otpReasponse = await fetch(`${BASE_URL}/auth/crm/verify/otp`, {
 
                     method: 'POST',

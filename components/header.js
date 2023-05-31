@@ -18,7 +18,7 @@ export default function Header() {
             ) : pathname == "/income-assessment-tempate" ? (
               <>
               <div className="d-flex">
-                <Image onClick={() => router.push('/income-assessment-tempates')} src={backButton} style={{width: "15px", height: "15px", alignItems: "center", margin: "5px", marginRight: '10px', cursor: "pointer"}} />
+                <Image onClick={() => router.push('/income-assessment-tempates')} src={backButton} style={{width: "15px", height: "15px", alignItems: "center", margin: "5px", marginRight: '10px', cursor: "pointer"}}  alt="back button"/>
                 <h4>Income Assessment Template</h4>
                 </div>
               </>

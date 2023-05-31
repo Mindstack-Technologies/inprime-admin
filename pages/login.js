@@ -58,7 +58,7 @@ const loginForm = () => {
                 },
                 // body: JSON.stringify(values),
             });
-            console.log(response)
+            // console.log(response)
             const data = await response.json();
             if (response.status == "200") {
                 // console.log(data);
@@ -75,6 +75,7 @@ const loginForm = () => {
             } else {
                 // console.log(data);
                 console.log(data.status);
+                console.log("Something went wrong")
 
                 // Display an error message on failure
                 setErrorMessage(data.error);
