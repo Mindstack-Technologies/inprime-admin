@@ -52,8 +52,8 @@ const onPost = (data) => {
 const Schema = Yup.object().shape({
   occupation: Yup.string().required("occupation is required"),
   version: Yup.string().required("version is required"),
-  form_title: Yup.string().required("form_title is required"),
-  form_name: Yup.string().required("form_name is required"),
+  form_title: Yup.string().required("form title is required"),
+  form_name: Yup.string().required("form name is required"),
   description: Yup.string().required("description is required"),
 });
 
@@ -264,6 +264,7 @@ export default function IncomeAssessmentTemplate() {
                     Description <span>*</span>
                   </label>
                   <Field
+                  as="textarea"
                     type="text"
                     id="description"
                     name="description"
@@ -284,7 +285,7 @@ export default function IncomeAssessmentTemplate() {
                 type="submit"
                 // onClick={handleButtonClick}
                 // disabled={isSubmitting}
-                className="btn btn-primary"
+                className="btn btn-primary  mt-3"
               >
                 Submit
               </button>
