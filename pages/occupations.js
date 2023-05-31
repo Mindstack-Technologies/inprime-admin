@@ -91,6 +91,8 @@ import Button from "react-bootstrap/Button";
 import { Alert, Modal } from "react-bootstrap";
 import DeleteMetadata from '../public/images/icons/DeleteMetadata.svg';
 import OccupationAction from '../public/images/icons/OccupationAction.svg';
+import { BASE_URL } from "../baseURL";
+
 
 export default function Occupations() {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -176,7 +178,7 @@ export default function Occupations() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        "https://staging-api.inprime.in/crm/incomeAssessment/occupations",
+        `${BASE_URL}/crm/incomeAssessment/occupations`,
         // {
         //   mode: "no-cors",
         //   headers: {
@@ -218,7 +220,7 @@ export default function Occupations() {
   const handleFormSubmit = async () => {
     // Here you can add code to submit the form data to your backend or API
     const response = await fetch(
-      "https://staging-api.inprime.in/crm/incomeAssessment/occupations",
+      `${BASE_URL}/crm/incomeAssessment/occupations`,
       {
         method: "POST",
         headers: {
@@ -245,7 +247,8 @@ export default function Occupations() {
     if (response.ok) {
       // The request was successful
       const data = await response.json();
-      alert("Sucessfully added ")
+      // alert("Sucessfully added ")
+      console.log("Sucessfully added" )
       console.log(data)
       // Do something with the response data
     } else {
@@ -314,7 +317,7 @@ export default function Occupations() {
           <>
             <DataTable columns={columns} data={data} pagination />
 
-            {selectedOccupation && (
+            {/* {selectedOccupation && (
               <div>
                 <h3>{selectedOccupation.title}</h3>
                 <p>{selectedOccupation.description}</p>
@@ -328,7 +331,7 @@ export default function Occupations() {
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
           </>
         ) : (
           ""

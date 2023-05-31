@@ -6,6 +6,9 @@ export default function Navigation() {
   const path = router.pathname;
   const handleLogout = async () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('formData');
+    localStorage.removeItem('OccupationID')
+
     // localStorage.removeItem('formData');
     console.log('Logged Out');
     // window.location.reload();
@@ -67,8 +70,8 @@ export default function Navigation() {
         </ListGroup.Item>
         <ListGroup.Item
           action
-          href="/income-assessment-tempate"
-          className={path == "/income-assessment-tempate" ? "active" : ""}
+          href="/income-assessment-tempates"
+          className={path == "/income-assessment-tempates"|| path == "/income-assessment-tempate" ? "active" : ""}
         >
           <Image
             src="/images/icons/assessment.svg"

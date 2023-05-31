@@ -46,34 +46,34 @@ const loginForm = () => {
 
         //Saving the phone number entered
         setPhoneNumber(values.mobileNumber);
-
+        console.log(values.mobileNumber);
         setcontinueLoading(true);
 
         try {
-            const response = await fetch(`${BASE_URL}/api/dsa/auth/send-otp`, {
-
-                method: 'POST',
+            // const response = await fetch(`${BASE_URL}/api/dsa/auth/send-otp`, {
+                const response = await fetch(`${BASE_URL}/auth/crm/request/otp?mobileNo=${phoneNumber}&isMock=true`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(values),
+                // body: JSON.stringify(values),
             });
             console.log(response)
             const data = await response.json();
             if (response.status == "200") {
-                console.log(data);
+                // console.log(data);
                 // console.log(data.status);
 
 
                 //saving user id
-                setUserId(data.responseIdentifier);
-                console.log(data.responseIdentifier);
+                setUserId(data.data.reqId);
+                // console.log(data.data.reqId);
 
                 setcontinueLoading(false);
                 setStatus(true);
 
             } else {
-                console.log(data);
+                // console.log(data);
                 console.log(data.status);
 
                 // Display an error message on failure

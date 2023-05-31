@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactFormGenerator, ElementStore } from "react-form-builder2";
-import { post } from "./requests";
+// import { post } from "./requests";
 
 export default class Demobar extends React.Component {
   constructor(props) {
@@ -59,9 +59,9 @@ export default class Demobar extends React.Component {
     const { postUrl } = this.props;
     console.log("onSubmit", data);
     // Place code to post json data to server here
-    post(postUrl, data).then(() => {
-      // window.location.href = "/form";
-    });
+    // post(postUrl, data).then(() => {
+    //   // window.location.href = "/form";
+    // });
     return false;
   }
 
@@ -90,7 +90,7 @@ export default class Demobar extends React.Component {
     if (this.state.roPreviewVisible) {
       roModalClass += " show d-block";
     }
-  console.log(this.state.data);
+  // console.log(this.state.data);
 
     return (
       <div className="row" style={{ margin: "10px" }}>
