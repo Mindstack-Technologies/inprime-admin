@@ -5,7 +5,7 @@ import { ReactFormGenerator, ElementStore } from "react-form-builder2";
 export default class Demobar extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props.variables)
+    // console.log(props.variables)
     this.state = {
       data: [],
       previewVisible: false,
@@ -53,11 +53,11 @@ export default class Demobar extends React.Component {
   };
 
   onSubmit(data) { 
-    console.log(data);   
-    console.log(this.props);
+    // console.log(data);   
+    // console.log(this.props);
 
     const { postUrl } = this.props;
-    console.log("onSubmit", data);
+    // console.log("onSubmit", data);
     // Place code to post json data to server here
     // post(postUrl, data).then(() => {
     //   // window.location.href = "/form";
