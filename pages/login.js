@@ -46,7 +46,7 @@ const loginForm = () => {
 
         //Saving the phone number entered
         setPhoneNumber(values.mobileNumber);
-        console.log(values.mobileNumber);
+        // console.log(values.mobileNumber);
         setcontinueLoading(true);
 
         try {

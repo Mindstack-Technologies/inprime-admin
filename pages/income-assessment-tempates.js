@@ -11,8 +11,6 @@ import Image from "next/image";
 import { useRouter } from 'next/router';
 import { BASE_URL } from "../baseURL";
 
-// import SearchIcon from "../images/icons/search-icon.svg";
-// import OccupationAction from "../images/icons/OccupationAction.svg";
 
 function IncomeAssessmentPage() {
   const [data, setData] = useState([]);
@@ -44,7 +42,6 @@ function IncomeAssessmentPage() {
             // onClick={() => setSelectedOccupation(row)}
             onClick={() => {
               console.log(row.occupationID);
-              // localStorage.getItem("OccupationID", row.occupationID);
               localStorage.setItem('OccupationID', row.occupationID)
               router.push('/formgenerator');
               setSelectedOccupation(row);
@@ -53,8 +50,6 @@ function IncomeAssessmentPage() {
             className="occupationActionButton"
           >
             <div className=" d-flex">
-              {/* ... */}
-              {/* <span>.</span> <span>.</span> <span>.</span> */}
               <Image src={OccupationAction} />
             </div>
           </Button>
