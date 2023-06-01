@@ -81,7 +81,7 @@ export default function Navigation() {
           ></Image>
           Income Assessment Templates
         </ListGroup.Item>
-        <ListGroup.Item
+        {/* <ListGroup.Item
           action
           href="/formgenerator"
           className={path == "/formgenerator" ? "active" : ""}
@@ -93,7 +93,7 @@ export default function Navigation() {
             height="16"
           ></Image>
           formgenerator
-        </ListGroup.Item>
+        </ListGroup.Item> */}
         <ListGroup.Item action href="#link2" onClick={handleLogout}>
           <Image
             src="/images/icons/logout.svg"

@@ -5,7 +5,16 @@ import backButton from "../public/images/BackButton.svg"
 export default function Header() {
   const router = useRouter();
   const pathname = router.pathname;
+  const handleLogout = async () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('formData');
+    localStorage.removeItem('OccupationID')
 
+    // localStorage.removeItem('formData');
+    console.log('Logged Out');
+    // window.location.reload();
+    router.push('/login');
+  };
   return (
     <>
       <nav className="header-nav">
@@ -45,9 +54,10 @@ export default function Header() {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout} >Log out</Dropdown.Item>
+                {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
                 <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
               </Dropdown.Menu>
             </Dropdown>
           </div>
