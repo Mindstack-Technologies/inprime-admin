@@ -6,7 +6,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Image from "next/image";
 import Button from "react-bootstrap/Button";
-import Login from '../components/Login';
+import Login from '../components/OTPLogin';
 
 const columns = [
   {

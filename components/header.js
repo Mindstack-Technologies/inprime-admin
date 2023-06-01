@@ -1,7 +1,7 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import Image from "next/image";
 import { useRouter } from "next/router";
-
+import backButton from "../public/images/BackButton.svg"
 export default function Header() {
   const router = useRouter();
   const pathname = router.pathname;
@@ -13,8 +13,15 @@ export default function Header() {
           <div className="col-lg-8">
             {pathname == "/occupations" ? (
               <h4>Occupations</h4>
+            ) : pathname == "/income-assessment-tempates" ? (
+              <h4>Income Assessment Templates </h4>
             ) : pathname == "/income-assessment-tempate" ? (
-              <h4>Income Assessment Templates</h4>
+              <>
+              <div className="d-flex">
+                <Image onClick={() => router.push('/income-assessment-tempates')} src={backButton} style={{width: "15px", height: "15px", alignItems: "center", margin: "5px", marginRight: '10px', cursor: "pointer"}}  alt="back button"/>
+                <h4>Income Assessment Template</h4>
+                </div>
+              </>
             ) : pathname == "/users" ? (
               <h4>Users</h4>
             ) : pathname == "/loan-files" ? (

@@ -1,0 +1,221 @@
+/* Form with all items */
+.formBackground,
+.otpFormBackground {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    height: 0 auto;
+    width: 420px;
+    margin: 3rem auto;
+    padding: 40px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.formHeadding {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* Form controls with lablels and input */
+
+.formControl {
+    padding-top: 32px;
+    margin: 0;
+}
+
+.otpCardInput {
+    margin: 0;
+    padding-bottom: 20px;
+}
+
+.otpCardInput label,
+.formControl label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #333333;
+    padding-bottom: 8px;
+    margin: 0;
+}
+
+.otpCardInput label {
+    padding-top: 32px;
+    padding-bottom: 20px !important;
+}
+
+.otpCardInput input,
+.formControl input {
+    border-width: 1px;
+    width: 100%;
+    height: 42px;
+    background: #FFFFFF;
+    border: 1px solid #EBECF1;
+    border-radius: 4px;
+    font: inherit;
+    line-height: 1.5rem;
+    padding: 0.25rem 1rem;
+}
+
+.otpCardInput input:focus,
+.formControl input:focus {
+    outline: none;
+    background: #FFFFFF !important;
+    border-color: #00357C !important;
+}
+
+
+
+
+/* Continue Button style  */
+.continueButton {
+    width: 100%;
+    height: 40px;
+    font: inherit;
+    border: 1px solid #00357C;
+    background: #00357C;
+    color: white;
+    padding: 0.25rem 1rem;
+    border-radius: 8px;
+    border-style: solid;
+    cursor: pointer;
+}
+
+.OTPButton:hover,
+.OTPButton:active,
+.continueButton:hover,
+.continueButton:active {
+    background: #00357C !important;
+    border-color: #00357C;
+}
+
+.OTPButton:focus,
+.continueButton:focus {
+    outline: none;
+}
+
+.OTPButton {
+    width: 100%;
+    height: 40px;
+    font: inherit;
+    border: 1px solid #00357C;
+    background: #00357C;
+    color: white;
+    padding: 0.25rem 1rem;
+    border-radius: 8px;
+    border-style: solid;
+    cursor: pointer;
+}
+
+/* Move to Login */
+.movetoLogin {
+    text-align: center;
+    padding-top: 20px;
+    margin: 0;
+}
+
+
+/* .resendOTP p a, */
+.movetoLogin a {
+    margin: 0;
+    text-decoration: none;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #333333;
+    cursor: pointer;
+}
+
+.movetoLogin a:hover {
+    color: #00357C;
+
+}
+
+.footerCopyright {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    color: #333333;
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* OTP Timer */
+/* .resendOTPTimer {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    color: #969696;
+}
+
+
+.otpWillRecivie {
+    font-size: 12px;
+    color: #969090;
+    padding: 0;
+    margin: 0;
+} */
+
+
+/* loading screen animation*/
+/* Button replace effect in loading */
+
+.animationEffect {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+
+.dotEffect {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #00357C;
+    ;
+}
+
+
+.animationContainer .dotEffect:nth-last-child(1) {
+    animation: jumpingAnimation 0.6s 0.1s ease-in infinite;
+}
+
+.animationContainer .dotEffect:nth-last-child(2) {
+    animation: jumpingAnimation 0.6s 0.2s ease-in infinite;
+}
+
+.animationContainer .dotEffect:nth-last-child(3) {
+    animation: jumpingAnimation 0.6s 0.3s ease-in infinite;
+}
+
+@keyframes jumpingAnimation {
+    0 {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(0, 15px, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
