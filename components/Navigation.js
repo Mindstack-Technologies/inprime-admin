@@ -4,6 +4,16 @@ import { useRouter } from "next/router";
 export default function Navigation() {
   const router = useRouter();
   const path = router.pathname;
+  const handleLogout = async () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('formData');
+    localStorage.removeItem('OccupationID')
+
+    // localStorage.removeItem('formData');
+    console.log('Logged Out');
+    // window.location.reload();
+    router.push('/login');
+  };
   return (
     <>
       <div className="d-flex justify-content-center mb-5 mt-5">
@@ -60,8 +70,8 @@ export default function Navigation() {
         </ListGroup.Item>
         <ListGroup.Item
           action
-          href="/income-assessment-tempate"
-          className={path == "/income-assessment-tempate" ? "active" : ""}
+          href="/income-assessment-tempates"
+          className={path == "/income-assessment-tempates"|| path == "/income-assessment-tempate" ? "active" : ""}
         >
           <Image
             src="/images/icons/assessment.svg"
@@ -84,7 +94,7 @@ export default function Navigation() {
           ></Image>
           formgenerator
         </ListGroup.Item>
-        <ListGroup.Item action href="#link2">
+        <ListGroup.Item action href="#link2" onClick={handleLogout}>
           <Image
             src="/images/icons/logout.svg"
             alt=""

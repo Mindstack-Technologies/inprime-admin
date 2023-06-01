@@ -88,7 +88,11 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Image from "next/image";
 import Button from "react-bootstrap/Button";
-import { Modal } from "react-bootstrap";
+import { Alert, Modal } from "react-bootstrap";
+import DeleteMetadata from '../public/images/icons/DeleteMetadata.svg';
+import OccupationAction from '../public/images/icons/OccupationAction.svg';
+import { BASE_URL } from "../baseURL";
+
 
 export default function Occupations() {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -100,6 +104,7 @@ export default function Occupations() {
   const [subcategory, setSubcategory] = useState("");
   const [description, setDescription] = useState("");
   const [selectedOccupation, setSelectedOccupation] = useState(null);
+  const [riskCategory, setRiskCategory] = useState("");
 
   // Define the categories and subcategories arrays
   const categories = ["Category 1", "Category 2", "Category 3"];
@@ -107,8 +112,8 @@ export default function Occupations() {
 
   const columns = [
     { name: "#", selector: (row) => row.id },
-    { name: "Occupation", selector: (row) => row.title },
-    { name: "Category", selector: (row) => row.year },
+    { name: "Occupation", selector: (row) => row.occupationName },
+    { name: "Category", selector: (row) => row.category },
     { name: "Subcategory", selector: (row) => row.subcategory },
     {
       name: "Created On",
@@ -123,14 +128,11 @@ export default function Occupations() {
       name: "Action",
       cell: (row) => (
         <div className="d-flex">
-          <Button variant="" onClick={() => setSelectedOccupation(row)}style={{ lineHeight: "0.5" }}
-        >
-          <div className="d-flex">
-            {/* ... */}
-          <span>.</span>
-          <span>.</span>
-          <span>.</span>
-          </div>
+          <Button variant="" onClick={() => setSelectedOccupation(row)} style={{ lineHeight: "0.5" }} className="occupationActionButton"
+          >
+            <div className=" d-flex">
+              <Image src={OccupationAction} alt="" />
+            </div>
           </Button>
         </div>
       ),
@@ -168,22 +170,104 @@ export default function Occupations() {
     setMetadata(newMetadata);
   };
 
-  const handleFormSubmit = () => {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations`,
+        // {
+        //   mode: "no-cors",
+        //   headers: {
+        //     "Access-Control-Allow-Origin": "*",
+        //   },
+        // }
+      );
+      // console.log(response)
+      // console.log(response.status)
+      const data = await response.json();
+      // console.log(data.data)
+      if (response.status === 200) {
+        const newData = data.data.map((item) => ({
+          ...item,
+          occupationName: item.name,
+          category: item.category,
+          subcategory: item.subCategory,
+          description: item.description,
+          // metadata: item.metadata,
+          metadata: item.metadata
+            ? Object.entries(item.metadata).map(([key, value]) => ({
+              key,
+              value,
+            }))
+            : [],
+          createdOn: new Date(item.createdAt),
+        }));
+        console.log("Get is successful")
+
+        setData(newData);
+      } else {
+        // Handle the error
+        Alert("Something went worng")
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  const handleFormSubmit = async () => {
     // Here you can add code to submit the form data to your backend or API
+    const response = await fetch(
+      `${BASE_URL}/crm/incomeAssessment/occupations`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([{
+
+          occupationCategory: category,
+          occupationSubCategory: subcategory,
+          occupation: occupationName,
+          description: description,
+          riskCategory: riskCategory,
+          metadata: metadata.length && metadata.some(({ key, value }) => key || value)
+            ? metadata.reduce((acc, { key, value }) => {
+              if (key) acc[key] = value;
+              return acc;
+            }, {})
+            : {},
+
+        }]),
+      }
+    );
+
+    if (response.ok) {
+      // The request was successful
+      const data = await response.json();
+      // alert("Sucessfully added ")
+      console.log("Sucessfully added" )
+      console.log(data)
+      // Do something with the response data
+    } else {
+      // The request failed
+      // Handle the error
+      alert("Something went wrong ")
+    }
 
     // Add the new occupation to the data array
-    setData((prevData) => [
-      ...prevData,
-      {
-        id: prevData.length + 1,
-        title: occupationName,
-        year: category,
-        subcategory,
-        description,
-        metadata,
-        createdOn: new Date(),
-      },
-    ]);
+    // setData((prevData) => [
+    //   ...prevData,
+    //   {
+    //     id: prevData.length + 1,
+    //     occupationName: occupationName,
+    //     category: category,
+    //     subcategory,
+    //     description,
+    //     metadata,
+    //     createdOn: new Date(),
+    //   },
+    // ]);
 
     // Close the create modal
     handleCloseCreateModal();
@@ -231,7 +315,7 @@ export default function Occupations() {
           <>
             <DataTable columns={columns} data={data} pagination />
 
-            {selectedOccupation && (
+            {/* {selectedOccupation && (
               <div>
                 <h3>{selectedOccupation.title}</h3>
                 <p>{selectedOccupation.description}</p>
@@ -245,31 +329,32 @@ export default function Occupations() {
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
           </>
         ) : (
           ""
         )}
       </AdminLayout>
 
-      <Modal show={showCreateModal} onHide={handleCloseCreateModal} className=" modal-lg" >
-        <Modal.Header closeButton>
+      <Modal show={showCreateModal} onHide={handleCloseCreateModal} className="modal-lg" >
+        <Modal.Header closeButton className="occupationModalHeader">
           <Modal.Title>Create New Occupation</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3">
+            <Form.Group className="occupationModalGroup mb-3">
               <Form.Label>Occupation Name<span>*</span></Form.Label>
               <Form.Control
                 type="text"
                 value={occupationName}
+                placeholder="Enter occupation name"
                 onChange={(event) => setOccupationName(event.target.value)}
               />
             </Form.Group>
 
             {/* Change the category field to a dropdown */}
-            <Form.Group className="mb-3">
+            <Form.Group className="occupationModalGroup mb-3">
               <Form.Label>Category<span>*</span></Form.Label>
               <Form.Select
                 value={category}
@@ -288,7 +373,7 @@ export default function Occupations() {
             </Form.Group>
 
             {/* Change the subcategory field to a dropdown */}
-            <Form.Group className="mb-3">
+            <Form.Group className="occupationModalGroup mb-3">
               <Form.Label>Subcategory<span>*</span></Form.Label>
               <Form.Select
                 value={subcategory}
@@ -307,67 +392,83 @@ export default function Occupations() {
             </Form.Group>
 
             {/* Keep the description field as a textarea */}
-            <Form.Group className="mb-3">
+            <Form.Group className="occupationModalGroupDescription mb-3">
               <Form.Label>Description<span>*</span></Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
                 value={description}
+                placeholder="Enter description "
                 onChange={(event) => setDescription(event.target.value)}
               />
             </Form.Group>
-
+            <Form.Group className="occupationModalGroup mb-3">
+              <Form.Label>Risk Category</Form.Label>
+              <Form.Select
+                value={riskCategory}
+                onChange={(event) => setRiskCategory(event.target.value)}
+              >
+                <option value="">Select a risk category</option>
+                <option value="LOW">LOW</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HIGH">HIGH</option>
+              </Form.Select>
+            </Form.Group>
             {/* Keep the metadata fields as text inputs */}
-            <hr />
-            <h5>Metadata</h5>
 
             {metadata.map((data, index) => (
-              <div key={index} className="d-flex mb-3">
-                <Form.Control
-                  className="me-2"
-                  type="text"
-                  placeholder="Key"
-                  value={data.key}
-                  onChange={(event) =>
-                    handleMetadataChange(index, "key", event)
-                  }
-                />
+              <Form.Group className="occupationModalGroup mb-3">
+                <Form.Label>Metadata</Form.Label>
+                <div key={index} className="d-flex mb-3">
+                  <Form.Control
+                    className="me-2"
+                    type="text"
+                    placeholder="Enter key"
+                    value={data.key}
+                    onChange={(event) =>
+                      handleMetadataChange(index, "key", event)
+                    }
+                  />
 
-                <Form.Control
-                  type="text"
-                  placeholder="Value"
-                  value={data.value}
-                  onChange={(event) =>
-                    handleMetadataChange(index, "value", event)
-                  }
-                />
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Value"
+                    value={data.value}
+                    onChange={(event) =>
+                      handleMetadataChange(index, "value", event)
+                    }
+                  />
 
-                {metadata.length > 1 && (
-                  <Button
-                    variant="danger ms-2"
-                    onClick={() => handleRemoveMetadata(index)}
-                  >
-                    -
-                  </Button>
-                )}
-              </div>
+                  {metadata.length > 1 && (
+                    <Button
+                      variant="ms-2"
+                      className="occupationMetadataRemoveButton"
+                      onClick={() => handleRemoveMetadata(index)}
+                    >
+                      {/* - */}
+                      <Image src={DeleteMetadata} />
+                    </Button>
+                  )}
+                </div>
+              </Form.Group>
+
             ))}
 
             {/* Keep the add metadata button */}
-            <Button variant="" onClick={handleAddMetadata}>
+            <p onClick={handleAddMetadata} className="addOccupationMetadata">
               + Add Metadata
-            </Button>
+            </p>
           </Form>
         </Modal.Body>
 
         {/* Keep the modal footer */}
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseCreateModal}>
+        <Modal.Footer className="occupationFooter">
+          <Button variant="secondary" onClick={handleCloseCreateModal} className="occupatoionFooterCancelButton">
             Cancel
           </Button>
 
           {/* Keep the create button */}
-          <Button variant="primary" onClick={handleFormSubmit}>
+          <Button variant="primary" onClick={handleFormSubmit} className="occupatoionFooterSubmitButton">
             Create
           </Button>
         </Modal.Footer>
