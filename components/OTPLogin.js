@@ -57,7 +57,7 @@ const OTPScreen = (props) => {
                     setcontinueLoading(false);
 
                     // Redirect to the home page on successful registration
-                    router.push('/');
+                    router.push('/occupations');
                 } else {
                     // Display an error message on failure
                     setErrorMessage(otpReasponse.error);
