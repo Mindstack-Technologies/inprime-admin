@@ -2,53 +2,20 @@ import React, { useState, useEffect } from "react";
 import FormBuilder from "react-form-builder2";
 import "react-form-builder2/dist/app.css";
 import Demobar from "@/components/DemoBar";
-// import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
-// import { TouchBackend } from "react-dnd-touch-backend";
-// // import { HTML5Backend } from "react-dnd-html5-backend";
-// import { MultiBackend } from "react-dnd-multi-backend";
-// import { TouchTransition } from "react-dnd-multi-backend";
-// import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
-// import { TouchBackend } from "react-dnd-touch-backend";
-// import MultiBackend from "react-dnd-multi-backend";
-// import { TouchTransition } from "react-dnd-multi-backend-touch";
 import AdminLayout from "@/layouts/AdminLayout";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { BASE_URL } from "../baseURL";
 import Head from "next/head";
-import { Modal } from "react-bootstrap";
+import { Alert, Modal } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 
 
-
-// Form Data
-// const url = "/api/formdata";
-// const saveUrl = "/api/formdata";
-// const postUrl = "/api/form";
-
-// const onPost = (data) => {
-//   console.log("onPost=", data);
-// };
 const onPost = (data) => {
   const jsonData = JSON.stringify(data);
   localStorage.setItem('formData', jsonData);
-
   // console.log("onPost=", jsonData);
   // console.log(data)
-  // const jsonData = JSON.stringify(data);
-  // localStorage.setItem('formData', JSON.stringify(data));
-  localStorage.setItem('formData', jsonData);
-  // const jsonData = JSON.stringify(data);
-  // console.log("onPost=", jsonData);
-  // try {
-  //   const parsedData = JSON.parse(jsonData);
-  //   // console.log("onPost=", jsonData);
-  //   console.log("data is valid JSON");
-  // } catch (e) {
-  //   console.log("data is not valid JSON:", e);
-  // }
 };
 
 const Schema = Yup.object().shape({
@@ -77,10 +44,7 @@ export default function IncomeAssessmentTemplate() {
   const handleSubmit = async (values) => {
 
     setIsLoading(true);
-
-    // const baseUrl = "https://staging-api.inprime.in";
     const occupationId = values.occupation;
-    // console.log(occupationId)
     const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
     const taskData = localStorage.getItem("formData")
@@ -104,7 +68,6 @@ export default function IncomeAssessmentTemplate() {
       formName: values.form_name,
       task_data: onlyArry,
     };
-    // console.log(data)
 
     try {
       const response = await fetch(url, {
@@ -124,7 +87,6 @@ export default function IncomeAssessmentTemplate() {
       } else {
         setShowErrorModal(true);
         setTimeout(() => setShowErrorModal(true), 10000);
-        // throw new Error("Something went wrong");
       }
     } catch (error) {
       console.error(error);
@@ -147,8 +109,6 @@ export default function IncomeAssessmentTemplate() {
       setOptions(data.data);
       console.log('Get is successful')
       setIsLoading(false);
-
-      // console.log(options)
     };
     fetchData();
   }, []);
@@ -172,6 +132,28 @@ export default function IncomeAssessmentTemplate() {
         />
       </Head>
       <AdminLayout>
+      {showSuccessModal && (
+        <Alert
+          variant="success"
+          onClose={() => setShowSuccessModal(false)}
+          dismissible
+          className="alert-top" // <-- add this line
+        >
+          Successfully added
+        </Alert>
+      )}
+
+      {/* Error alert */}
+      {showErrorModal && (
+        <Alert
+          variant="danger"
+          onClose={() => setShowErrorModal(false)}
+          dismissible
+          className="alert-top" // <-- add this line
+        >
+          Something went wrong
+        </Alert>
+      )}
         <Formik
           initialValues={initialValues}
           validationSchema={Schema}
@@ -184,7 +166,6 @@ export default function IncomeAssessmentTemplate() {
             // handleBlur,
             // handleSubmit,
             // isSubmitting,
-            /* and other goodies */
           }) => (
             <Form className="mb-5 pl-3 pr-4 assessment-form">
               <div className="row">
@@ -321,35 +302,24 @@ export default function IncomeAssessmentTemplate() {
             </Form>
           )}
         </Formik>
-        {/* <DndProvider backend={MultiBackend} options={HTML5toTouch}> */}
         <Demobar
         // postUrl={postUrl} 
         />
-        {/* <Demobar postUrl={postUrl} onPost={onPost} /> */}
-
         <FormBuilder.ReactFormBuilder
           onPost={onPost}
         // url={url}
         // saveUrl={saveUrl}
         />
-        {/* </DndProvider> */}
-        {/* <button
-                type="submit"
-                // disabled={isSubmitting}
-                className="btn btn-primary"
-              >
-                Submit
-              </button> */}
       </AdminLayout>
       {/* Success modal */}
-      <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
+      {/* <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
         <Modal.Body className="text-center fs-5 p-0 text-success font-weight-bold">Successfully added</Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* Error modal */}
-      <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
+      {/* <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
         <Modal.Body className="text-center fs-5 p-0 text-danger font-weight-bold">Something went wrong</Modal.Body>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

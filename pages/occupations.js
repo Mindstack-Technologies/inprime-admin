@@ -96,17 +96,8 @@ export default function Occupations() {
 
     const response = await fetch(
       `${BASE_URL}/crm/incomeAssessment/occupations`,
-      // {
-      //   mode: "no-cors",
-      //   headers: {
-      //     "Access-Control-Allow-Origin": "*",
-      //   },
-      // }
     );
-    // console.log(response)
-    // console.log(response.status)
     const data = await response.json();
-    // console.log(data.data)
     if (response.status === 200) {
       const newData = data.data.map((item) => ({
         ...item,
@@ -173,13 +164,11 @@ export default function Occupations() {
       fetchData()
       setTimeout(() => setShowSuccessModal(false), 10000);
       // console.log(data)
-      // Do something with the response data
     } else {
       // The request failed
       // Handle the error
       setShowErrorModal(true);
       setTimeout(() => setShowErrorModal(true), 10000);
-
       // alert("Something went wrong ")
     }
 
@@ -214,6 +203,28 @@ export default function Occupations() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminLayout>
+      {showSuccessModal && (
+        <Alert
+          variant="success"
+          onClose={() => setShowSuccessModal(false)}
+          dismissible
+          className="alert-top" 
+        >
+          Successfully added
+        </Alert>
+      )}
+
+      {/* Error alert */}
+      {showErrorModal && (
+        <Alert
+          variant="danger"
+          onClose={() => setShowErrorModal(false)}
+          dismissible
+          className="alert-top" 
+        >
+          Something went wrong
+        </Alert>
+      )}
         <div className="row toolbar">
           <div className="col-lg-4">
             <InputGroup className="mb-3 ms-3">
@@ -264,15 +275,16 @@ export default function Occupations() {
         )}
       </AdminLayout>
       {/* Success modal */}
-      <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
+      {/* <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
         <Modal.Body className="text-center fs-5 p-0 text-success font-weight-bold">Successfully added</Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* Error modal */}
-      <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
+      {/* <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
         <Modal.Body className="text-center fs-5 p-0 text-danger font-weight-bold">Something went wrong</Modal.Body>
-      </Modal>
-
+      </Modal>  */}
+      {/* Success alert */}
+      
       <Modal show={showCreateModal} onHide={handleCloseCreateModal} className="modal-lg" >
         <Modal.Header closeButton className="occupationModalHeader">
           <Modal.Title>Create New Occupation</Modal.Title>
