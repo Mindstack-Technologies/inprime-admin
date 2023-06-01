@@ -8,8 +8,6 @@ export default function Navigation() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('formData');
     localStorage.removeItem('OccupationID')
-
-    // localStorage.removeItem('formData');
     console.log('Logged Out');
     // window.location.reload();
     router.push('/login');

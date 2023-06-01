@@ -147,16 +147,6 @@ function IncomeAssessmentPage() {
           )} */}
 
         </div>
-
-        {/* <>
-          <div className="d-flex justify-content-start mt-4">
-            <Button variant="primary ms-4" onClick={() => setShowTemplate(false)}>
-              Back
-            </Button>
-          </div>
-          <IncomeAssessmentTemplate setShowTemplate={setShowTemplate} />
-        </>
-   */}
       </AdminLayout>
 
     </div>
