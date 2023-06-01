@@ -18,6 +18,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { BASE_URL } from "../baseURL";
 import Head from "next/head";
+import { Modal } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 
 
@@ -68,9 +70,13 @@ const initialValues = {
 
 
 export default function IncomeAssessmentTemplate() {
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (values) => {
 
+    setIsLoading(true);
 
     // const baseUrl = "https://staging-api.inprime.in";
     const occupationId = values.occupation;
@@ -89,7 +95,7 @@ export default function IncomeAssessmentTemplate() {
     //   formName: values.form_name,
     //   sections: onlyArry,
     // };
-    
+
     const data = {
       occupationId: values.occupation,
       formTitle: values.form_title,
@@ -112,13 +118,19 @@ export default function IncomeAssessmentTemplate() {
       if (response.ok) {
         const data = await response.json();
         // console.log(data);
+        setShowSuccessModal(true);
+        setTimeout(() => setShowSuccessModal(false), 10000);
         console.log("Post request is done")
       } else {
-        throw new Error("Something went wrong");
+        setShowErrorModal(true);
+        setTimeout(() => setShowErrorModal(true), 10000);
+        // throw new Error("Something went wrong");
       }
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
+
 
   };
 
@@ -134,6 +146,8 @@ export default function IncomeAssessmentTemplate() {
       const data = await response.json();
       setOptions(data.data);
       console.log('Get is successful')
+      setIsLoading(false);
+
       // console.log(options)
     };
     fetchData();
@@ -264,7 +278,7 @@ export default function IncomeAssessmentTemplate() {
                     Description <span>*</span>
                   </label>
                   <Field
-                  as="textarea"
+                    as="textarea"
                     type="text"
                     id="description"
                     name="description"
@@ -285,9 +299,24 @@ export default function IncomeAssessmentTemplate() {
                 type="submit"
                 // onClick={handleButtonClick}
                 // disabled={isSubmitting}
+                disabled={isLoading}
                 className="btn btn-primary  mt-3"
               >
-                Submit
+                {isLoading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="mr-2"
+                    />
+                    Loading...
+                  </>
+                ) : (
+                  "Submit"
+                )}
               </button>
             </Form>
           )}
@@ -312,6 +341,15 @@ export default function IncomeAssessmentTemplate() {
                 Submit
               </button> */}
       </AdminLayout>
+      {/* Success modal */}
+      <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
+        <Modal.Body className="text-center fs-5 p-0 text-success font-weight-bold">Successfully added</Modal.Body>
+      </Modal>
+
+      {/* Error modal */}
+      <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
+        <Modal.Body className="text-center fs-5 p-0 text-danger font-weight-bold">Something went wrong</Modal.Body>
+      </Modal>
     </div>
   );
 }
