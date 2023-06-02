@@ -52,8 +52,9 @@ export default class Demobar extends React.Component {
     });
   };
 
-  onSubmit(data) { 
-    // console.log(data);   
+  onSubmit(data) {
+    // console.log(data);
+    // console.log(JSON.stringify(data))
     // console.log(this.props);
 
     const { postUrl } = this.props;
@@ -73,7 +74,7 @@ export default class Demobar extends React.Component {
   //   });
   //   return false;
   // }
-  
+
 
   render() {
     let modalClass = "modal";
@@ -90,7 +91,7 @@ export default class Demobar extends React.Component {
     if (this.state.roPreviewVisible) {
       roModalClass += " show d-block";
     }
-  // console.log(this.state.data);
+    // console.log(this.state.data);
 
     return (
       <div className="row" style={{ margin: "10px" }}>
@@ -133,9 +134,11 @@ export default class Demobar extends React.Component {
                 <div className="modal-body">
                   <ReactFormGenerator
                     download_path=""
-                    back_action="/"
-                    back_name="Back"
-                    answer_data={{}}
+                    // back_action="/"
+                    // back_name="Back"
+                    answer_data={{
+                      "text_input_D1E26757-25B0-4BD5-8DB0-39B512EA9C96":"Kirana Store","text_input_3FEAD0BB-2F04-420E-B468-C846193E1D44":"Ravi",
+                    }}
                     action_name="Save"
                     form_action="/"
                     form_method="POST"
@@ -166,12 +169,12 @@ export default class Demobar extends React.Component {
                 <div className="modal-body">
                   <ReactFormGenerator
                     download_path=""
-                    back_action="/"
-                    back_name="Back"
+                    // back_action="/"
+                    // back_name="Back"
                     answer_data={{}}
-                    action_name="Save"
-                    form_action="/"
-                    form_method="POST"
+                    // action_name="Save"
+                    // form_action="/"
+                    // form_method="POST"
                     read_only={true}
                     variables={this.props.variables}
                     hide_actions={true}

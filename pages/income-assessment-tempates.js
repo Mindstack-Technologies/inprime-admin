@@ -42,8 +42,10 @@ function IncomeAssessmentPage() {
             // onClick={() => setSelectedOccupation(row)}
             onClick={() => {
               // console.log(row.occupationID);
-              localStorage.setItem('OccupationID', row.occupationID)
-              router.push('/formgenerator');
+              // localStorage.setItem('OccupationID', row.occupationID)
+              // router.push('/formgenerator');
+              router.push(`/formgenerator?occupationID=${row.occupationID}`);
+
               setSelectedOccupation(row);
             }}
             style={{ lineHeight: "0.5" }}
