@@ -14,7 +14,7 @@ import { Spinner } from "react-bootstrap";
 const onPost = (data) => {
   const jsonData = JSON.stringify(data);
   localStorage.setItem('formData', jsonData);
-  // console.log("onPost=", jsonData);
+  // console.log( jsonData);
   // console.log(data)
 };
 
@@ -168,6 +168,31 @@ export default function IncomeAssessmentTemplate() {
             // isSubmitting,
           }) => (
             <Form className="mb-5 pl-3 pr-4 assessment-form">
+              <div className="text-right">
+                 <button
+                type="submit"
+                // onClick={handleButtonClick}
+                // disabled={isSubmitting}
+                disabled={isLoading}
+                className="btn btn-primary   mb-3 mt-2 mr-2"
+              >
+                {isLoading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="mr-2"
+                    />
+                    Loading...
+                  </>
+                ) : (
+                  "Submit"
+                )}
+              </button>
+              </div>
               <div className="row">
                 <div className="col-lg-6">
                   <label htmlFor="occupation">
@@ -274,31 +299,6 @@ export default function IncomeAssessmentTemplate() {
                   {/* {errors.description && touched.description} */}
                 </div>
               </div>
-              {/* <button onClick={handleButtonClick}>Log Values</button> */}
-
-              <button
-                type="submit"
-                // onClick={handleButtonClick}
-                // disabled={isSubmitting}
-                disabled={isLoading}
-                className="btn btn-primary  mt-3"
-              >
-                {isLoading ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="mr-2"
-                    />
-                    Loading...
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </button>
             </Form>
           )}
         </Formik>
