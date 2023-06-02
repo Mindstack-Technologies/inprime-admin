@@ -60,7 +60,7 @@ const OTPScreen = (props) => {
                     router.push('/occupations');
                 } else {
                     // Display an error message on failure
-                    setErrorMessage(otpReasponse.error);
+                    setErrorMessage(responseBody.errorMessage);
                     errorSetAlert(true);
                     setcontinueLoading(false);
                 }
@@ -78,11 +78,11 @@ const OTPScreen = (props) => {
                 <Image src={InprimeLogo} alt="login Logo"/>
                 </div>
 
-            <div style={{ height: '40px', paddingTop: '4px', paddingBottom: '4px', margin: '0' }}>
+            <div style={{ height: errorAlert ? 'auto' : '40px', paddingTop: '4px', paddingBottom: '4px', margin: '0' }}>
                 {errorAlert && (
                     <Alert variant="danger" onClose={() => errorSetAlert(false)} dismissible>
-                        <Alert.Heading>{errorMessage}</Alert.Heading>
-                        <p>Please recheck the the OTP</p>
+                        {/* <Alert.Heading>{errorMessage}</Alert.Heading> */}
+                        <Alert.Body>{errorMessage}</Alert.Body>
                     </Alert>
                 )}
             </div>

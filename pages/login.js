@@ -51,7 +51,7 @@ const loginForm = () => {
 
         try {
             // const response = await fetch(`${BASE_URL}/api/dsa/auth/send-otp`, {
-                const response = await fetch(`${BASE_URL}/auth/crm/request/otp?mobileNo=${phoneNumber}&isMock=true`, {
+                const response = await fetch(`${BASE_URL}/auth/crm/request/otp?mobileNo=${phoneNumber}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const loginForm = () => {
                             <Image src={InprimeLogo} alt="login Logo"/>
                             </div>
 
-                        <div style={{ height: '40px', paddingTop: '4px', paddingBottom: '4px', margin: '0' }}>
+                        <div style={{ height: errorAlert ? 'auto' : '40px', paddingTop: '4px', paddingBottom: '4px', margin: '0' }}>
                             {errorAlert && (
                                 <Alert style={{ marginTop: '4px', marginBottom: '4px', }} variant="danger" onClose={() => errorSetAlert(false)} dismissible>
                                     <p>There is no Account on +91 {phoneNumber} this number.</p>
