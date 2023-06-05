@@ -409,13 +409,22 @@ function MyForm() {
   useEffect(() => {
     // const OccupationID = localStorage.getItem('OccupationID');
     const OccupationID = router.query.occupationID;
-
+    console.log(OccupationID)
     if (OccupationID) {
+      const bearerToken = localStorage.getItem('access_token');
+
       // console.log(OccupationID)
       // setFormData(JSON.parse(jsonData));
       async function fetchData() {
         try {
-          const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${OccupationID}`);
+
+          const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${OccupationID}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`
+            }
+          }
+          );
           const data = await response.json();
           // console.log(data.data[0].json)
           setFormData(data.data[0].json);
