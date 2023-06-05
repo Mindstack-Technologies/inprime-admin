@@ -28,8 +28,8 @@ export default function Occupations() {
 
 
   // Define the categories and subcategories arrays
-  const categories = ["Category 1", "Category 2", "Category 3"];
-  const subcategories = ["Subcategory 1", "Subcategory 2", "Subcategory 3"];
+  const categories = ["Agriculture", "Animal Husbandary and Animal Products", "Fishing and Meat/Poultry", "Business/Small Enterprise", "Individual Self-employed(Service)"];
+  const subcategories = ["Self-employed", "Skilled Labour", "Manufacturing", "Independant Professionals", "Agents", "Other", ];
   // useEffect(() => {
   //   const bearerToken = localStorage.getItem('access_token');
   //   // Use bearerToken here
