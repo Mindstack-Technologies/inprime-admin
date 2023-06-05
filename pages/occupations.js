@@ -30,6 +30,11 @@ export default function Occupations() {
   // Define the categories and subcategories arrays
   const categories = ["Category 1", "Category 2", "Category 3"];
   const subcategories = ["Subcategory 1", "Subcategory 2", "Subcategory 3"];
+  // useEffect(() => {
+  //   const bearerToken = localStorage.getItem('access_token');
+  //   // Use bearerToken here
+  // }, []);      // const OccupationID = localStorage.getItem('OccupationID');
+
 
   const columns = [
     { name: "#", selector: (row) => row.id },
@@ -93,9 +98,14 @@ export default function Occupations() {
 
   // Get reqest 
   const fetchData = async () => {
-
+    const bearerToken = localStorage.getItem('access_token');
     const response = await fetch(
       `${BASE_URL}/crm/incomeAssessment/occupations`,
+      {
+        headers: {
+          'Authorization': `Bearer ${bearerToken}`
+        }
+      }
     );
     const data = await response.json();
     if (response.status === 200) {
@@ -119,7 +129,7 @@ export default function Occupations() {
       setData(newData);
     } else {
       // Handle the error
-      Alert("Something went worng")
+      console.log("Something went worng")
     }
   };
   useEffect(() => {
@@ -128,12 +138,16 @@ export default function Occupations() {
 
   const handleFormSubmit = async () => {
     // Here you can add code to submit the form data to your backend or API
+    const bearerToken = localStorage.getItem('access_token');
+
     const response = await fetch(
       `${BASE_URL}/crm/incomeAssessment/occupations`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`
+
         },
         body: JSON.stringify([{
 
@@ -203,28 +217,28 @@ export default function Occupations() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminLayout>
-      {showSuccessModal && (
-        <Alert
-          variant="success"
-          onClose={() => setShowSuccessModal(false)}
-          dismissible
-          className="alert-top" 
-        >
-          Successfully added
-        </Alert>
-      )}
+        {showSuccessModal && (
+          <Alert
+            variant="success"
+            onClose={() => setShowSuccessModal(false)}
+            dismissible
+            className="alert-top"
+          >
+            Successfully added
+          </Alert>
+        )}
 
-      {/* Error alert */}
-      {showErrorModal && (
-        <Alert
-          variant="danger"
-          onClose={() => setShowErrorModal(false)}
-          dismissible
-          className="alert-top" 
-        >
-          Something went wrong
-        </Alert>
-      )}
+        {/* Error alert */}
+        {showErrorModal && (
+          <Alert
+            variant="danger"
+            onClose={() => setShowErrorModal(false)}
+            dismissible
+            className="alert-top"
+          >
+            Something went wrong
+          </Alert>
+        )}
         <div className="row toolbar">
           <div className="col-lg-4">
             <InputGroup className="mb-3 ms-3">
@@ -284,7 +298,7 @@ export default function Occupations() {
         <Modal.Body className="text-center fs-5 p-0 text-danger font-weight-bold">Something went wrong</Modal.Body>
       </Modal>  */}
       {/* Success alert */}
-      
+
       <Modal show={showCreateModal} onHide={handleCloseCreateModal} className="modal-lg" >
         <Modal.Header closeButton className="occupationModalHeader">
           <Modal.Title>Create New Occupation</Modal.Title>

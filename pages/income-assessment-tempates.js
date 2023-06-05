@@ -52,7 +52,7 @@ function IncomeAssessmentPage() {
             className="occupationActionButton"
           >
             <div className=" d-flex">
-              <Image src={OccupationAction} alt=""/>
+              <Image src={OccupationAction} alt="" />
             </div>
           </Button>
         </div>
@@ -64,8 +64,15 @@ function IncomeAssessmentPage() {
   ];
 
   useEffect(() => {
+    const bearerToken = localStorage.getItem('access_token');
     const fetchData = async () => {
-      const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates`);
+      const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates`,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        }
+      );
       const data = await response.json();
       // console.log(data)
       if (response.status === 200) {
