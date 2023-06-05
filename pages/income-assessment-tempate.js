@@ -48,6 +48,8 @@ export default function IncomeAssessmentTemplate() {
     const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
     const taskData = localStorage.getItem("formData")
+    const bearerToken = localStorage.getItem('access_token');
+
     const convert = JSON.parse(taskData)
     const onlyArry = convert.task_data
     // console.log(onlyArry)
@@ -74,6 +76,8 @@ export default function IncomeAssessmentTemplate() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${bearerToken}`
+
         },
         body: JSON.stringify(data),
       });
@@ -103,8 +107,16 @@ export default function IncomeAssessmentTemplate() {
   // const [isSubmitting, setisSubmitting] = useState(false)
 
   useEffect(() => {
+    const bearerToken = localStorage.getItem('access_token');
     const fetchData = async () => {
-      const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations`);
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations`,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        }
+      );
       const data = await response.json();
       setOptions(data.data);
       console.log('Get is successful')
@@ -132,28 +144,28 @@ export default function IncomeAssessmentTemplate() {
         />
       </Head>
       <AdminLayout>
-      {showSuccessModal && (
-        <Alert
-          variant="success"
-          onClose={() => setShowSuccessModal(false)}
-          dismissible
-          className="alert-top" // <-- add this line
-        >
-          Successfully added
-        </Alert>
-      )}
+        {showSuccessModal && (
+          <Alert
+            variant="success"
+            onClose={() => setShowSuccessModal(false)}
+            dismissible
+            className="alert-top" // <-- add this line
+          >
+            Successfully added
+          </Alert>
+        )}
 
-      {/* Error alert */}
-      {showErrorModal && (
-        <Alert
-          variant="danger"
-          onClose={() => setShowErrorModal(false)}
-          dismissible
-          className="alert-top" // <-- add this line
-        >
-          Something went wrong
-        </Alert>
-      )}
+        {/* Error alert */}
+        {showErrorModal && (
+          <Alert
+            variant="danger"
+            onClose={() => setShowErrorModal(false)}
+            dismissible
+            className="alert-top" // <-- add this line
+          >
+            Something went wrong
+          </Alert>
+        )}
         <Formik
           initialValues={initialValues}
           validationSchema={Schema}
@@ -169,29 +181,29 @@ export default function IncomeAssessmentTemplate() {
           }) => (
             <Form className="mb-5 pl-3 pr-4 assessment-form">
               <div className="text-right">
-                 <button
-                type="submit"
-                // onClick={handleButtonClick}
-                // disabled={isSubmitting}
-                disabled={isLoading}
-                className="btn btn-primary   mb-3 mt-2 mr-2"
-              >
-                {isLoading ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="mr-2"
-                    />
-                    Loading...
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </button>
+                <button
+                  type="submit"
+                  // onClick={handleButtonClick}
+                  // disabled={isSubmitting}
+                  disabled={isLoading}
+                  className="btn btn-primary   mb-3 mt-2 mr-2"
+                >
+                  {isLoading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="mr-2"
+                      />
+                      Loading...
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
               </div>
               <div className="row">
                 <div className="col-lg-6">
