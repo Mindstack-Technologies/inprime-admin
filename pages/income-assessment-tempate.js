@@ -9,6 +9,7 @@ import { BASE_URL } from "../baseURL";
 import Head from "next/head";
 import { Alert, Modal } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
+import { useRouter } from 'next/router';
 
 
 const onPost = (data) => {
@@ -20,19 +21,19 @@ const onPost = (data) => {
 
 const Schema = Yup.object().shape({
   occupation: Yup.string().required("occupation is required"),
-  version: Yup.string().required("version is required"),
+  // version: Yup.string().required("version is required"),
   form_title: Yup.string().required("form title is required"),
   form_name: Yup.string().required("form name is required"),
   description: Yup.string().required("description is required"),
 });
 
-const initialValues = {
-  occupation: "",
-  version: "",
-  form_title: "",
-  form_name: "",
-  description: ""
-};
+// const initialValues = {
+//   occupation: "",
+//   version: "1.0",
+//   form_title: "",
+//   form_name: "",
+//   description: ""
+// };
 
 
 
@@ -40,63 +41,483 @@ export default function IncomeAssessmentTemplate() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [submitBiuttonisLoading, setSubmitBiuttonisLoading] = useState(false)
+  const [isUpdateLoading, setIsUpdateLoading]= useState(false)
+  const [showReactgeneratorEmpty, setShowReactgeneratorEmpty] = useState(false)
+
+  const [initialValues, setInitialValues] = useState('')
+
+
+  const [formsData, setFormData] = useState(
+    // [{"id":"6B4F521F-1561-489F-9640-C3B66E2E18E6","element":"Header","text":"Header Text","static":true,"required":false,"bold":false,"italic":false,"content":"<p style=\"text-align:center;\">Header ","canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"dirty":false},{"id":"46C4452C-F982-4AE1-AE42-96E4FF249A10","element":"TextInput","text":"Text Input","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"text_input_3459BB15-DD99-4187-982B-B979EB8524A6","label":"Name ","dirty":false},{"id":"DC4E97D3-BA97-4529-8D2E-A8FCB3BFD1CC","element":"RadioButtons","text":"Multiple Choice","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"radiobuttons_1AABD0E8-60DE-4BC0-B123-26446304F52B","label":"Select ","options":[{"value":"place_holder_option_1","text":"Place holder option 1","key":"radiobuttons_option_420398A8-B343-41B7-8607-B1DD77088BCC"},{"value":"place_holder_option_2","text":"Place holder option 2","key":"radiobuttons_option_C1DD4E75-9CFB-4FE7-9F63-A1D4B98F3710"},{"value":"place_holder_option_3","text":"Place holder option 3","key":"radiobuttons_option_F25B166F-87C3-407B-956C-3D9F4CE03FBE"}],"dirty":false},{"id":"75799FD7-5658-4741-A6CA-6F4E75BBF495","element":"FileUpload","text":"File Upload","required":false,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"file_upload_803A759E-4268-47A1-BBE2-67437990571B","label":"Placeholder label"},{"id":"E1171553-757E-496B-B2A3-394EF6B42054","element":"Camera","text":"Camera","required":false,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"camera_94274634-08B1-4EFD-BDD2-5E8030CE108B","label":"Placeholder label"}]
+    ''
+  );
+  const [errorMessage, setErrorMessage] = useState('')
+  const [submitErrorMessagePopup, setSubmitErrorMessagePopup] = useState(false)
+
+  const [saveErrorMessagePopup, setSaveErrorMessagePopup] = useState(false)
+
+  
+  const [saveButtonIsClicked, setSaveButtonIsClicked] = useState(false)
+  const [updateButtonIsClicked, setUpdateButtonIsClicked] = useState(false)
+
+
+  const router = useRouter();
+
+    // Posting the from 
 
   const handleSubmit = async (values) => {
+    console.log(saveButtonIsClicked)
 
-    setIsLoading(true);
-    const occupationId = values.occupation;
-    const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
+    if (saveButtonIsClicked === true) {
+      setIsLoading(true);
 
-    const taskData = localStorage.getItem("formData")
-    const bearerToken = localStorage.getItem('access_token');
+      console.log('save button is clicked')
+      const occupationId = values.occupation;
+      const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
-    const convert = JSON.parse(taskData)
-    const onlyArry = convert.task_data
-    // console.log(onlyArry)
-    // const data = {
-    //   occupationId: values.occupation,
-    //   formTitle: values.form_title,
-    //   version: values.version,
-    //   formDesc: values.description,
-    //   formName: values.form_name,
-    //   sections: onlyArry,
-    // };
+      const taskData = localStorage.getItem("formData")
+      console.log(taskData)
+      if (taskData === null && formsData === null) {
+        console.log("both are null")
+        setShowReactgeneratorEmpty(true)
+        setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
 
-    const data = {
-      occupationId: values.occupation,
-      formTitle: values.form_title,
-      version: values.version,
-      formDescription: values.description,
-      formName: values.form_name,
-      task_data: onlyArry,
-    };
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${bearerToken}`
-
-        },
-        body: JSON.stringify(data),
-      });
-      // console.log(response)
-      if (response.ok) {
-        const data = await response.json();
-        // console.log(data);
-        setShowSuccessModal(true);
-        setTimeout(() => setShowSuccessModal(false), 10000);
-        console.log("Post request is done")
-      } else {
-        setShowErrorModal(true);
-        setTimeout(() => setShowErrorModal(true), 10000);
       }
-    } catch (error) {
-      console.error(error);
-    }
-    setIsLoading(false);
+      // else if(taskData !== null ){
+      //   console.log("test not null ")
+      //   setShowReactgeneratorEmpty(true)
+      //   setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+      // }
 
+      else if (taskData === null) {
+        console.log('form is not edited ')
+
+        // console.log(formsData)
+        const bearerToken = localStorage.getItem('access_token');
+
+        const data = {
+          occupationId: values.occupation,
+          formTitle: values.form_title,
+          // version: values.version,
+          formDescription: values.description,
+          formName: values.form_name,
+          task_data: formsData,
+        };
+        console.log(data)
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${bearerToken}`
+
+            },
+            body: JSON.stringify(data),
+          });
+          // console.log(response)
+          if (response.ok) {
+            const data = await response.json();
+            // console.log(data);
+            if (data.errorCode === "400") {
+              setErrorMessage(data.errorMessage)
+              setSaveErrorMessagePopup(true);
+              setTimeout(() => setSaveErrorMessagePopup(false), 10000);
+            } else {
+              setShowSuccessModal(true);
+              setTimeout(() => setShowSuccessModal(false), 10000);
+              console.log("Post request is done")
+            }
+          } else {
+            setShowErrorModal(true);
+            setTimeout(() => setShowErrorModal(true), 10000);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        
+
+      } else {
+        console.log('form is  edited or new form')
+
+        const bearerToken = localStorage.getItem('access_token');
+
+        const convert = JSON.parse(taskData)
+        const onlyArry = convert.task_data
+        console.log(convert)
+        console.log(onlyArry)
+        console.log(onlyArry.length)
+        if (onlyArry.length == 0) {
+          console.log("it containe empty []")
+          setShowReactgeneratorEmpty(true)
+          setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+        }
+        // const data = {
+        //   occupationId: values.occupation,
+        //   formTitle: values.form_title,
+        //   version: values.version,
+        //   formDesc: values.description,
+        //   formName: values.form_name,
+        //   sections: onlyArry,
+        // };
+        else {
+          const data = {
+            occupationId: values.occupation,
+            formTitle: values.form_title,
+            version: values.version,
+            formDescription: values.description,
+            formName: values.form_name,
+            task_data: onlyArry,
+          };
+          console.log(data)
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${bearerToken}`
+
+              },
+              body: JSON.stringify(data),
+            });
+            // console.log(response)
+            if (response.ok) {
+              const data = await response.json();
+              // console.log(data);
+              setShowSuccessModal(true);
+              setTimeout(() => setShowSuccessModal(false), 10000);
+              console.log("Post request is done")
+            } else {
+              setShowErrorModal(true);
+              setTimeout(() => setShowErrorModal(true), 10000);
+            }
+          } catch (error) {
+            console.error(error);
+
+          }
+        }
+      }
+      setSaveButtonIsClicked(false)
+      setIsLoading(false);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    else if (updateButtonIsClicked === true) {
+      setIsUpdateLoading(true);
+
+      console.log('Update button is clicked')
+      console.log(templateId)
+      const occupationId = values.occupation;
+      const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
+
+      const taskData = localStorage.getItem("formData")
+      console.log(taskData)
+      if (taskData === null && formsData === null) {
+        console.log("both are null")
+        setShowReactgeneratorEmpty(true)
+        setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+
+      }
+      // else if(taskData !== null ){
+      //   console.log("test not null ")
+      //   setShowReactgeneratorEmpty(true)
+      //   setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+      // }
+
+      else if (taskData === null) {
+        console.log('form is not edited ')
+
+        // console.log(formsData)
+        const bearerToken = localStorage.getItem('access_token');
+
+        const data = {
+          occupationId: values.occupation,
+          formTitle: values.form_title,
+          // version: values.version,
+          formDescription: values.description,
+          formName: values.form_name,
+      templateId: templateId, 
+
+          task_data: formsData,
+        };
+        console.log(data)
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${bearerToken}`
+
+            },
+            body: JSON.stringify(data),
+          });
+          // console.log(response)
+          if (response.ok) {
+            const data = await response.json();
+            // console.log(data);
+            if (data.errorCode === "400") {
+              setErrorMessage(data.errorMessage)
+              setSaveErrorMessagePopup(true);
+              setTimeout(() => setSaveErrorMessagePopup(false), 10000);
+            } else {
+              setShowSuccessModal(true);
+              setTimeout(() => setShowSuccessModal(false), 10000);
+              console.log("Post request is done")
+            }
+          } else {
+            setShowErrorModal(true);
+            setTimeout(() => setShowErrorModal(true), 10000);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        
+
+      } else {
+        console.log('form is  edited or new form')
+
+        const bearerToken = localStorage.getItem('access_token');
+
+        const convert = JSON.parse(taskData)
+        const onlyArry = convert.task_data
+        console.log(convert)
+        console.log(onlyArry)
+        console.log(onlyArry.length)
+        if (onlyArry.length == 0) {
+          console.log("it containe empty []")
+          setShowReactgeneratorEmpty(true)
+          setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+        }
+        // const data = {
+        //   occupationId: values.occupation,
+        //   formTitle: values.form_title,
+        //   version: values.version,
+        //   formDesc: values.description,
+        //   formName: values.form_name,
+        //   sections: onlyArry,
+        // };
+        else {
+          const data = {
+            occupationId: values.occupation,
+            formTitle: values.form_title,
+            version: values.version,
+            formDescription: values.description,
+            formName: values.form_name,
+            templateId: templateId, 
+
+            task_data: onlyArry,
+          };
+          console.log(data)
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${bearerToken}`
+
+              },
+              body: JSON.stringify(data),
+            });
+            // console.log(response)
+            if (response.ok) {
+              const data = await response.json();
+              // console.log(data);
+              setShowSuccessModal(true);
+              setTimeout(() => setShowSuccessModal(false), 10000);
+              console.log("Post request is done")
+            } else {
+              setShowErrorModal(true);
+              setTimeout(() => setShowErrorModal(true), 10000);
+            }
+          } catch (error) {
+            console.error(error);
+
+          }
+        }
+      }
+      setUpdateButtonIsClicked(false)
+      setIsUpdateLoading(false);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Submit button is working here
+    else {
+      setSubmitBiuttonisLoading(true)
+      console.log("submit button is clicked")
+      console.log(templateId)
+      const occupationId = values.occupation;
+      const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
+
+      const taskData = localStorage.getItem("formData")
+      console.log(taskData)
+      if (taskData === null && formsData === null) {
+        console.log("both are null")
+        setShowReactgeneratorEmpty(true)
+        setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+
+      }
+      // else if(taskData !== null ){
+      //   console.log("test not null ")
+      //   setShowReactgeneratorEmpty(true)
+      //   setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+      // }
+
+      else if (taskData === null) {
+        console.log('form is not edited ')
+
+        // console.log(formsData)
+        const bearerToken = localStorage.getItem('access_token');
+
+        const data = {
+          occupationId: values.occupation,
+          formTitle: values.form_title,
+          // version: values.version,
+          templateId: templateId, 
+          publish: true,
+          formDescription: values.description,
+          formName: values.form_name,
+          task_data: formsData,
+        };
+        console.log(data)
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${bearerToken}`
+
+            },
+            body: JSON.stringify(data),
+          });
+          console.log(response)
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data.errorCode);
+            if (data.errorCode === "400") {
+              setErrorMessage(data.errorMessage)
+              setSubmitErrorMessagePopup(true);
+              setTimeout(() => setSubmitErrorMessagePopup(true), 10000);
+            } else {
+              setShowSuccessModal(true);
+              setTimeout(() => setShowSuccessModal(false), 10000);
+              console.log("Post request is done")
+            }
+          } else {
+            setShowErrorModal(true);
+            setTimeout(() => setShowErrorModal(true), 10000);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+      } else {
+        console.log('form is  edited or new form')
+
+        const bearerToken = localStorage.getItem('access_token');
+
+        const convert = JSON.parse(taskData)
+        const onlyArry = convert.task_data
+        console.log(convert)
+        console.log(onlyArry)
+        console.log(onlyArry.length)
+        if (onlyArry.length == 0) {
+          console.log("it containe empty []")
+          setShowReactgeneratorEmpty(true)
+          setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
+        }
+        // const data = {
+        //   occupationId: values.occupation,
+        //   formTitle: values.form_title,
+        //   version: values.version,
+        //   formDesc: values.description,
+        //   formName: values.form_name,
+        //   sections: onlyArry,
+        // };
+        else {
+          const data = {
+            occupationId: values.occupation,
+            formTitle: values.form_title,
+            version: values.version,
+            formDescription: values.description,
+            formName: values.form_name,
+            task_data: onlyArry,
+          };
+          console.log(data)
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${bearerToken}`
+
+              },
+              body: JSON.stringify(data),
+            });
+            console.log(response)
+            if (response.ok) {
+              const data = await response.json();
+              // console.log(data);
+              setShowSuccessModal(true);
+              setTimeout(() => setShowSuccessModal(false), 10000);
+              console.log("Post request is done")
+            } else {
+              setShowErrorModal(true);
+              setTimeout(() => setShowErrorModal(true), 10000);
+            }
+          } catch (error) {
+            console.error(error);
+
+          }
+        }
+      }
+      setSaveButtonIsClicked(false)
+      setSubmitBiuttonisLoading(false)
+
+    }
+
+
+
+
+    localStorage.removeItem("formData")
+    localStorage.removeItem("income-assessment-data")
+    // router.push(`/income-assessment-tempates`);
 
   };
 
@@ -122,8 +543,73 @@ export default function IncomeAssessmentTemplate() {
       console.log('Get is successful')
       setIsLoading(false);
     };
+    setInitialValues(
+      {
+        occupation: "",
+        version: "1.0",
+        form_title: "",
+        form_name: "",
+        description: ""
+      }
+    )
     fetchData();
   }, []);
+
+
+  const [download, setDownload] = useState(false)
+  const [templateId, setTemplateId] = useState('')
+  useEffect(() => {
+    setDownload(true)
+    const getsaveddata = localStorage.getItem("income-assessment-data")
+    console.log(getsaveddata)
+    if (getsaveddata !== null && getsaveddata !== undefined) {
+      console.log("not null")
+      console.log(JSON.parse(getsaveddata))
+      const savedData = JSON.parse(getsaveddata)
+      // console.log(savedData.formName)
+      setFormData(savedData.json)
+      // console.log(savedData.id)
+      setTemplateId(savedData.id)
+      
+      // console.log(savedData.json)
+      // const converting = JSON.stringify(savedData.json)
+      // console.log(converting)
+      // setFormData( [{"id":"6B4F521F-1561-489F-9640-C3B66E2E18E6","element":"Header","text":"Header Text","static":true,"required":false,"bold":false,"italic":false,"content":"<p style=\"text-align:center;\">Header ","canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"dirty":false},{"id":"46C4452C-F982-4AE1-AE42-96E4FF249A10","element":"TextInput","text":"Text Input","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"text_input_3459BB15-DD99-4187-982B-B979EB8524A6","label":"Name ","dirty":false},{"id":"DC4E97D3-BA97-4529-8D2E-A8FCB3BFD1CC","element":"RadioButtons","text":"Multiple Choice","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"radiobuttons_1AABD0E8-60DE-4BC0-B123-26446304F52B","label":"Select ","options":[{"value":"place_holder_option_1","text":"Place holder option 1","key":"radiobuttons_option_420398A8-B343-41B7-8607-B1DD77088BCC"},{"value":"place_holder_option_2","text":"Place holder option 2","key":"radiobuttons_option_C1DD4E75-9CFB-4FE7-9F63-A1D4B98F3710"},{"value":"place_holder_option_3","text":"Place holder option 3","key":"radiobuttons_option_F25B166F-87C3-407B-956C-3D9F4CE03FBE"}],"dirty":false},{"id":"75799FD7-5658-4741-A6CA-6F4E75BBF495","element":"FileUpload","text":"File Upload","required":false,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"file_upload_803A759E-4268-47A1-BBE2-67437990571B","label":"Placeholder label"},{"id":"E1171553-757E-496B-B2A3-394EF6B42054","element":"Camera","text":"Camera","required":false,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"camera_94274634-08B1-4EFD-BDD2-5E8030CE108B","label":"Placeholder label"}])
+
+
+      setInitialValues(
+        {
+          occupation: savedData.occupationId,
+          version: "1.0",
+          form_title: savedData.formName,
+          form_name: savedData.formName,
+          description: savedData.formDescription
+        }
+      )
+    }
+    else {
+      console.log("it is null")
+
+      console.log(getsaveddata)
+      setInitialValues(
+        {
+          occupation: "",
+          version: "1.0",
+          form_title: "",
+          form_name: "",
+          description: ""
+        }
+      )
+      setFormData(null)
+
+
+    }
+    // console.log(getsaveddata)
+
+  }, []);
+  //   const saveButtonIsClicked =() =>{
+  // console.log('clilcked')
+  //   }
 
   return (
     <div>
@@ -144,6 +630,26 @@ export default function IncomeAssessmentTemplate() {
         />
       </Head>
       <AdminLayout>
+        {submitErrorMessagePopup && (
+          <Alert
+            variant="danger"
+            onClose={() => setSubmitErrorMessagePopup(false)}
+            dismissible
+            className="alert-top" // <-- add this line
+          >
+            {errorMessage}
+          </Alert>
+        )}
+        {saveErrorMessagePopup && (
+          <Alert
+            variant="danger"
+            onClose={() => setSaveErrorMessagePopup(false)}
+            dismissible
+            className="alert-top" // <-- add this line
+          >
+            {errorMessage}
+          </Alert>
+        )}
         {showSuccessModal && (
           <Alert
             variant="success"
@@ -154,7 +660,7 @@ export default function IncomeAssessmentTemplate() {
             Successfully added
           </Alert>
         )}
-
+        {/* {JSON.stringify(formsData)} */}
         {/* Error alert */}
         {showErrorModal && (
           <Alert
@@ -166,10 +672,22 @@ export default function IncomeAssessmentTemplate() {
             Something went wrong
           </Alert>
         )}
+        {showReactgeneratorEmpty && (
+          <Alert
+            variant="danger"
+            onClose={() => setShowReactgeneratorEmpty(false)}
+            dismissible
+            className="alert-top" // <-- add this line
+          >
+            Form is empty
+          </Alert>
+        )}
         <Formik
           initialValues={initialValues}
           validationSchema={Schema}
           onSubmit={handleSubmit}
+          enableReinitialize={true}
+
         >
           {({
             values,
@@ -183,6 +701,7 @@ export default function IncomeAssessmentTemplate() {
               <div className="text-right">
                 <button
                   type="submit"
+                  onClick={() => setSaveButtonIsClicked(true)}
                   // onClick={handleButtonClick}
                   // disabled={isSubmitting}
                   disabled={isLoading}
@@ -201,9 +720,59 @@ export default function IncomeAssessmentTemplate() {
                       Loading...
                     </>
                   ) : (
+                    "Save"
+                  )}
+                </button>
+                
+                <button
+                  type="submit"
+                  onClick={() => setUpdateButtonIsClicked(true)}
+                  // onClick={handleButtonClick}
+                  // disabled={isSubmitting}
+                  disabled={isUpdateLoading}
+                  className="btn btn-primary   mb-3 mt-2 mr-2"
+                >
+                  {isUpdateLoading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="mr-2"
+                      />
+                      Loading...
+                    </>
+                  ) : (
+                    "Update"
+                  )}
+                </button>
+
+                <button
+                  type="submit"
+                  // onClick={handleButtonClick}
+                  // disabled={isSubmitting}
+                  disabled={submitBiuttonisLoading}
+                  className="btn btn-primary   mb-3 mt-2 mr-2"
+                >
+                  {submitBiuttonisLoading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="mr-2"
+                      />
+                      Loading...
+                    </>
+                  ) : (
                     "Submit"
                   )}
                 </button>
+
               </div>
               <div className="row">
                 <div className="col-lg-6">
@@ -217,7 +786,7 @@ export default function IncomeAssessmentTemplate() {
                     className="form-control"
                     value={values.occupation}
                   >
-                    <option value="" >Select a category</option>
+                    <option value="" >Select an Occupation</option>
                     {options.map((options) => (
 
                       <option key={options.id} value={options.id}>
@@ -230,16 +799,16 @@ export default function IncomeAssessmentTemplate() {
                   </ErrorMessage>
                   {/* {errors.occupation && touched.occupation} */}
                 </div>
-                <div className="col-lg-6">
+                {/* <div className="col-lg-6">
                   <label htmlFor="version">
                     Version <span>*</span>
                   </label>
-                  <Field as="select" id="version" name="version" className="form-control">
-                    {/* Add a default option */}
-                    <option value="">Select a version</option>
+                  <Field as="select" id="version" name="version" className="form-control"> */}
+                {/* Add a default option */}
+                {/* <option value="">Select a version</option> */}
 
-                    {/* Map over the versions array to create option elements */}
-                    {versions.map((version) => (
+                {/* Map over the versions array to create option elements */}
+                {/* {versions.map((version) => (
                       <option key={version} value={version}>
                         {version}
                       </option>
@@ -248,7 +817,7 @@ export default function IncomeAssessmentTemplate() {
                   <ErrorMessage name="version">
                     {(msg) => <div className="form-text text-danger">{msg}</div>}
                   </ErrorMessage>
-                </div>
+                </div> */}
               </div>
 
               <div className="row">
@@ -317,11 +886,15 @@ export default function IncomeAssessmentTemplate() {
         <Demobar
         // postUrl={postUrl} 
         />
-        <FormBuilder.ReactFormBuilder
-          onPost={onPost}
-        // url={url}
-        // saveUrl={saveUrl}
-        />
+        {download &&
+          <FormBuilder.ReactFormBuilder
+            onPost={onPost}
+            // data={JSON.stringify(formsData)}
+            data={formsData}
+
+          //url ={url}
+          // saveUrl={saveUrl}
+          />}
       </AdminLayout>
       {/* Success modal */}
       {/* <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>

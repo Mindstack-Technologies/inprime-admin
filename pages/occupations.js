@@ -10,37 +10,143 @@ import { Alert, Modal } from "react-bootstrap";
 import DeleteMetadata from '../public/images/icons/DeleteMetadata.svg';
 import OccupationAction from '../public/images/icons/OccupationAction.svg';
 import { BASE_URL } from "../baseURL";
+import { Formik, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { FormControl } from 'react-bootstrap';
+import Popover from 'react-bootstrap/Popover';
+import Overlay from 'react-bootstrap/Overlay';
 
 
+const validationSchema = Yup.object().shape({
+  occupationName: Yup.string()
+    .required('Occupation Name is required'),
+  category: Yup.string()
+    .required('Category is required'),
+  subcategory: Yup.string()
+    .required('Subcategory is required'),
+  description: Yup.string()
+    .required('Description is required'),
+  riskCategory: Yup.string()
+    .required('Risk Category is required')
+});
+const categories = [
+  "Agriculture",
+  "Animal Husbandary and Animal Products",
+  "Fishing and Meat/Poultry",
+  "Business/Small Enterprise",
+  "Individual Self-employed(Service)",
+];
+
+const allSubcategories = [
+  { category: "Agriculture", name: "Self-employed" },
+  { category: "Agriculture", name: "Skilled Labour" },
+  { category: "Animal Husbandary and Animal Products", name: "Self-employed" },
+  { category: "Animal Husbandary and Animal Products", name: "Skilled Labour" },
+  { category: "Fishing and Meat/Poultry", name: "Self-employed" },
+  { category: "Fishing and Meat/Poultry", name: "Skilled Labour" },
+  { category: "Business/Small Enterprise", name: "Product Sales/Trade Business" },
+  { category: "Business/Small Enterprise", name: "Packaged Food, Restaurant, Eatery" },
+  { category: "Business/Small Enterprise", name: "Service Business" },
+  { category: "Business/Small Enterprise", name: "Manufacturing" },
+  { category: "Individual Self-employed(Service)", name: "Skilled Labour" },
+  { category: "Individual Self-employed(Service)", name: "Agents" },
+  { category: "Individual Self-employed(Service)", name: "Independant Professionals" },
+  { category: "Individual Self-employed(Service)", name: "Other" },
+];
 export default function Occupations() {
-  const [domLoaded, setDomLoaded] = useState(false);
+  // const [domLoaded, setDomLoaded] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [metadata, setMetadata] = useState([{ key: "", value: "" }]);
+  // const [metadata, setMetadata] = useState([{ key: "", value: "" }]);
   const [data, setData] = useState([]);
-  const [occupationName, setOccupationName] = useState("");
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [description, setDescription] = useState("");
+  // const [occupationName, setOccupationName] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [subcategory, setSubcategory] = useState("");
+  // const [description, setDescription] = useState("");
   const [selectedOccupation, setSelectedOccupation] = useState(null);
-  const [riskCategory, setRiskCategory] = useState("");
+  // const [riskCategory, setRiskCategory] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [target, setTarget] = useState(null);
+
+  const [setFieldValue, setSetFieldValue] = useState(null);
+
+  // const [category, setCategory] = useState("");
+  // const [subcategory, setSubcategory] = useState("");
+  // const [subcategories, setSubcategories] = useState([]);
+
+  // const handleCategoryChange = (event) => {
+  //   const selectedCategory = event.target.value;
+  //   setCategory(selectedCategory);
+
+  //   // Filter subcategories based on selected category
+  //   const filteredSubcategories = allSubcategories.filter(
+  //     (subcategory) => subcategory.category === selectedCategory
+  //   );
+  //   setSubcategories(filteredSubcategories);
+  // };
 
 
-  // Define the categories and subcategories arrays
-  const categories = ["Agriculture", "Animal Husbandary and Animal Products", "Fishing and Meat/Poultry", "Business/Small Enterprise", "Individual Self-employed(Service)"];
-  const subcategories = ["Self-employed", "Skilled Labour", "Manufacturing", "Independant Professionals", "Agents", "Other", ];
-  // useEffect(() => {
-  //   const bearerToken = localStorage.getItem('access_token');
-  //   // Use bearerToken here
-  // }, []);      // const OccupationID = localStorage.getItem('OccupationID');
-
+  function SwitchComponent({ apiValue, onToggle }) {
+    const [checked, setChecked] = useState(apiValue);
+  
+    const handleToggle = () => {
+      setChecked(!checked);
+      onToggle(!checked);
+    };
+  
+    return (
+      // <label>
+      //   <input type="checkbox" checked={checked} onChange={handleToggle} />
+      //   {checked ? 'On' : 'Off'}
+      // </label>
+      <Form>
+      <Form.Check
+        type="switch"
+        id="custom-switch"
+        label={apiValue ? 'Active' : 'Not Active'}
+        checked={apiValue}
+        onChange={(e) => onToggle(e.target.checked)}
+      />
+    </Form>
+    );
+  }
 
   const columns = [
-    { name: "#", selector: (row) => row.id },
+    // { name: "#", selector: (row) => row.id },
     { name: "Occupation", selector: (row) => row.occupationName },
     { name: "Category", selector: (row) => row.category },
     { name: "Subcategory", selector: (row) => row.subcategory },
+    { name: "Active/Deactive", selector: (row) => (
+      <div>
+        {/* <Button onClick={(()=>HandleActiveDeactiveButton(row))}>
+        {row.ActiveDeactive}
+
+        </Button> */}
+         <SwitchComponent
+        // apiValue={row.ActiveDeactive}
+        apiValue={row.ActiveDeactive === 'Active'}
+
+        
+        onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
+      />
+         {/* <div> */}
+    {/* <ToggleSwitch onChange={(()=>HandleActiveDeactiveButton(row))} checked={row.ActiveDeactive} /> */}
+    {/* <Form>
+      <Form.Check // prettier-ignore
+        type="switch"
+        id="custom-switch"
+        // label="Check this switch"
+      />
+    </Form> */}
+  {/* </div> */}
+      </div>
+
+
+       )},
     {
       name: "Created On",
       selector: (row) =>
@@ -50,55 +156,164 @@ export default function Occupations() {
           year: "numeric",
         }),
     },
+    // {
+    //   name: "Action",
+    //   cell: (row) => (
+    //     <div className="d-flex">
+    //       <Button variant="" onClick={() => setSelectedOccupation(row)} style={{ lineHeight: "0.5" }} className="occupationActionButton">
+    //         <div className="d-flex">
+    //           <Image src={OccupationAction} alt="" />
+    //         </div>
+    //       </Button>
+    //     </div>
+    //   ),
+    //   style: {
+    //     textAlign: "right",
+    //   },
+    // },
     {
       name: "Action",
       cell: (row) => (
         <div className="d-flex">
-          <Button variant="" onClick={() => setSelectedOccupation(row)} style={{ lineHeight: "0.5" }} className="occupationActionButton"
+          {/* Add your action buttons here */}
+          <Button
+            variant=""
+            className="occupationActionButton"
+            onClick={(event) => {
+              setShowPopup(true);
+              setSelectedRow(row);
+              setTarget(event.target);
+            }}
+            style={{ lineHeight: "0.5" }}
           >
-            <div className=" d-flex">
+            <div className="d-flex">
               <Image src={OccupationAction} alt="" />
             </div>
+
           </Button>
         </div>
       ),
-      style: {
-        textAlign: "right",
-      },
     },
   ];
+
+
+  // Active and deactive button
+  const HandleActiveDeactiveButton = async(row, newValue)=> {
+    console.log(newValue)
+    const bearerToken = localStorage.getItem('access_token');
+      // console.log("test")
+      console.log(row.ActiveDeactive)
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations?update=true`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${bearerToken}`
+
+          },
+          body: JSON.stringify([{
+            id: row.id,
+            active: newValue
+          }]),
+        }
+      );
+      console.log(response)
+      if (response.ok) {
+        // The request was successful
+        const data = await response.json();
+        console.log(data)
+        // alert("Sucessfully added ")
+        setShowSuccessModal(true);
+
+
+        console.log("Sucessfully added")
+        fetchData()
+        setTimeout(() => setShowSuccessModal(false), 10000);
+        // console.log(data)
+      } else {
+        // The request failed
+        // Handle the error
+        setShowErrorModal(true);
+        setTimeout(() => setShowErrorModal(true), 10000);
+        // alert("Something went wrong ")
+      }
+  }
+
+  // Popup function shows the edit and view 
+  function Popup({ row, onClose, onEditClick, onViewClick }) {
+    return (
+      <Overlay target={target} show={true} placement="bottom" rootClose={true} onHide={onClose}>
+        {(props) => (
+          <Popover id="popover-contained" {...props}>
+            {/* <Popover.Header as="h3">Pop-up</Popover.Header> */}
+            <Popover.Body className="p-0">
+              {/* Add your pop-up content here */}
+              {/* <p>Selected row: {JSON.stringify(row)}</p> */}
+              {/* <Button variant="primary" onClick={onClose}>
+                view
+              </Button>
+              <Button variant="primary" onClick={handleEditClick}>
+                Edit
+              </Button> */}
+              {/* <p>view</p> */}
+              <p className="" onClick={(() => onViewClick(row.id))}>
+                view
+              </p>
+              <p className="" onClick={(() => onEditClick(row.id))}>
+                Edit
+              </p>
+
+            </Popover.Body>
+          </Popover>
+        )}
+      </Overlay>
+    );
+  }
+
 
   const handleOpenCreateModal = () => setShowCreateModal(true);
 
   const handleCloseCreateModal = () => {
     // Clear the input fields
-    setOccupationName("");
-    setCategory("");
-    setSubcategory("");
-    setDescription("");
-    setMetadata([{ key: "", value: "" }]);
-
+    // setOccupationName("");
+    // setCategory("");
+    // setSubcategory("");
+    // setDescription("");
+    // setMetadata([{ key: "", value: "" }]);
+    setInitialValues({
+      occupationName: '',
+      category: '',
+      subcategory: '',
+      description: '',
+      riskCategory: '',
+      metadata: [{ key: '', value: '' }]
+    })
     // Close the modal
+    setIsReadOnly(false);
+    setSubmittingUsingEdit(false)
     setShowCreateModal(false);
   };
 
-  const handleAddMetadata = () => {
-    setMetadata([...metadata, { key: "", value: "" }]);
-  };
+  // const handleAddMetadata = () => {
+  //   setMetadata([...metadata, { key: "", value: "" }]);
+  // };
 
-  const handleRemoveMetadata = (index) => {
-    setMetadata(metadata.filter((_, i) => i !== index));
-  };
+  // const handleRemoveMetadata = (index) => {
+  //   setMetadata(metadata.filter((_, i) => i !== index));
+  // };
 
-  const handleMetadataChange = (index, keyOrValue, event) => {
-    const newMetadata = [...metadata];
-    newMetadata[index][keyOrValue] = event.target.value;
-    setMetadata(newMetadata);
-  };
+  // const handleMetadataChange = (index, keyOrValue, event) => {
+  //   const newMetadata = [...metadata];
+  //   newMetadata[index][keyOrValue] = event.target.value;
+  //   setMetadata(newMetadata);
+  // };
 
   // Get reqest 
   const fetchData = async () => {
     const bearerToken = localStorage.getItem('access_token');
+    setLoading(true);
+
     const response = await fetch(
       `${BASE_URL}/crm/incomeAssessment/occupations`,
       {
@@ -115,6 +330,7 @@ export default function Occupations() {
         category: item.category,
         subcategory: item.subCategory,
         description: item.description,
+        ActiveDeactive: item.active ? "Active" : "Not Active",
         // metadata: item.metadata,
         metadata: item.metadata
           ? Object.entries(item.metadata).map(([key, value]) => ({
@@ -131,82 +347,277 @@ export default function Occupations() {
       // Handle the error
       console.log("Something went worng")
     }
+    setLoading(false);
+    setInitialValues({
+      occupationName: '',
+      category: '',
+      subcategory: '',
+      description: '',
+      riskCategory: '',
+      metadata: [{ key: '', value: '' }]
+    })
+
   };
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleFormSubmit = async () => {
-    // Here you can add code to submit the form data to your backend or API
-    const bearerToken = localStorage.getItem('access_token');
+  const [submittingUsingEdit, setSubmittingUsingEdit] = useState(false)
 
-    const response = await fetch(
-      `${BASE_URL}/crm/incomeAssessment/occupations`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${bearerToken}`
+  const handleFormSubmit = async (values) => {
 
-        },
-        body: JSON.stringify([{
+    // Updating the OccupationId 
+    if (submittingUsingEdit === true) {
 
-          occupationCategory: category,
-          occupationSubCategory: subcategory,
-          occupation: occupationName,
-          description: description,
-          riskCategory: riskCategory,
-          metadata: metadata.length && metadata.some(({ key, value }) => key || value)
-            ? metadata.reduce((acc, { key, value }) => {
-              if (key) acc[key] = value;
-              return acc;
-            }, {})
-            : {},
+      console.log("updating the occupation using edit")
+      // Here you can add code to submit the form data to your backend or API
+      const bearerToken = localStorage.getItem('access_token');
+      // console.log("test")
+      // console.log(values)
+      const { occupationName, category, subcategory, description, riskCategory, metadata } = values;
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations?update=true`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${bearerToken}`
 
-        }]),
+          },
+          body: JSON.stringify([{
+            id: occupationId,
+            occupationCategory: category,
+            occupationSubCategory: subcategory,
+            occupation: occupationName,
+            description: description,
+            riskCategory: riskCategory,
+            metadata: metadata.length && metadata.some(({ key, value }) => key || value)
+              ? metadata.reduce((acc, { key, value }) => {
+                if (key) acc[key] = value;
+                return acc;
+              }, {})
+              : {},
+
+          }]),
+        }
+      );
+
+      if (response.ok) {
+        // The request was successful
+        const data = await response.json();
+        // alert("Sucessfully added ")
+        setShowSuccessModal(true);
+
+
+        console.log("Sucessfully added")
+        fetchData()
+        setTimeout(() => setShowSuccessModal(false), 10000);
+        // console.log(data)
+      } else {
+        // The request failed
+        // Handle the error
+        setShowErrorModal(true);
+        setTimeout(() => setShowErrorModal(true), 10000);
+        // alert("Something went wrong ")
       }
-    );
 
-    if (response.ok) {
-      // The request was successful
-      const data = await response.json();
-      // alert("Sucessfully added ")
-      setShowSuccessModal(true);
+      // Add the new occupation to the data array
+      // setData((prevData) => [
+      //   ...prevData,
+      //   {
+      //     id: prevData.length + 1,
+      //     occupationName: occupationName,
+      //     category: category,
+      //     subcategory,
+      //     description,
+      //     metadata,
+      //     createdOn: new Date(),
+      //   },
+      // ]);
 
+      // Close the create modal
 
-      console.log("Sucessfully added")
-      fetchData()
-      setTimeout(() => setShowSuccessModal(false), 10000);
-      // console.log(data)
-    } else {
-      // The request failed
-      // Handle the error
-      setShowErrorModal(true);
-      setTimeout(() => setShowErrorModal(true), 10000);
-      // alert("Something went wrong ")
     }
+    else {
+      console.log('posting new one')
+      // Here you can add code to submit the form data to your backend or API
+      const bearerToken = localStorage.getItem('access_token');
+      console.log("test")
+      // console.log(values)
+      const { occupationName, category, subcategory, description, riskCategory, metadata } = values;
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${bearerToken}`
 
-    // Add the new occupation to the data array
-    // setData((prevData) => [
-    //   ...prevData,
-    //   {
-    //     id: prevData.length + 1,
-    //     occupationName: occupationName,
-    //     category: category,
-    //     subcategory,
-    //     description,
-    //     metadata,
-    //     createdOn: new Date(),
-    //   },
-    // ]);
+          },
+          body: JSON.stringify([{
 
-    // Close the create modal
+            occupationCategory: category,
+            occupationSubCategory: subcategory,
+            occupation: occupationName,
+            description: description,
+            riskCategory: riskCategory,
+            metadata: metadata.length && metadata.some(({ key, value }) => key || value)
+              ? metadata.reduce((acc, { key, value }) => {
+                if (key) acc[key] = value;
+                return acc;
+              }, {})
+              : {},
+
+          }]),
+        }
+      );
+
+      if (response.ok) {
+        // The request was successful
+        const data = await response.json();
+        // alert("Sucessfully added ")
+        setShowSuccessModal(true);
+
+
+        console.log("Sucessfully added")
+        fetchData()
+        setTimeout(() => setShowSuccessModal(false), 10000);
+        // console.log(data)
+      } else {
+        // The request failed
+        // Handle the error
+        setShowErrorModal(true);
+        setTimeout(() => setShowErrorModal(true), 10000);
+        // alert("Something went wrong ")
+      }
+
+      // Add the new occupation to the data array
+      // setData((prevData) => [
+      //   ...prevData,
+      //   {
+      //     id: prevData.length + 1,
+      //     occupationName: occupationName,
+      //     category: category,
+      //     subcategory,
+      //     description,
+      //     metadata,
+      //     createdOn: new Date(),
+      //   },
+      // ]);
+
+      // Close the create modal
+    }
+   
     handleCloseCreateModal();
   };
 
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
+const [occupationId, setOccupationId] = useState('')
+  const [initialValues, setInitialValues] = useState('')
+
+  const handlePoPupEditClick = async (id,) => {
+    setSubmittingUsingEdit(true)
+    setOccupationId(id)
+    console.log("handle click")
+    // console.log(id)
+    const bearerToken = localStorage.getItem('access_token');
+    // Make the GET API request
+    const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${bearerToken}`
+        }
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      console.log("good")
+      // Convert the metadata object into an array of objects with key and value properties
+      const metadataArray = Object.entries(data.data[0].metadata).map(([key, value]) => ({
+        key,
+        value,
+      }));
+      console.log(metadataArray)
+      setInitialValues({
+        occupationName: data.data[0].name,
+        category: data.data[0].category,
+        subcategory: data.data[0].subCategory,
+        description: data.data[0].description,
+        riskCategory: data.data[0].riskCategory,
+        metadata: metadataArray
+        // metadata: [{ key: '', value: '' }]
+
+      })
+      setShowCreateModal(true)
+
+    } else {
+      console.log('bad')
+      setInitialValues({
+        occupationName: '',
+        category: '',
+        subcategory: '',
+        description: '',
+        riskCategory: '',
+        metadata: [{ key: '', value: '' }]
+      })
+
+    }
+    // setShowCreateModal(true)
+
+    // Make the fetch request here
+  };
+
+
+  // View button is clicked this will work
+  const [isReadOnly, setIsReadOnly] = useState(false);
+
+  const handleViewClick = async (id) => {
+    setIsReadOnly(true);
+    setShowCreateModal(true)
+    console.log("handle view click")
+    console.log(id)
+    const bearerToken = localStorage.getItem('access_token');
+    // Make the GET API request
+    const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${bearerToken}`
+        }
+      }
+    );
+    const data = await response.json();
+    console.log(data)
+
+    if (response.ok) {
+      console.log("good")
+      // Convert the metadata object into an array of objects with key and value properties
+      const metadataArray = Object.entries(data.data[0].metadata).map(([key, value]) => ({
+        key,
+        value,
+      }));
+      console.log(metadataArray)
+      setInitialValues({
+        occupationName: data.data[0].name,
+        category: data.data[0].category,
+        subcategory: data.data[0].subCategory,
+        description: data.data[0].description,
+        riskCategory: data.data[0].riskCategory,
+        metadata: metadataArray
+      })
+      setShowCreateModal(true)
+
+    } else {
+      console.log('bad')
+      setInitialValues({
+        occupationName: '',
+        category: '',
+        subcategory: '',
+        description: '',
+        riskCategory: '',
+        metadata: [{ key: '', value: '' }]
+      })
+
+    }
+  };
 
   return (
     <div>
@@ -217,6 +628,24 @@ export default function Occupations() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminLayout>
+        {/* {showPopup && <Popup row={selectedRow} onClose={() => setShowPopup(false)} />} */}
+        {/* {showPopup && (
+          <Popup
+            row={selectedRow}
+            onClose={() => setShowPopup(false)}
+            setFieldValue={setFieldValue} // Pass the setFieldValue function as a prop
+          />
+        )} */}
+        {showPopup && (
+          <Popup
+            row={selectedRow}
+            onClose={() => setShowPopup(false)}
+            setShowCreateModal={setShowCreateModal}
+            // setFieldValue={setFieldValue} // Pass the setFieldValue function as a prop
+            onEditClick={handlePoPupEditClick}
+            onViewClick={handleViewClick}
+          />
+        )}
         {showSuccessModal && (
           <Alert
             variant="success"
@@ -239,203 +668,294 @@ export default function Occupations() {
             Something went wrong
           </Alert>
         )}
-        <div className="row toolbar">
-          <div className="col-lg-4">
-            <InputGroup className="mb-3 ms-3">
-              <InputGroup.Text id="basic-addon1">
-                <Image
-                  src="/images/icons/search-icon.svg"
-                  width="18"
-                  height="18"
-                  alt=""
-                ></Image>
-              </InputGroup.Text>
-              <Form.Control
-                placeholder="Search"
-                aria-label="search"
-                aria-describedby="basic-addon1"
-              />
-            </InputGroup>
+        {loading ? (
+          <div className="loading-container">
+            <div className="spinner"></div>
           </div>
-          <div className="col-lg-8 d-flex justify-content-end">
-            <Button variant="primary me-4" onClick={handleOpenCreateModal}>
-              + Create New
-            </Button>
-          </div>
-        </div>
-
-        {domLoaded ? (
-          <>
-            <DataTable columns={columns} data={data} pagination />
-
-            {/* {selectedOccupation && (
-              <div>
-                <h3>{selectedOccupation.title}</h3>
-                <p>{selectedOccupation.description}</p>
-
-                <h4>Metadata</h4>
-                <ul>
-                  {selectedOccupation.metadata.map((data, index) => (
-                    <li key={index}>
-                      {data.key}: {data.value}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )} */}
-          </>
         ) : (
-          ""
+          <>
+            <div className="row toolbar">
+              <div className="col-lg-4">
+                <InputGroup className="mb-3 ms-3">
+                  <InputGroup.Text id="basic-addon1">
+                    <Image
+                      src="/images/icons/search-icon.svg"
+                      width="18"
+                      height="18"
+                      alt=""
+                    ></Image>
+                  </InputGroup.Text>
+                  <Form.Control
+                    placeholder="Search"
+                    aria-label="search"
+                    aria-describedby="basic-addon1"
+                  />
+                </InputGroup>
+              </div>
+              <div className="col-lg-8 d-flex justify-content-end">
+                <Button variant="primary me-4" onClick={handleOpenCreateModal}>
+                  + Create New
+                </Button>
+              </div>
+            </div>
+            <DataTable columns={columns} data={data} pagination />
+          </>
+
         )}
       </AdminLayout>
-      {/* Success modal */}
-      {/* <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
-        <Modal.Body className="text-center fs-5 p-0 text-success font-weight-bold">Successfully added</Modal.Body>
-      </Modal> */}
-
-      {/* Error modal */}
-      {/* <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
-        <Modal.Body className="text-center fs-5 p-0 text-danger font-weight-bold">Something went wrong</Modal.Body>
-      </Modal>  */}
-      {/* Success alert */}
-
-      <Modal show={showCreateModal} onHide={handleCloseCreateModal} className="modal-lg" >
+      <Modal show={showCreateModal} onHide={handleCloseCreateModal} className="modal-lg">
         <Modal.Header closeButton className="occupationModalHeader">
           <Modal.Title>Create New Occupation</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
-          <Form>
-            <Form.Group className="occupationModalGroup mb-3">
-              <Form.Label>Occupation Name<span>*</span></Form.Label>
-              <Form.Control
-                type="text"
-                value={occupationName}
-                placeholder="Enter occupation name"
-                onChange={(event) => setOccupationName(event.target.value)}
-              />
-            </Form.Group>
+          <Formik
+            initialValues={
+              //   {
+              //   occupationName: '',
+              //   category: '',
+              //   subcategory: '',
+              //   description: '',
+              //   riskCategory: '',
+              //   metadata: [{ key: '', value: '' }]
+              // }
+              initialValues
+            }
+            validationSchema={validationSchema}
+            // onSubmit={(values) => {
+            //   // handle form submission
+            //   console.log('Form data:', values);
 
-            {/* Change the category field to a dropdown */}
-            <Form.Group className="occupationModalGroup mb-3">
-              <Form.Label>Category<span>*</span></Form.Label>
-              <Form.Select
-                value={category}
-                onChange={(event) => setCategory(event.target.value)}
-              >
-                {/* Add a default option */}
-                <option value="">Select a category</option>
+            //   // close modal
+            //   // handleCloseCreateModal();
+            // }}
+            onSubmit={handleFormSubmit}
+            enableReinitialize={true}
 
-                {/* Map over the categories array to create option elements */}
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              setFieldValue
+            }) => {
+              // Filter subcategories based on selected category
+              const subcategories = allSubcategories.filter(
+                (subcategory) => subcategory.category === values.category
+              );
 
-            {/* Change the subcategory field to a dropdown */}
-            <Form.Group className="occupationModalGroup mb-3">
-              <Form.Label>Subcategory<span>*</span></Form.Label>
-              <Form.Select
-                value={subcategory}
-                onChange={(event) => setSubcategory(event.target.value)}
-              >
-                {/* Add a default option */}
-                <option value="">Select a subcategory</option>
-
-                {/* Map over the subcategories array to create option elements */}
-                {subcategories.map((subcategory) => (
-                  <option key={subcategory} value={subcategory}>
-                    {subcategory}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-
-            {/* Keep the description field as a textarea */}
-            <Form.Group className="occupationModalGroupDescription mb-3">
-              <Form.Label>Description<span>*</span></Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={description}
-                placeholder="Enter description "
-                onChange={(event) => setDescription(event.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="occupationModalGroup mb-3">
-              <Form.Label>Risk Category</Form.Label>
-              <Form.Select
-                value={riskCategory}
-                onChange={(event) => setRiskCategory(event.target.value)}
-              >
-                <option value="">Select a risk category</option>
-                <option value="LOW">LOW</option>
-                <option value="MEDIUM">MEDIUM</option>
-                <option value="HIGH">HIGH</option>
-              </Form.Select>
-            </Form.Group>
-            {/* Keep the metadata fields as text inputs */}
-
-            {metadata.map((data, index) => (
-              <Form.Group className="occupationModalGroup mb-3">
-                <Form.Label>Metadata</Form.Label>
-                <div key={index} className="d-flex mb-3">
-                  <Form.Control
-                    className="me-2"
-                    type="text"
-                    placeholder="Enter key"
-                    value={data.key}
-                    onChange={(event) =>
-                      handleMetadataChange(index, "key", event)
-                    }
-                  />
-
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter Value"
-                    value={data.value}
-                    onChange={(event) =>
-                      handleMetadataChange(index, "value", event)
-                    }
-                  />
-
-                  {metadata.length > 1 && (
-                    <Button
-                      variant="ms-2"
-                      className="occupationMetadataRemoveButton"
-                      onClick={() => handleRemoveMetadata(index)}
+              return (
+                <Form onSubmit={handleSubmit}  >
+                  <Form.Group className="occupationModalGroup mb-3">
+                    <Form.Label>Occupation Name<span>*</span></Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="occupationName"
+                      value={values.occupationName}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      readOnly={isReadOnly}
+                      placeholder="Enter occupation name"
+                      onKeyPress={(event) => {
+                        // Prevent non-alphabetic characters
+                        if (!/[a-zA-Z\s]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
+                    />
+                    {touched.occupationName && errors.occupationName && (
+                      <div className="form-text text-danger">{errors.occupationName}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="occupationModalGroup mb-3">
+                    <Form.Label>Category<span>*</span></Form.Label>
+                    <Form.Select
+                      name="category"
+                      value={values.category}
+                      onChange={(event) => {
+                        handleChange(event);
+                        // Reset subcategory value when category changes
+                        setFieldValue('subcategory', '');
+                      }}
+                      onBlur={handleBlur}
+                      disabled={isReadOnly}
                     >
-                      {/* - */}
-                      <Image src={DeleteMetadata} />
+                      <option value="">Select a category</option>
+                      {categories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    {touched.category && errors.category && (
+                      <div className="form-text text-danger">{errors.category}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="occupationModalGroup mb-3">
+                    <Form.Label>Subcategory<span>*</span></Form.Label>
+                    <Form.Select
+                      name="subcategory"
+                      value={values.subcategory}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={isReadOnly}
+                    >
+                      <option value="">Select a subcategory</option>
+                      {subcategories.map((subcategory) => (
+                        <option key={subcategory.name} value={subcategory.name}>
+                          {subcategory.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    {touched.subcategory && errors.subcategory && (
+                      <div className="form-text text-danger">{errors.subcategory}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="occupationModalGroupDescription mb-3">
+                    <Form.Label>Description<span>*</span></Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      name="description"
+                      value={values.description}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      readOnly={isReadOnly}
+                      placeholder="Enter description "
+                    />
+                    {touched.description && errors.description && (
+                      <div className="form-text text-danger">{errors.description}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="occupationModalGroup mb-3">
+                    <Form.Label>Risk Category</Form.Label>
+                    <Form.Select
+                      name="riskCategory"
+                      value={values.riskCategory}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={isReadOnly}
+                    >
+                      <option value="">Select a risk category</option>
+                      <option value="LOW">LOW</option>
+                      <option value="MEDIUM">MEDIUM</option>
+                      <option value="HIGH">HIGH</option>
+                    </Form.Select>
+                    {touched.riskCategory && errors.riskCategory && (
+                      <div className="form-text text-danger">{errors.riskCategory}</div>
+                    )}
+                  </Form.Group>
+
+                  {/* Keep the metadata fields as text inputs */}
+                  {values.metadata.map((data, index) => (
+                    <Form.Group className="occupationModalGroup mb-3" key={index}>
+                      <Form.Label>Metadata</Form.Label>
+                      <div className="d-flex mb-3">
+                        <InputGroup className="me-2">
+                          <FormControl
+                            type="text"
+                            placeholder="Enter key"
+                            name={`metadata[${index}].key`}
+                            value={data.key}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            readOnly={isReadOnly}
+                          />
+                        </InputGroup>
+
+                        <InputGroup className="">
+                          <FormControl
+                            type="text"
+                            placeholder="Enter Value"
+                            name={`metadata[${index}].value`}
+                            value={data.value}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            readOnly={isReadOnly}
+                          />
+                        </InputGroup>
+
+                        {values.metadata.length > 1 && (
+                          <Button
+                            variant=""
+                            className="ms-2 occupationMetadataRemoveButton"
+                            onClick={() => {
+                              const newMetadata = [...values.metadata];
+                              newMetadata.splice(index, 1);
+                              setFieldValue('metadata', newMetadata);
+                            }}
+                            disabled={isReadOnly}
+                          >
+                            {/* - */}
+                            <Image src={DeleteMetadata} />
+                          </Button>
+                        )}
+                      </div>
+                    </Form.Group>
+                  ))}
+
+                  {/* Keep the add metadata button */}
+                  <p
+                    // onClick={() => {
+                    //   const newMetadata = [...values.metadata, { key: '', value: '' }];
+                    //   setFieldValue('metadata', newMetadata);
+                    // }}
+                    onClick={
+                      !isReadOnly
+                        ? () => {
+                          const newMetadata = [...values.metadata, { key: '', value: '' }];
+                          setFieldValue('metadata', newMetadata);
+                        }
+                        : undefined
+                    }
+                    className="addOccupationMetadata"
+                    disabled={isReadOnly}
+                  >
+                    + Add Metadata
+                  </p>
+
+                  <div className="occupationFooter">
+                    {/* Update the cancel button to reset the form */}
+                    <Button variant="secondary"
+                      disabled={isReadOnly}
+                      onClick={() => {
+                        // resetForm();
+                        handleCloseCreateModal();
+                      }} className="occupatoionFooterCancelButton">
+                      Cancel
                     </Button>
-                  )}
-                </div>
-              </Form.Group>
+                    {/* Update the create button to submit the form */}
+                    <Button variant="primary" type="submit" className="occupatoionFooterSubmitButton" disabled={isReadOnly}>
+                      Create
+                    </Button>
+                  </div>
 
-            ))}
-
-            {/* Keep the add metadata button */}
-            <p onClick={handleAddMetadata} className="addOccupationMetadata">
-              + Add Metadata
-            </p>
-          </Form>
+                </Form>
+              );
+            }}
+          </Formik>
         </Modal.Body>
 
         {/* Keep the modal footer */}
-        <Modal.Footer className="occupationFooter">
-          <Button variant="secondary" onClick={handleCloseCreateModal} className="occupatoionFooterCancelButton">
-            Cancel
-          </Button>
-
-          {/* Keep the create button */}
-          <Button variant="primary" onClick={handleFormSubmit} className="occupatoionFooterSubmitButton">
-            Create
-          </Button>
-        </Modal.Footer>
+        {/* <Modal.Footer className="occupationFooter"> */}
+        {/* Update the cancel button to reset the form */}
+        {/* <Button variant="secondary" onClick={() => {
+          resetForm();
+          handleCloseCreateModal();
+        }} className="occupatoionFooterCancelButton">
+          Cancel
+        </Button> */}
+        {/* Update the create button to submit the form */}
+        {/* <Button variant="primary" type="submit" className="occupatoionFooterSubmitButton">
+          Create
+        </Button>
+      </Modal.Footer> */}
       </Modal>
     </div>
   );
 }
+
+
+

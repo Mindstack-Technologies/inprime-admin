@@ -1,8 +1,59 @@
+import React, { useEffect, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
+import Modal from "react-bootstrap/Modal";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import backButton from "../public/images/BackButton.svg"
+import backButton from "../public/images/BackButton.svg";
+import { BASE_URL } from "../baseURL";
+
+
 export default function Header() {
+
+  const [adminUser, setAdminUser] = useState('');
+  const [profileData, setProfileData] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [adminImage, setAdminImage] = useState('');
+
+  useEffect(() => {
+
+    const bearerToken = localStorage.getItem('access_token');
+    const fetchData = async () => {
+      // setLoading(true);
+
+      const response = await fetch(`${BASE_URL}/crm/profile`,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        }
+      );
+      const data = await response.json();
+      // console.log(data)
+      if (response.status === 200) {
+        console.log(`${data.data}`)
+        console.log("Get is successful")
+        setAdminUser(data?.data?.firstName)
+        setAdminImage(data?.data?.profilePic)
+        setProfileData(data);
+
+        // setData(newData);
+      } else {
+        // Handle the error
+        // alert("Something went wrong");
+      }
+      // setLoading(false);
+
+    };
+    fetchData();
+  }, []);
+
+  // const handleActionClick = (event) => {
+  //   setShowPopover(!showPopover);
+  //   target.current = event.target;
+  // }
+
+
+
   const router = useRouter();
   const pathname = router.pathname;
   const handleLogout = async () => {
@@ -24,9 +75,9 @@ export default function Header() {
               <h4>Income Assessment Templates </h4>
             ) : pathname == "/income-assessment-tempate" ? (
               <>
-              <div className="d-flex">
-                <Image onClick={() => router.push('/income-assessment-tempates')} src={backButton} style={{width: "15px", height: "15px", alignItems: "center", margin: "5px", marginRight: '10px', cursor: "pointer"}}  alt="back button"/>
-                <h4>Income Assessment Template</h4>
+                <div className="d-flex">
+                  <Image onClick={() => { router.push('/income-assessment-tempates'); localStorage.removeItem('income-assessment-data'); localStorage.removeItem("formData") }} src={backButton} style={{ width: "15px", height: "15px", alignItems: "center", margin: "5px", marginRight: '10px', cursor: "pointer" }} alt="back button" />
+                  <h4>Income Assessment Template</h4>
                 </div>
               </>
             ) : pathname == "/users" ? (
@@ -42,16 +93,22 @@ export default function Header() {
           <div className="col-lg-4 d-flex justify-content-end">
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
-                <Image
+                {/* <Image
                   src="/images/user_pic.png"
                   width="28"
                   height="28"
                   alt=""
-                ></Image>{" "}
-                Admin User
+                ></Image>{" "} */}
+                {adminImage ? (
+                  <Image src={adminImage} width="28" height="28" alt="" style={{borderRadius: "50%"}} />
+                ) : (
+                  <img src="/images/profile-default.svg" width="28" height="28" alt="" style={{borderRadius: "50%"}}/>
+                )}
+                {adminUser}
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setShowProfile(true)}>Show profile</Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout} >Log out</Dropdown.Item>
                 {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
                 <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
@@ -61,6 +118,35 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      {/* Modal to display profile details */}
+      <Modal show={showProfile} onHide={() => setShowProfile(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Profile Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {profileData && (
+            <div style={{ padding: "20px" }}>
+              <div style={{ marginBottom: "10px" }}>
+                <span style={{ fontWeight: "bold" }}>First Name:</span>{" "}
+                {profileData.data.firstName}
+              </div>
+              <div style={{ marginBottom: "10px" }}>
+                <span style={{ fontWeight: "bold" }}>Last Name:</span>{" "}
+                {profileData.data.lastName}
+              </div>
+              <div style={{ marginBottom: "10px" }}>
+                <span style={{ fontWeight: "bold" }}>Email:</span>{" "}
+                {profileData.data.email}
+              </div>
+              <div style={{ marginBottom: "10px" }}>
+                <span style={{ fontWeight: "bold" }}>Mobile No:</span>{" "}
+                {profileData.data.mobileNo}
+              </div>
+              {/* Render other profile details here */}
+            </div>
+          )}
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
