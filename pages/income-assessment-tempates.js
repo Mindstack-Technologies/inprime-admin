@@ -453,7 +453,9 @@ function IncomeAssessmentPage() {
               <p onClick={handleEditClick}>
                 Edit
               </p>
-              <p >
+              <p 
+              // onClick={handleDublicateClick}
+              >
                 Dublicate
               </p>
             </Popover.Body>

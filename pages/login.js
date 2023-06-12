@@ -45,7 +45,7 @@ const loginForm = () => {
         try {
             // const response = await fetch(`${BASE_URL}/api/dsa/auth/send-otp`, {
             const response = await fetch(
-                `${BASE_URL}/auth/crm/request/otp?mobileNo=${values.mobileNumber}&isMock=true`,
+                `${BASE_URL}/auth/crm/request/otp?mobileNo=${values.mobileNumber}`,
                 {
                     method: "GET",
                     headers: {
