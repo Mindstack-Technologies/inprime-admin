@@ -199,10 +199,10 @@ export default function Occupations() {
 
   // Active and deactive button
   const HandleActiveDeactiveButton = async(row, newValue)=> {
-    console.log(newValue)
+    // console.log(newValue)
     const bearerToken = localStorage.getItem('access_token');
       // console.log("test")
-      console.log(row.ActiveDeactive)
+      // console.log(row.ActiveDeactive)
       const response = await fetch(
         `${BASE_URL}/crm/incomeAssessment/occupations?update=true`,
         {
