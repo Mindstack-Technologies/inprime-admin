@@ -39,12 +39,13 @@ const loginForm = () => {
         //Saving the phone number entered
         setPhoneNumber(values.mobileNumber);
         // console.log(values.mobileNumber);
+        // console.log(phoneNumber)
         setcontinueLoading(true);
 
         try {
             // const response = await fetch(`${BASE_URL}/api/dsa/auth/send-otp`, {
             const response = await fetch(
-                `${BASE_URL}/auth/crm/request/otp?mobileNo=${phoneNumber}&isMock=true`,
+                `${BASE_URL}/auth/crm/request/otp?mobileNo=${values.mobileNumber}`,
                 {
                     method: "GET",
                     headers: {
@@ -66,7 +67,7 @@ const loginForm = () => {
                 setStatus(true);
             } else {
                 // console.log(data);
-                console.log(data.status);
+                // console.log(data.status);
                 console.log("Something went wrong");
                 // Display an error message on failure
                 setErrorMessage(data.error);
@@ -80,6 +81,7 @@ const loginForm = () => {
         }
 
         // Set the submitting state to false
+        setcontinueLoading(false);
         setSubmitting(false);
     };
 

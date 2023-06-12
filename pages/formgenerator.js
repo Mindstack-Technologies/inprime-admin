@@ -409,7 +409,7 @@ function MyForm() {
   useEffect(() => {
     // const OccupationID = localStorage.getItem('OccupationID');
     const OccupationID = router.query.occupationID;
-    console.log(OccupationID)
+    // console.log(OccupationID)
     if (OccupationID) {
       const bearerToken = localStorage.getItem('access_token');
 
