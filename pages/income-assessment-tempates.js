@@ -10,17 +10,15 @@ import OccupationAction from '../public/images/icons/OccupationAction.svg';
 import Image from "next/image";
 import { useRouter } from 'next/router';
 import { BASE_URL } from "../baseURL";
-// import Modal from 'react-bootstrap/Modal';
 import Popover from 'react-bootstrap/Popover';
 import Overlay from 'react-bootstrap/Overlay';
-// import { useRef } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Alert, Modal } from "react-bootstrap";
 
 
 function IncomeAssessmentPage() {
   const [data, setData] = useState([]);
-  const [showTemplate, setShowTemplate] = useState(false);
+  // const [showTemplate, setShowTemplate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -72,16 +70,10 @@ function IncomeAssessmentPage() {
           year: "numeric",
         }),
     },
-    // { name: "Active/Deactive", selector: (row) => row.ActiveDeactive },
     {
       name: "Active/Deactive", selector: (row) => (
         <div>
-          {/* <Button onClick={(()=>HandleActiveDeactiveButton(row))}>
-        {row.ActiveDeactive}
-
-        </Button> */}
           <SwitchComponent
-            // apiValue={row.ActiveDeactive}
             apiValue={row.ActiveDeactive === 'Active'}
             onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
           />
@@ -143,42 +135,24 @@ function IncomeAssessmentPage() {
       ),
     },
   ];
-  // function Popup({ row, onClose }) {
-  //   return (
-  //     <Overlay target={target} show={true} placement="right">
-  //       {(props) => (
-  //         <Popover id="popover-contained" {...props}>
-  //           <Popover.Header as="h3">Pop-up</Popover.Header>
-  //           <Popover.Body>
-  //             {/* Add your pop-up content here */}
-  //             <p>Selected row: {JSON.stringify(row)}</p>
-  //             <Button variant="primary" onClick={onClose}>
-  //               Edit
-  //             </Button>
-  //           </Popover.Body>
-  //         </Popover>
-  //       )}
-  //     </Overlay>
-  //   );
-  // }
 
   const [showErrorModalMessage, setShowErrorModalMessage] = useState('')
   const [showErrorActiveDeactiveModal, setShowErrorActiveDeactiveModal] = useState(false)
 
   // Active and deactive button
   const HandleActiveDeactiveButton = async (row, newValue) => {
-    console.log(newValue)
+    // console.log(newValue)
     const bearerToken = localStorage.getItem('access_token');
-    console.log("test")
-    console.log(row.occupationID)
-    console.log(row.id)
-    console.log(row.ActiveDeactive)
+    // console.log("test")
+    // console.log(row.occupationID)
+    // console.log(row.id)
+    // console.log(row.ActiveDeactive)
     const requestBody = {
       templateId: row.id,
       active: newValue
     };
-    console.log(requestBody)
-    console.log(JSON.stringify(requestBody))
+    // console.log(requestBody)
+    // console.log(JSON.stringify(requestBody))
     const response = await fetch(
       `${BASE_URL}/crm/incomeAssessment/template?occupationId=${row.occupationID}`,
       {
@@ -196,7 +170,7 @@ function IncomeAssessmentPage() {
     if (response.ok) {
       // The request was successful
       // const data = await response.json();
-      console.log(data)
+      // console.log(data)
       // alert("Sucessfully added ")
       setShowSuccessModal(true);
 
@@ -208,7 +182,7 @@ function IncomeAssessmentPage() {
     } else {
       // The request failed
       // Handle the error
-      console.log(data.errorMessage)
+      // console.log(data.errorMessage)
       setShowErrorModalMessage(data.errorMessage)
 
       setShowErrorActiveDeactiveModal(true);
@@ -305,7 +279,7 @@ function IncomeAssessmentPage() {
       }
     );
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
     if (response.status === 200) {
       // console.log(data.data)
       // const newData = data.data.map((item) => ({
@@ -328,14 +302,9 @@ function IncomeAssessmentPage() {
             'Authorization': `Bearer ${bearerToken}`
           }
         });
-        console.log(occupationResponse)
+        // console.log(occupationResponse)
         const occupationData = await occupationResponse.json();
         const occupationName = occupationData?.data?.[0]?.name;
-        // console.log(occupationData?.data?.[0]?.name)
-        // console.log(item.status)
-        // console.log(item.json)
-        // console.log(item.formName)
-        // console.log(item.formDescription)
         return {
           id: item.id,
           templateName: item.formTitle,
@@ -368,14 +337,14 @@ function IncomeAssessmentPage() {
   }
 
 
-  const handleEdit = (row) => {
-    // Send GET request with row data as parameter
-    fetch(`/your-endpoint-here?data=${row.data}`)
-      .then(response => response.json())
-      .then(data => {
-        // Handle response data here
-      });
-  }
+  // const handleEdit = (row) => {
+  //   // Send GET request with row data as parameter
+  //   fetch(`/your-endpoint-here?data=${row.data}`)
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // Handle response data here
+  //     });
+  // }
   {/* <Overlay
   show={showPopover}
   target={target.current}
@@ -393,9 +362,6 @@ function IncomeAssessmentPage() {
 
   }
   const handlePoPupDublicateClick = async (row) => {
-    // console.log(row)
-    // console.log(row.json)
-
     const bearerToken = localStorage.getItem('access_token');
     // const dubllicateBody = {
     //   formTitle: row.templateName,
@@ -420,13 +386,13 @@ function IncomeAssessmentPage() {
         }),
       }
     );
-    console.log(response)
+    // console.log(response)
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
     if (response.ok) {
       // The request was successful
       // const data = await response.json();
-      console.log(data)
+      // console.log(data)
       // alert("Sucessfully added ")
       setShowSuccessModal(true);
 
@@ -438,7 +404,7 @@ function IncomeAssessmentPage() {
     } else {
       // The request failed
       // Handle the error
-      console.log(data.errorMessage)
+      // console.log(data.errorMessage)
       setShowErrorModalMessage(data.errorMessage)
 
       setShowErrorActiveDeactiveModal(true);
@@ -564,18 +530,6 @@ function IncomeAssessmentPage() {
 </Modal> */}
 
       </AdminLayout>
-      {/* <Overlay
-  show={showPopover}
-  target={target.current}
-  placement="bottom"
-  containerPadding={20}
->
-  <Popover id="popover-contained">
-    <Popover.Content>
-      <Button onClick={() => handleEdit(row)}>Edit</Button>
-    </Popover.Content>
-  </Popover>
-</Overlay> */}
     </div>
   );
 }

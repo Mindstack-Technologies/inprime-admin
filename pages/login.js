@@ -67,7 +67,7 @@ const loginForm = () => {
                 setStatus(true);
             } else {
                 // console.log(data);
-                console.log(data.status);
+                // console.log(data.status);
                 console.log("Something went wrong");
                 // Display an error message on failure
                 setErrorMessage(data.error);

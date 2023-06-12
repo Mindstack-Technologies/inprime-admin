@@ -27,15 +27,6 @@ const Schema = Yup.object().shape({
   description: Yup.string().required("description is required"),
 });
 
-// const initialValues = {
-//   occupation: "",
-//   version: "1.0",
-//   form_title: "",
-//   form_name: "",
-//   description: ""
-// };
-
-
 
 export default function IncomeAssessmentTemplate() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -64,11 +55,13 @@ export default function IncomeAssessmentTemplate() {
 
   const router = useRouter();
 
-    // Posting the from 
 
+  // Posting the from 
   const handleSubmit = async (values) => {
-    console.log(saveButtonIsClicked)
+    // console.log(saveButtonIsClicked)
 
+
+    // save button is clicked
     if (saveButtonIsClicked === true) {
       setIsLoading(true);
 
@@ -77,7 +70,7 @@ export default function IncomeAssessmentTemplate() {
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
       const taskData = localStorage.getItem("formData")
-      console.log(taskData)
+      // console.log(taskData)
       if (taskData === null && formsData === null) {
         console.log("both are null")
         setShowReactgeneratorEmpty(true)
@@ -104,7 +97,7 @@ export default function IncomeAssessmentTemplate() {
           formName: values.form_name,
           task_data: formsData,
         };
-        console.log(data)
+        // console.log(data)
 
         try {
           const response = await fetch(url, {
@@ -145,9 +138,9 @@ export default function IncomeAssessmentTemplate() {
 
         const convert = JSON.parse(taskData)
         const onlyArry = convert.task_data
-        console.log(convert)
-        console.log(onlyArry)
-        console.log(onlyArry.length)
+        // console.log(convert)
+        // console.log(onlyArry)
+        // console.log(onlyArry.length)
         if (onlyArry.length == 0) {
           console.log("it containe empty []")
           setShowReactgeneratorEmpty(true)
@@ -203,18 +196,7 @@ export default function IncomeAssessmentTemplate() {
       setIsLoading(false);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    
+    // Update button is clciked
     else if (updateButtonIsClicked === true) {
       setIsUpdateLoading(true);
 
@@ -224,7 +206,7 @@ export default function IncomeAssessmentTemplate() {
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
       const taskData = localStorage.getItem("formData")
-      console.log(taskData)
+      // console.log(taskData)
       if (taskData === null && formsData === null) {
         console.log("both are null")
         setShowReactgeneratorEmpty(true)
@@ -253,7 +235,7 @@ export default function IncomeAssessmentTemplate() {
 
           task_data: formsData,
         };
-        console.log(data)
+        // console.log(data)
 
         try {
           const response = await fetch(url, {
@@ -294,9 +276,9 @@ export default function IncomeAssessmentTemplate() {
 
         const convert = JSON.parse(taskData)
         const onlyArry = convert.task_data
-        console.log(convert)
-        console.log(onlyArry)
-        console.log(onlyArry.length)
+        // console.log(convert)
+        // console.log(onlyArry)
+        // console.log(onlyArry.length)
         if (onlyArry.length == 0) {
           console.log("it containe empty []")
           setShowReactgeneratorEmpty(true)
@@ -321,7 +303,7 @@ export default function IncomeAssessmentTemplate() {
 
             task_data: onlyArry,
           };
-          console.log(data)
+          // console.log(data)
 
           try {
             const response = await fetch(url, {
@@ -355,26 +337,6 @@ export default function IncomeAssessmentTemplate() {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Submit button is working here
     else {
       setSubmitBiuttonisLoading(true)
@@ -384,7 +346,7 @@ export default function IncomeAssessmentTemplate() {
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
       const taskData = localStorage.getItem("formData")
-      console.log(taskData)
+      // console.log(taskData)
       if (taskData === null && formsData === null) {
         console.log("both are null")
         setShowReactgeneratorEmpty(true)
@@ -413,7 +375,7 @@ export default function IncomeAssessmentTemplate() {
           formName: values.form_name,
           task_data: formsData,
         };
-        console.log(data)
+        // console.log(data)
 
         try {
           const response = await fetch(url, {
@@ -425,10 +387,10 @@ export default function IncomeAssessmentTemplate() {
             },
             body: JSON.stringify(data),
           });
-          console.log(response)
+          // console.log(response)
           if (response.ok) {
             const data = await response.json();
-            console.log(data.errorCode);
+            // console.log(data.errorCode);
             if (data.errorCode === "400") {
               setErrorMessage(data.errorMessage)
               setSubmitErrorMessagePopup(true);
@@ -453,9 +415,9 @@ export default function IncomeAssessmentTemplate() {
 
         const convert = JSON.parse(taskData)
         const onlyArry = convert.task_data
-        console.log(convert)
-        console.log(onlyArry)
-        console.log(onlyArry.length)
+        // console.log(convert)
+        // console.log(onlyArry)
+        // console.log(onlyArry.length)
         if (onlyArry.length == 0) {
           console.log("it containe empty []")
           setShowReactgeneratorEmpty(true)
@@ -490,7 +452,7 @@ export default function IncomeAssessmentTemplate() {
               },
               body: JSON.stringify(data),
             });
-            console.log(response)
+            // console.log(response)
             if (response.ok) {
               const data = await response.json();
               // console.log(data);
@@ -511,9 +473,6 @@ export default function IncomeAssessmentTemplate() {
       setSubmitBiuttonisLoading(false)
 
     }
-
-
-
 
     localStorage.removeItem("formData")
     localStorage.removeItem("income-assessment-data")
@@ -561,10 +520,10 @@ export default function IncomeAssessmentTemplate() {
   useEffect(() => {
     setDownload(true)
     const getsaveddata = localStorage.getItem("income-assessment-data")
-    console.log(getsaveddata)
+    // console.log(getsaveddata)
     if (getsaveddata !== null && getsaveddata !== undefined) {
       console.log("not null")
-      console.log(JSON.parse(getsaveddata))
+      // console.log(JSON.parse(getsaveddata))
       const savedData = JSON.parse(getsaveddata)
       // console.log(savedData.formName)
       setFormData(savedData.json)
@@ -590,7 +549,7 @@ export default function IncomeAssessmentTemplate() {
     else {
       console.log("it is null")
 
-      console.log(getsaveddata)
+      // console.log(getsaveddata)
       setInitialValues(
         {
           occupation: "",
@@ -799,27 +758,7 @@ export default function IncomeAssessmentTemplate() {
                   </ErrorMessage>
                   {/* {errors.occupation && touched.occupation} */}
                 </div>
-                {/* <div className="col-lg-6">
-                  <label htmlFor="version">
-                    Version <span>*</span>
-                  </label>
-                  <Field as="select" id="version" name="version" className="form-control"> */}
-                {/* Add a default option */}
-                {/* <option value="">Select a version</option> */}
-
-                {/* Map over the versions array to create option elements */}
-                {/* {versions.map((version) => (
-                      <option key={version} value={version}>
-                        {version}
-                      </option>
-                    ))}
-                  </Field>
-                  <ErrorMessage name="version">
-                    {(msg) => <div className="form-text text-danger">{msg}</div>}
-                  </ErrorMessage>
-                </div> */}
               </div>
-
               <div className="row">
                 <div className="col-lg-6">
                   <label htmlFor="form_title">

@@ -54,40 +54,15 @@ const allSubcategories = [
   { category: "Individual Self-employed(Service)", name: "Other" },
 ];
 export default function Occupations() {
-  // const [domLoaded, setDomLoaded] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  // const [metadata, setMetadata] = useState([{ key: "", value: "" }]);
   const [data, setData] = useState([]);
-  // const [occupationName, setOccupationName] = useState("");
-  // const [category, setCategory] = useState("");
-  // const [subcategory, setSubcategory] = useState("");
-  // const [description, setDescription] = useState("");
-  const [selectedOccupation, setSelectedOccupation] = useState(null);
-  // const [riskCategory, setRiskCategory] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [showPopup, setShowPopup] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [target, setTarget] = useState(null);
 
-  const [setFieldValue, setSetFieldValue] = useState(null);
-
-  // const [category, setCategory] = useState("");
-  // const [subcategory, setSubcategory] = useState("");
-  // const [subcategories, setSubcategories] = useState([]);
-
-  // const handleCategoryChange = (event) => {
-  //   const selectedCategory = event.target.value;
-  //   setCategory(selectedCategory);
-
-  //   // Filter subcategories based on selected category
-  //   const filteredSubcategories = allSubcategories.filter(
-  //     (subcategory) => subcategory.category === selectedCategory
-  //   );
-  //   setSubcategories(filteredSubcategories);
-  // };
 
 
   function SwitchComponent({ apiValue, onToggle }) {
@@ -122,30 +97,11 @@ export default function Occupations() {
     { name: "Subcategory", selector: (row) => row.subcategory },
     { name: "Active/Deactive", selector: (row) => (
       <div>
-        {/* <Button onClick={(()=>HandleActiveDeactiveButton(row))}>
-        {row.ActiveDeactive}
-
-        </Button> */}
          <SwitchComponent
-        // apiValue={row.ActiveDeactive}
         apiValue={row.ActiveDeactive === 'Active'}
-
-        
         onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
       />
-         {/* <div> */}
-    {/* <ToggleSwitch onChange={(()=>HandleActiveDeactiveButton(row))} checked={row.ActiveDeactive} /> */}
-    {/* <Form>
-      <Form.Check // prettier-ignore
-        type="switch"
-        id="custom-switch"
-        // label="Check this switch"
-      />
-    </Form> */}
-  {/* </div> */}
       </div>
-
-
        )},
     {
       name: "Created On",
@@ -218,11 +174,11 @@ export default function Occupations() {
           }]),
         }
       );
-      console.log(response)
+      // console.log(response)
       if (response.ok) {
         // The request was successful
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         // alert("Sucessfully added ")
         setShowSuccessModal(true);
 
@@ -239,6 +195,7 @@ export default function Occupations() {
         // alert("Something went wrong ")
       }
   }
+
 
   // Popup function shows the edit and view 
   function Popup({ row, onClose, onEditClick, onViewClick }) {
@@ -276,11 +233,6 @@ export default function Occupations() {
 
   const handleCloseCreateModal = () => {
     // Clear the input fields
-    // setOccupationName("");
-    // setCategory("");
-    // setSubcategory("");
-    // setDescription("");
-    // setMetadata([{ key: "", value: "" }]);
     setInitialValues({
       occupationName: '',
       category: '',
@@ -490,22 +442,6 @@ export default function Occupations() {
         setTimeout(() => setShowErrorModal(true), 10000);
         // alert("Something went wrong ")
       }
-
-      // Add the new occupation to the data array
-      // setData((prevData) => [
-      //   ...prevData,
-      //   {
-      //     id: prevData.length + 1,
-      //     occupationName: occupationName,
-      //     category: category,
-      //     subcategory,
-      //     description,
-      //     metadata,
-      //     createdOn: new Date(),
-      //   },
-      // ]);
-
-      // Close the create modal
     }
    
     handleCloseCreateModal();
@@ -536,7 +472,7 @@ const [occupationId, setOccupationId] = useState('')
         key,
         value,
       }));
-      console.log(metadataArray)
+      // console.log(metadataArray)
       setInitialValues({
         occupationName: data.data[0].name,
         category: data.data[0].category,
@@ -574,7 +510,7 @@ const [occupationId, setOccupationId] = useState('')
     setIsReadOnly(true);
     setShowCreateModal(true)
     console.log("handle view click")
-    console.log(id)
+    // console.log(id)
     const bearerToken = localStorage.getItem('access_token');
     // Make the GET API request
     const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${id}`,
@@ -594,7 +530,7 @@ const [occupationId, setOccupationId] = useState('')
         key,
         value,
       }));
-      console.log(metadataArray)
+      // console.log(metadataArray)
       setInitialValues({
         occupationName: data.data[0].name,
         category: data.data[0].category,
@@ -628,14 +564,6 @@ const [occupationId, setOccupationId] = useState('')
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminLayout>
-        {/* {showPopup && <Popup row={selectedRow} onClose={() => setShowPopup(false)} />} */}
-        {/* {showPopup && (
-          <Popup
-            row={selectedRow}
-            onClose={() => setShowPopup(false)}
-            setFieldValue={setFieldValue} // Pass the setFieldValue function as a prop
-          />
-        )} */}
         {showPopup && (
           <Popup
             row={selectedRow}
@@ -721,13 +649,6 @@ const [occupationId, setOccupationId] = useState('')
               initialValues
             }
             validationSchema={validationSchema}
-            // onSubmit={(values) => {
-            //   // handle form submission
-            //   console.log('Form data:', values);
-
-            //   // close modal
-            //   // handleCloseCreateModal();
-            // }}
             onSubmit={handleFormSubmit}
             enableReinitialize={true}
 
@@ -898,10 +819,6 @@ const [occupationId, setOccupationId] = useState('')
 
                   {/* Keep the add metadata button */}
                   <p
-                    // onClick={() => {
-                    //   const newMetadata = [...values.metadata, { key: '', value: '' }];
-                    //   setFieldValue('metadata', newMetadata);
-                    // }}
                     onClick={
                       !isReadOnly
                         ? () => {
