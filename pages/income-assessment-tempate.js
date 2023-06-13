@@ -22,6 +22,7 @@ const onPost = (data) => {
 const Schema = Yup.object().shape({
   occupation: Yup.string().required("occupation is required"),
   // version: Yup.string().required("version is required"),
+  templateName: Yup.string().required("template name is required"),
   form_title: Yup.string().required("form title is required"),
   form_name: Yup.string().required("form name is required"),
   description: Yup.string().required("description is required"),
@@ -33,7 +34,7 @@ export default function IncomeAssessmentTemplate() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [submitBiuttonisLoading, setSubmitBiuttonisLoading] = useState(false)
-  const [isUpdateLoading, setIsUpdateLoading]= useState(false)
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false)
   const [showReactgeneratorEmpty, setShowReactgeneratorEmpty] = useState(false)
 
   const [initialValues, setInitialValues] = useState('')
@@ -48,9 +49,11 @@ export default function IncomeAssessmentTemplate() {
 
   const [saveErrorMessagePopup, setSaveErrorMessagePopup] = useState(false)
 
-  
+
   const [saveButtonIsClicked, setSaveButtonIsClicked] = useState(false)
   const [updateButtonIsClicked, setUpdateButtonIsClicked] = useState(false)
+
+  const [saveErrorMessageSameTemplate, setSaveErrorMessageSameTemplate]= useState(false)
 
 
   const router = useRouter();
@@ -66,6 +69,7 @@ export default function IncomeAssessmentTemplate() {
       setIsLoading(true);
 
       console.log('save button is clicked')
+      console.log(values.templateName)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
@@ -93,6 +97,7 @@ export default function IncomeAssessmentTemplate() {
           occupationId: values.occupation,
           formTitle: values.form_title,
           // version: values.version,
+          templateName: values.templateName,
           formDescription: values.description,
           formName: values.form_name,
           task_data: formsData,
@@ -125,11 +130,12 @@ export default function IncomeAssessmentTemplate() {
           } else {
             setShowErrorModal(true);
             setTimeout(() => setShowErrorModal(true), 10000);
+            // console.log("here it got error")
           }
         } catch (error) {
           console.error(error);
         }
-        
+
 
       } else {
         console.log('form is  edited or new form')
@@ -158,12 +164,13 @@ export default function IncomeAssessmentTemplate() {
           const data = {
             occupationId: values.occupation,
             formTitle: values.form_title,
-            version: values.version,
+            // version: values.version,
+            templateName: values.templateName,
             formDescription: values.description,
             formName: values.form_name,
             task_data: onlyArry,
           };
-          console.log(data)
+          // console.log(data)
 
           try {
             const response = await fetch(url, {
@@ -176,15 +183,22 @@ export default function IncomeAssessmentTemplate() {
               body: JSON.stringify(data),
             });
             // console.log(response)
+            const outputdata = await response.json();
+            
             if (response.ok) {
-              const data = await response.json();
+              // const data = await response.json();
               // console.log(data);
               setShowSuccessModal(true);
               setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
             } else {
-              setShowErrorModal(true);
-              setTimeout(() => setShowErrorModal(true), 10000);
+              setSaveErrorMessageSameTemplate(true);
+              setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
+              // console.log("here it got error")
+              // console.log(outputdata)
+              // console.log(outputdata.errorMessage)
+              setErrorMessage(outputdata.errorMessage)
+
             }
           } catch (error) {
             console.error(error);
@@ -231,7 +245,7 @@ export default function IncomeAssessmentTemplate() {
           // version: values.version,
           formDescription: values.description,
           formName: values.form_name,
-      templateId: templateId, 
+          templateId: templateId,
 
           task_data: formsData,
         };
@@ -267,7 +281,7 @@ export default function IncomeAssessmentTemplate() {
         } catch (error) {
           console.error(error);
         }
-        
+
 
       } else {
         console.log('form is  edited or new form')
@@ -296,10 +310,10 @@ export default function IncomeAssessmentTemplate() {
           const data = {
             occupationId: values.occupation,
             formTitle: values.form_title,
-            version: values.version,
+            // version: values.version,
             formDescription: values.description,
             formName: values.form_name,
-            templateId: templateId, 
+            templateId: templateId,
 
             task_data: onlyArry,
           };
@@ -369,7 +383,8 @@ export default function IncomeAssessmentTemplate() {
           occupationId: values.occupation,
           formTitle: values.form_title,
           // version: values.version,
-          templateId: templateId, 
+          templateName: values.templateName,
+          templateId: templateId,
           publish: true,
           formDescription: values.description,
           formName: values.form_name,
@@ -388,8 +403,10 @@ export default function IncomeAssessmentTemplate() {
             body: JSON.stringify(data),
           });
           // console.log(response)
+          const outputdata = await response.json();
+
           if (response.ok) {
-            const data = await response.json();
+            // const data = await response.json();
             // console.log(data.errorCode);
             if (data.errorCode === "400") {
               setErrorMessage(data.errorMessage)
@@ -399,10 +416,17 @@ export default function IncomeAssessmentTemplate() {
               setShowSuccessModal(true);
               setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              
             }
           } else {
-            setShowErrorModal(true);
-            setTimeout(() => setShowErrorModal(true), 10000);
+            // setShowErrorModal(true);
+            // setTimeout(() => setShowErrorModal(true), 10000);
+            setSaveErrorMessageSameTemplate(true);
+            setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
+            // console.log("here it got error")
+            // console.log(outputdata)
+            // console.log(outputdata.errorMessage)
+            setErrorMessage(outputdata.errorMessage)
           }
         } catch (error) {
           console.error(error);
@@ -435,7 +459,10 @@ export default function IncomeAssessmentTemplate() {
           const data = {
             occupationId: values.occupation,
             formTitle: values.form_title,
-            version: values.version,
+            // version: values.version,
+            templateName: values.templateName,
+            templateId: templateId,
+            publish: true,
             formDescription: values.description,
             formName: values.form_name,
             task_data: onlyArry,
@@ -453,15 +480,23 @@ export default function IncomeAssessmentTemplate() {
               body: JSON.stringify(data),
             });
             // console.log(response)
+            const outputdata = await response.json();
+
             if (response.ok) {
-              const data = await response.json();
+              // const data = await response.json();
               // console.log(data);
               setShowSuccessModal(true);
               setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
             } else {
-              setShowErrorModal(true);
-              setTimeout(() => setShowErrorModal(true), 10000);
+              // setShowErrorModal(true);
+              // setTimeout(() => setShowErrorModal(true), 10000);
+              setSaveErrorMessageSameTemplate(true);
+            setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
+            // console.log("here it got error")
+            // console.log(outputdata)
+            // console.log(outputdata.errorMessage)
+            setErrorMessage(`${outputdata.errorMessage} So save First`)
             }
           } catch (error) {
             console.error(error);
@@ -508,7 +543,8 @@ export default function IncomeAssessmentTemplate() {
         version: "1.0",
         form_title: "",
         form_name: "",
-        description: ""
+        description: "",
+        templateName: ""
       }
     )
     fetchData();
@@ -529,7 +565,7 @@ export default function IncomeAssessmentTemplate() {
       setFormData(savedData.json)
       // console.log(savedData.id)
       setTemplateId(savedData.id)
-      
+
       // console.log(savedData.json)
       // const converting = JSON.stringify(savedData.json)
       // console.log(converting)
@@ -539,10 +575,12 @@ export default function IncomeAssessmentTemplate() {
       setInitialValues(
         {
           occupation: savedData.occupationId,
-          version: "1.0",
-          form_title: savedData.formName,
+          // version: "1.0",
+          // templateName: savedData.templateName,
+          form_title: savedData.formTitle,
           form_name: savedData.formName,
-          description: savedData.formDescription
+          description: savedData.formDescription,
+          templateName: savedData?.templateName
         }
       )
     }
@@ -553,10 +591,12 @@ export default function IncomeAssessmentTemplate() {
       setInitialValues(
         {
           occupation: "",
-          version: "1.0",
+          // version: "1.0",
+          // templateName: "",
           form_title: "",
           form_name: "",
-          description: ""
+          description: "",
+          templateName: ""
         }
       )
       setFormData(null)
@@ -569,6 +609,7 @@ export default function IncomeAssessmentTemplate() {
   //   const saveButtonIsClicked =() =>{
   // console.log('clilcked')
   //   }
+
 
   return (
     <div>
@@ -609,6 +650,16 @@ export default function IncomeAssessmentTemplate() {
             {errorMessage}
           </Alert>
         )}
+        {saveErrorMessageSameTemplate && (
+          <Alert
+            variant="danger"
+            onClose={() => setSaveErrorMessageSameTemplate(false)}
+            dismissible
+            className="alert-top" // <-- add this line
+          >
+            {errorMessage}
+          </Alert>
+        )}
         {showSuccessModal && (
           <Alert
             variant="success"
@@ -631,6 +682,8 @@ export default function IncomeAssessmentTemplate() {
             Something went wrong
           </Alert>
         )}
+        
+        
         {showReactgeneratorEmpty && (
           <Alert
             variant="danger"
@@ -682,7 +735,7 @@ export default function IncomeAssessmentTemplate() {
                     "Save"
                   )}
                 </button>
-                
+
                 <button
                   type="submit"
                   onClick={() => setUpdateButtonIsClicked(true)}
@@ -754,6 +807,25 @@ export default function IncomeAssessmentTemplate() {
                     ))}
                   </Field>
                   <ErrorMessage name="occupation">
+                    {(msg) => <div className="form-text text-danger">{msg}</div>}
+                  </ErrorMessage>
+                  {/* {errors.occupation && touched.occupation} */}
+                </div>
+                <div className="col-lg-6">
+                  <label htmlFor="templateName">
+                    Unique Template Name <span>*</span>
+                  </label>
+                  <Field
+
+                    type="text"
+                    id="templateName"
+                    name="templateName"
+
+                    // value={values.form_title}
+                    className="form-control"
+                    placeholder="Enter form Unique Template Name"
+                  />
+                  <ErrorMessage name="templateName">
                     {(msg) => <div className="form-text text-danger">{msg}</div>}
                   </ErrorMessage>
                   {/* {errors.occupation && touched.occupation} */}

@@ -14,6 +14,7 @@ import Popover from 'react-bootstrap/Popover';
 import Overlay from 'react-bootstrap/Overlay';
 import Dropdown from "react-bootstrap/Dropdown";
 import { Alert, Modal } from "react-bootstrap";
+import CustomPagination from "../components/CustomPagination";
 
 
 function IncomeAssessmentPage() {
@@ -59,6 +60,7 @@ function IncomeAssessmentPage() {
   const columns = [
     // { name: "#", selector: (row) => row.id },
     { name: "Template Name", selector: (row) => row.templateName },
+    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName },
     { name: "Occupation", selector: (row) => row.occupation },
     { name: "Version", selector: (row) => row.version },
     {
@@ -69,6 +71,7 @@ function IncomeAssessmentPage() {
           month: "long",
           year: "numeric",
         }),
+        sortable: true,
     },
     {
       name: "Active/Deactive", selector: (row) => (
@@ -139,6 +142,8 @@ function IncomeAssessmentPage() {
   const [showErrorModalMessage, setShowErrorModalMessage] = useState('')
   const [showErrorActiveDeactiveModal, setShowErrorActiveDeactiveModal] = useState(false)
 
+
+
   // Active and deactive button
   const HandleActiveDeactiveButton = async (row, newValue) => {
     // console.log(newValue)
@@ -187,6 +192,21 @@ function IncomeAssessmentPage() {
 
       setShowErrorActiveDeactiveModal(true);
       setTimeout(() => setShowErrorActiveDeactiveModal(false), 10000);
+
+
+      // useEffect( () => {
+      //   // const bearerToken = localStorage.getItem('access_token');
+      //   const testresponse =  fetch(`${BASE_URL}/crm/incomeAssessment/templates?occupationId=${occupationID}`,
+      //     {
+      //       headers: {
+      //         'Authorization': `Bearer ${bearerToken}`
+      //       }
+      //     }
+      //   )
+      //   const data =  testresponse.json();
+      //   console.log(data)
+        
+      // })
       // alert("Something went wrong ")
     }
   }
@@ -259,6 +279,21 @@ function IncomeAssessmentPage() {
   }, [selected]);
 
 
+  // useEffect ( async ()=>{
+  //   const bearerToken = localStorage.getItem('access_token');
+  //   response = await fetch (`${BASE_URL}/crm/incomeAssessment/templates?occupationId=${occupationID}`,
+  //   {
+  //     headers: {
+  //       'Authorization': `Bearer ${bearerToken}`
+  //     }
+  //   }
+  // )
+  // const data =await response.json();
+  // console.log(data)
+
+  // })
+
+
   const fetchData = async () => {
     const bearerToken = localStorage.getItem('access_token');
 
@@ -317,6 +352,7 @@ function IncomeAssessmentPage() {
           json: item.json,
           formName: item.formName,
           formDescription: item.formDescription,
+          UniqueTemplateName :item.templateName
         };
       });
       console.log("Get is successful")
@@ -510,7 +546,11 @@ function IncomeAssessmentPage() {
               {showPopup && <Popup row={selectedRow} onClose={() => setShowPopup(false)}
                 handleDublicateClick={handlePoPupDublicateClick}
               />}
-              <DataTable columns={columns} data={data} pagination />
+              <DataTable columns={columns} data={data} pagination 
+                    paginationComponent={CustomPagination}
+
+              
+              />
               {/* {domLoaded ? (
             <DataTable columns={columns} data={data} pagination />
           ) : (
