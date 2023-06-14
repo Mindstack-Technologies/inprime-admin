@@ -28,6 +28,9 @@ function IncomeAssessmentPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [selected, setSelected] = useState('All');
+  const [dropdownOccupationOptions, setDropdownOccupationOptions] = useState([]);
+  const [selectedOccupation, setSelectedOccupation]= useState(null);
+  const [selectedOccupationValue, setSelectedOccupationValue] = useState('All');
 
   const router = useRouter();
 
@@ -60,10 +63,11 @@ function IncomeAssessmentPage() {
 
   const columns = [
     // { name: "#", selector: (row) => row.id },
-    { name: "Template Name", selector: (row) => row.templateName,
-    width: "auto",
-  },
-    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName,  width: "auto"},
+    {
+      name: "Template Name", selector: (row) => row.templateName,
+      width: "auto",
+    },
+    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName, width: "auto" },
     { name: "Occupation", selector: (row) => row.occupation, width: "auto" },
     { name: "Version", selector: (row) => row.version, width: "100px" },
     {
@@ -74,8 +78,8 @@ function IncomeAssessmentPage() {
           month: "long",
           year: "numeric",
         }),
-        sortable: true,
-        width: "120px",
+      sortable: true,
+      width: "120px",
 
     },
     {
@@ -89,8 +93,9 @@ function IncomeAssessmentPage() {
       ),
       width: "150px",
     },
-    { name: "Published", selector: (row) => row.published,      
-     width: "130px",
+    {
+      name: "Published", selector: (row) => row.published,
+      width: "130px",
     },
 
     // {
@@ -214,7 +219,7 @@ function IncomeAssessmentPage() {
       //   )
       //   const data =  testresponse.json();
       //   console.log(data)
-        
+
       // })
       // alert("Something went wrong ")
     }
@@ -272,7 +277,7 @@ function IncomeAssessmentPage() {
                 // onClick={handleDublicateClick}
                 onClick={(() => handleDublicateClick(row))}
               >
-                Dublicate
+                Duplicate
               </p>
             </Popover.Body>
           </Popover>
@@ -285,7 +290,7 @@ function IncomeAssessmentPage() {
 
   useEffect(() => {
     fetchData();
-  }, [selected]);
+  }, [selected, selectedOccupation]);
 
 
   // useEffect ( async ()=>{
@@ -313,6 +318,12 @@ function IncomeAssessmentPage() {
     } else if (selected === 'Published') {
       apiUrl += '?status=PUBLISHED';
     }
+
+    if (selectedOccupation) {
+      apiUrl += `${apiUrl.includes('?') ? '&' : '?'}occupationId=${selectedOccupation}`;
+    }
+
+console.log(apiUrl)
     // const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates`,
     const response = await fetch(apiUrl,
 
@@ -361,7 +372,7 @@ function IncomeAssessmentPage() {
           json: item.json,
           formName: item.formName,
           formDescription: item.formDescription,
-          UniqueTemplateName :item.templateName
+          UniqueTemplateName: item.templateName
         };
       });
       console.log("Get is successful")
@@ -409,7 +420,7 @@ function IncomeAssessmentPage() {
   const handlePoPupDublicateClick = async (row) => {
     const bearerToken = localStorage.getItem('access_token');
 
-    console.log(row.UniqueTemplateName+" copy")
+    console.log(row.UniqueTemplateName + " copy")
     // const dubllicateBody = {
     //   formTitle: row.templateName,
     //   formDescription: row.formDescription,
@@ -426,7 +437,7 @@ function IncomeAssessmentPage() {
           "Authorization": `Bearer ${bearerToken}`
         },
         body: JSON.stringify({
-          templateName: row.UniqueTemplateName+" copy",
+          templateName: row.UniqueTemplateName + " copy",
           formTitle: row.templateName,
           formDescription: row.formDescription,
           formName: row.formName,
@@ -461,6 +472,33 @@ function IncomeAssessmentPage() {
     }
 
   }
+
+
+
+  // getitng occupation for dropdown 
+  // const [dropdownOccupationOptions, setDropdownOccupationOptions] = useState([]);
+  // const [selectedOccupation, setSelectedOccupation]= useState('All');
+
+  useEffect(() => {
+    const bearerToken = localStorage.getItem('access_token');
+    const fetchOccupationData = async () => {
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations`,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        }
+      );
+      const occuaptionData = await response.json();
+      console.log(occuaptionData)
+      setDropdownOccupationOptions(occuaptionData.data);
+      console.log('Get is successful')
+    };
+
+    fetchOccupationData();
+  }, []);
+
 
   return (
     <div>
@@ -534,7 +572,30 @@ function IncomeAssessmentPage() {
                     />
                   </InputGroup>
                 </div>
-                <div className="col-lg-4">
+                <div className="col-lg-2">
+                </div>
+                <div className="col-lg-2 d-flex justify-content-end">
+                  <Dropdown className="dorpdown-category">
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="dorpdown-category-selection">
+                      {selectedOccupationValue}
+                    </Dropdown.Toggle>
+
+                    {/* <Dropdown.Menu className="dropdown-category-menu">
+                      {dropdownOccupationOptions.map(option => (
+                        <Dropdown.Item onClick={() => setSelected(option)}>
+                          {option}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu> */}
+                    <Dropdown.Menu className="dropdown-category-menu">
+                    <Dropdown.Item onClick={() => {setSelectedOccupation(null); setSelectedOccupationValue('All')}}>All</Dropdown.Item>
+                      {dropdownOccupationOptions.map(option => (
+                        <Dropdown.Item key={option.id} onClick={() =>{ setSelectedOccupation(option.id); setSelectedOccupationValue(option.name)}}>
+                          {option.name}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
                 <div className="col-lg-2 d-flex justify-content-end">
                   <Dropdown className="dorpdown-category">
@@ -558,12 +619,12 @@ function IncomeAssessmentPage() {
               {showPopup && <Popup row={selectedRow} onClose={() => setShowPopup(false)}
                 handleDublicateClick={handlePoPupDublicateClick}
               />}
-              <DataTable columns={columns} data={data} pagination 
-                    paginationComponent={CustomPagination}
-                    customStyles={CustomStylesTable}
+              <DataTable columns={columns} data={data} pagination
+                paginationComponent={CustomPagination}
+                customStyles={CustomStylesTable}
 
 
-              
+
               />
               {/* {domLoaded ? (
             <DataTable columns={columns} data={data} pagination />
