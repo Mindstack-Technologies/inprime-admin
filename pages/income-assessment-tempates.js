@@ -15,6 +15,7 @@ import Overlay from 'react-bootstrap/Overlay';
 import Dropdown from "react-bootstrap/Dropdown";
 import { Alert, Modal } from "react-bootstrap";
 import CustomPagination from "../components/CustomPagination";
+import CustomStylesTable from "@/components/CustomStylesTable";
 
 
 function IncomeAssessmentPage() {
@@ -59,10 +60,12 @@ function IncomeAssessmentPage() {
 
   const columns = [
     // { name: "#", selector: (row) => row.id },
-    { name: "Template Name", selector: (row) => row.templateName },
-    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName },
-    { name: "Occupation", selector: (row) => row.occupation },
-    { name: "Version", selector: (row) => row.version },
+    { name: "Template Name", selector: (row) => row.templateName,
+    width: "auto",
+  },
+    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName,  width: "auto"},
+    { name: "Occupation", selector: (row) => row.occupation, width: "auto" },
+    { name: "Version", selector: (row) => row.version, width: "100px" },
     {
       name: "Created On",
       selector: (row) =>
@@ -72,6 +75,8 @@ function IncomeAssessmentPage() {
           year: "numeric",
         }),
         sortable: true,
+        width: "120px",
+
     },
     {
       name: "Active/Deactive", selector: (row) => (
@@ -81,9 +86,12 @@ function IncomeAssessmentPage() {
             onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
           />
         </div>
-      )
+      ),
+      width: "150px",
     },
-    { name: "Published", selector: (row) => row.published },
+    { name: "Published", selector: (row) => row.published,      
+     width: "130px",
+    },
 
     // {
     //   name: "Action",
@@ -136,6 +144,7 @@ function IncomeAssessmentPage() {
           </Button>
         </div>
       ),
+      width: "100px",
     },
   ];
 
@@ -399,6 +408,8 @@ function IncomeAssessmentPage() {
   }
   const handlePoPupDublicateClick = async (row) => {
     const bearerToken = localStorage.getItem('access_token');
+
+    console.log(row.UniqueTemplateName+" copy")
     // const dubllicateBody = {
     //   formTitle: row.templateName,
     //   formDescription: row.formDescription,
@@ -415,6 +426,7 @@ function IncomeAssessmentPage() {
           "Authorization": `Bearer ${bearerToken}`
         },
         body: JSON.stringify({
+          templateName: row.UniqueTemplateName+" copy",
           formTitle: row.templateName,
           formDescription: row.formDescription,
           formName: row.formName,
@@ -548,6 +560,8 @@ function IncomeAssessmentPage() {
               />}
               <DataTable columns={columns} data={data} pagination 
                     paginationComponent={CustomPagination}
+                    customStyles={CustomStylesTable}
+
 
               
               />

@@ -447,7 +447,22 @@ input {
 .popover p:hover {
   background-color: #77329b;
   color: #FFFFFF;
+  cursor: pointer;
 }
+
+
+
+/* occuaption view model */
+.viewModel{
+  position: fixed!important;
+  top: 50%!important;
+  left: 50%!important;
+  transform: translate(-50%, -50%)!important;
+}
+
+/* .myTable tr {
+  background-color: #000;
+} */
 
 /* occupatioin end */
 

@@ -16,7 +16,7 @@ import { FormControl } from 'react-bootstrap';
 import Popover from 'react-bootstrap/Popover';
 import Overlay from 'react-bootstrap/Overlay';
 import CustomPagination from "../components/CustomPagination";
-
+import CustomStylesTable from "@/components/CustomStylesTable";
 
 const validationSchema = Yup.object().shape({
   occupationName: Yup.string()
@@ -65,7 +65,8 @@ export default function Occupations() {
   const [target, setTarget] = useState(null);
   const [showingTemplateNameAndVersion, setshowingTemplateNameAndVersion] = useState(false)
   const [templatesArray, setTemplatesArray] = useState([]);
-
+  const [showErrorMessageModal, setShowErrorMessageModal] = useState(false)
+  const [errorMessageFromResponse, seterrorMessageFromResponse] = useState('')
 
 
   function SwitchComponent({ apiValue, onToggle }) {
@@ -97,27 +98,23 @@ export default function Occupations() {
     // { name: "#", selector: (row) => row.id },
     {
       name: "Occupation", selector: (row) => row.occupationName, sortable: true,
-      // style: {
-      //   width: '300px', // Set the width of the Occupation column
-      // },
+      width: "auto"
     },
     {
       name: "Template Name", selector: (row) => row.templateName,
+      width: "auto"
     },
     {
       name: "Version", selector: (row) => row.version,
+      width: "100px"
     },
     {
       name: "Category", selector: (row) => row.category,
-      // style: {
-      //     width: '400px', // Set the width of the Occupation column
-      //   }, 
+      width: "auto"
     },
     {
       name: "Subcategory", selector: (row) => row.subcategory,
-      // style: {
-      //   width: '200px', // Set the width of the Occupation column
-      // }, 
+      width: "auto"
     },
     // { name: "Active/Deactive", selector: (row) => (
     //   <div>
@@ -144,9 +141,8 @@ export default function Occupations() {
         if (rowA.ActiveDeactive === 'Active') return -1;
         return 1;
       },
-      // style: {
-      //   width: '100px', // Set the width of the Action column
-      // },
+      width: "170px"
+
     },
     {
       name: "Created On",
@@ -157,9 +153,8 @@ export default function Occupations() {
           year: "numeric",
         }),
       sortable: true,
-      // style: {
-      //   width: '100px', // Set the width of the Action column
-      // },
+      width: "130px"
+
 
     },
     // {
@@ -199,9 +194,73 @@ export default function Occupations() {
           </Button>
         </div>
       ),
+      width: "100px"
     },
   ];
 
+  // const CustomStylesTable = {
+  //   headCells: {
+  //     // style: {
+  //     //   backgroundColor: '#ADD8E6', // Change the background color of the header cells
+  //     //   fontSize: '12px', // Change the font size of the header cells
+
+  //     //   background: "rgba(235, 236, 241, 0.3)",
+  //     //   // border: "1px solid #EBECF1",
+  //     //   // borderRadius: "4px 4px 0px 0px",
+
+  //     //   // Add more styles here
+  //     // },
+
+
+  //   },
+  //   head: {
+  //     style: {
+  //       backgroundColor: '#ADD8E6', // Change the background color of the header cells
+  //       fontSize: '12px', // Change the font size of the header cells
+
+  //       background: "rgba(235, 236, 241, 0.3)",
+
+  //       border: "1px solid #EBECF1",
+  //       borderRadius: "4px 4px 0px 0px",
+  //       fontFamily: "Inter",
+  //       fontStyle: "normal",
+  //       fontWeight: "400",
+  //       lineHeight: "15px",
+  //       letterSpacing: "0.04em",
+  //       textTransform: "uppercase",
+  //       color: "rgba(51, 51, 51, 0.8)",
+
+  //       // Add more styles here
+  //     },
+  //   },
+  //   rowCells: {
+  //     style: {
+  //       fontFamily: "Inter",
+  //       fontStyle: "normal",
+  //       fontWeight: "400",
+  //       fontSize: '14px',
+  //       lineHeight: "17px",
+  //       color: "#333333",
+
+  //     }
+
+  //   },
+  //   rows:{
+  //     style: {
+  //       borderRadius: "4px 4px 0px 0px",
+  //       background: "#FFFFFF",
+  //       // border: "1px solid #EBECF1",
+
+  //     }
+  //   }
+  //   // Add more custom styles here
+  // };
+
+  // setsuccessMessageFromResponse(responsedata.errorMessage)
+  //     setShowSuccessMessageModal(true);
+  //     setTimeout(() => setShowSuccessMessageModal(false), 10000);
+  const [successMessageFromResponse, setsuccessMessageFromResponse] = useState('')
+  const [showSuccessMessageModal, setShowSuccessMessageModal] = useState(false)
 
   // Active and deactive button
   const HandleActiveDeactiveButton = async (row, newValue) => {
@@ -225,24 +284,35 @@ export default function Occupations() {
         }]),
       }
     );
+    const responsedata = await response.json();
+
     // console.log(response)
     if (response.ok) {
       // The request was successful
-      const data = await response.json();
+      // const data = await response.json();
       // console.log(data)
       // alert("Sucessfully added ")
-      setShowSuccessModal(true);
-
+      // setShowSuccessModal(true);
 
       console.log("Sucessfully added")
+      // fetchData()
+      // setTimeout(() => setShowSuccessModal(false), 10000);
+
+      setsuccessMessageFromResponse("Success fully Changed")
+      setShowSuccessMessageModal(true);
+
       fetchData()
-      setTimeout(() => setShowSuccessModal(false), 10000);
+
+      setTimeout(() => setShowSuccessMessageModal(false), 10000);
       // console.log(data)
     } else {
       // The request failed
       // Handle the error
-      setShowErrorModal(true);
-      setTimeout(() => setShowErrorModal(true), 10000);
+      seterrorMessageFromResponse(responsedata.errorMessage)
+      setShowErrorMessageModal(true);
+      setTimeout(() => setShowErrorMessageModal(false), 10000);
+      // setShowErrorModal(true);
+      // setTimeout(() => setShowErrorModal(false), 10000);
       // alert("Something went wrong ")
     }
   }
@@ -265,7 +335,7 @@ export default function Occupations() {
                 Edit
               </Button> */}
               {/* <p>view</p> */}
-              <p className="" onClick={(() => onViewClick(row.id))}>
+              <p className="" onClick={(() => onViewClick(row))}>
                 view
               </p>
               <p className="" onClick={(() => onEditClick(row.id))}>
@@ -279,7 +349,10 @@ export default function Occupations() {
     );
   }
 
-  const handleOpenCreateModal = () => setShowCreateModal(true);
+  const handleOpenCreateModal = () => {
+    setShowPopup(false);
+    setShowCreateModal(true);
+  }
 
   const handleCloseCreateModal = () => {
     // Clear the input fields
@@ -362,35 +435,37 @@ export default function Occupations() {
 
       const newDataPromises = data.data.map(async (item) => {
         // Make API call to get occupation data using item.occupationId
-        const occupationResponse = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${item.templateId}`, {
-          headers: {
-            'Authorization': `Bearer ${bearerToken}`
-          }
-        });
-        // console.log(occupationResponse)
-        const occupationData = await occupationResponse.json();
-        // console.log(occupationData)
-        const template_name = occupationData?.data?.[0]?.templateName;
-        const version = occupationData?.data?.[0]?.version;
 
-        // let template_name;
-        // let version;
-        // if (item.templateId) {
-        //   // Make API call to get occupation data using item.occupationId
-        //   const occupationResponse = await fetch(
-        //     `${BASE_URL}/crm/incomeAssessment/templates?id=${item.templateId}`,
-        //     {
-        //       headers: {
-        //         'Authorization': `Bearer ${bearerToken}`,
-        //       },
+
+        //   const occupationResponse = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${item.templateId}`, {
+        //     headers: {
+        //       'Authorization': `Bearer ${bearerToken}`
         //     }
-        //   );
+        //   });
         //   // console.log(occupationResponse)
         //   const occupationData = await occupationResponse.json();
-        //   console.log(occupationData);
-        //   template_name = occupationData?.data?.[0]?.templateName;
-        //   version = occupationData?.data?.[0]?.version;
-        // }
+        //   // console.log(occupationData)
+        //   const template_name = occupationData?.data?.[0]?.templateName;
+        //   const version = occupationData?.data?.[0]?.version;
+
+        let template_name;
+        let version;
+        if (item.templateId) {
+          // Make API call to get occupation data using item.occupationId
+          const occupationResponse = await fetch(
+            `${BASE_URL}/crm/incomeAssessment/templates?id=${item.templateId}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${bearerToken}`,
+              },
+            }
+          );
+          // console.log(occupationResponse)
+          const occupationData = await occupationResponse.json();
+          // console.log(occupationData);
+          template_name = occupationData?.data?.[0]?.templateName;
+          version = occupationData?.data?.[0]?.version;
+        }
         return {
           ...item,
           occupationName: item.name,
@@ -606,6 +681,8 @@ export default function Occupations() {
   const [isEditClicked, setIsEditClicked] = useState(false);
 
   const handlePoPupEditClick = async (id,) => {
+    setShowPopup(false);
+
     setIsEditClicked(true)
     // console.log(isEditClicked)
     setSubmittingUsingEdit(true)
@@ -698,15 +775,38 @@ export default function Occupations() {
   // View button is clicked this will work
   const [isReadOnly, setIsReadOnly] = useState(false);
 
-  const handleViewClick = async (id) => {
+
+  const [showViewClicked, setViewClicked] = useState(false);
+  const [occupationDetailsToView, setOccupationDetailsToView] = useState({});
+
+  const handleViewClose = () => {
+    setViewClicked(false);
+    setIsReadOnly(false);
+    setshowingTemplateNameAndVersion(false);
+  }
+  const handleViewShow = () => setViewClicked(true);
+  // useEffect(() => {
+  //   if (showViewClicked) {
+  //     const modalDialog = document.querySelector('.viewModel');
+  //     if (modalDialog) {
+  //       const top = (window.innerHeight - modalDialog.offsetHeight) / 2;
+  //       modalDialog.style.top = `${top}px`;
+  //     }
+  //   }
+  // }, [showViewClicked]);
+
+  const handleViewClick = async (row) => {
+    setShowPopup(false);
+
     setIsReadOnly(true);
+    // console.log(row)
     setshowingTemplateNameAndVersion(true)
-    setShowCreateModal(true)
+    // setShowCreateModal(true)
     console.log("handle view click")
     // console.log(id)
     const bearerToken = localStorage.getItem('access_token');
     // Make the GET API request
-    const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${id}`,
+    const response = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${row.id}`,
       {
         headers: {
           'Authorization': `Bearer ${bearerToken}`
@@ -719,21 +819,95 @@ export default function Occupations() {
     if (response.ok) {
       console.log("good")
       // Convert the metadata object into an array of objects with key and value properties
+      // const metadataArray = Object.entries(data.data[0].metadata).map(([key, value]) => ({
+      //   key,
+      //   value,
+      // }));
+      // console.log(metadataArray)
+      //   setInitialValues({
+      //     occupationName: data.data[0].name,
+      //     category: data.data[0].category,
+      //     subcategory: data.data[0].subCategory,
+      //     description: data.data[0].description,
+      //     riskCategory: data.data[0].riskCategory,
+      //     TemplateName: data?.data?.[0]?.templateId,
+      //     metadata: metadataArray
+      //   })
+
+      //   const templatesResponse = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?occupationId=${id}&status=PUBLISHED`,
+      //   {
+      //     headers: {
+      //       'Authorization': `Bearer ${bearerToken}`
+      //     }
+      //   }
+      // );
+      // const templatesData = await templatesResponse.json();
+      // // console.log(templatesData)
+
+      // if (templatesResponse.ok) {
+      //   // Use the templatesData to update the state of your component
+      //   // console.log(templatesData)
+      //   const templatesArray = templatesData.data.map(template => ({
+      //     version: template.version,
+      //     id: template.id,
+      //     templateName: template.templateName,
+      //     formTitle: template.formTitle
+      //   }));
+      //   setTemplatesArray(templatesArray)
+      //   // console.log(templatesArray)
+
+      // } else {
+      //   // Handle error
+      // }
+
+
+
+      //   setShowCreateModal(true)
+
+
+
+
+      let templateName;
+      let version;
+      if (data?.data?.[0]?.templateId) {
+        // Make API call to get template data using data.data[0].templateId
+        const templateResponse = await fetch(
+          `${BASE_URL}/crm/incomeAssessment/templates?id=${data.data[0].templateId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        const templateData = await templateResponse.json();
+
+        templateName = templateData?.data?.[0]?.templateName;
+        version = templateData?.data?.[0]?.version;
+      }
+
+
+
       const metadataArray = Object.entries(data.data[0].metadata).map(([key, value]) => ({
         key,
         value,
       }));
-      // console.log(metadataArray)
-      setInitialValues({
+
+
+      setOccupationDetailsToView({
         occupationName: data.data[0].name,
         category: data.data[0].category,
         subcategory: data.data[0].subCategory,
         description: data.data[0].description,
         riskCategory: data.data[0].riskCategory,
-        TemplateName: data?.data?.[0]?.templateId,
+        // templateName: data?.data?.[0]?.templateId,
+        // TemplateName: data?.data?.[0]?.templateName,
+        // version: data?.data?.[0]?.version,
+        TemplateName: templateName,
+        version: version,
         metadata: metadataArray
-      })
-      setShowCreateModal(true)
+      });
+
+      handleViewShow();
 
     } else {
       console.log('bad')
@@ -750,64 +924,6 @@ export default function Occupations() {
     }
   };
 
-
-
-
-
-  // const CustomPagination = ({
-  //   rowsPerPage,
-  //   rowCount,
-  //   onChangeRowsPerPage,
-  //   onChangePage,
-  //   currentPage,
-  //   ...props
-  // }) => {
-  //   const totalPages = Math.ceil(rowCount / rowsPerPage);
-
-  //   const handleRowsPerPageChange = (event) => {
-  //     onChangeRowsPerPage(Number(event.target.value));
-  //   };
-
-  //   const handlePreviousPage = () => {
-  //     if (currentPage > 1) {
-  //       onChangePage(currentPage - 1);
-  //     }
-  //   };
-
-  //   const handleNextPage = () => {
-  //     if (currentPage < totalPages) {
-  //       onChangePage(currentPage + 1);
-  //     }
-  //   };
-
-  //   return (
-  //     <div>
-  //       <div>
-  //         Show{' '}
-  //         <select value={rowsPerPage} onChange={handleRowsPerPageChange}>
-  //           <option value={10}>10</option>
-  //           <option value={15}>15</option>
-  //           <option value={20}>20</option>
-  //           <option value={25}>25</option>
-  //         </select>{' '}
-  //         entries
-  //       </div>
-  //       <div>
-  //         <button onClick={handlePreviousPage}>Previous</button>
-  //         {currentPage} of {totalPages}
-  //         <button onClick={handleNextPage}>Next</button>
-  //       </div>
-  //       <div>
-  //         Showing {currentPage * rowsPerPage - rowsPerPage + 1} to{' '}
-  //         {Math.min(currentPage * rowsPerPage, rowCount)} of {rowCount} entries
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-
-  const [showErrorMessageModal, setShowErrorMessageModal] = useState(false)
-  const [errorMessageFromResponse, seterrorMessageFromResponse] = useState('')
 
   return (
     <div>
@@ -840,7 +956,16 @@ export default function Occupations() {
             Successfully added
           </Alert>
         )}
-
+        {showSuccessMessageModal && (
+          <Alert
+            variant="success"
+            onClose={() => setShowSuccessMessageModal(false)}
+            dismissible
+            className="alert-top"
+          >
+            {successMessageFromResponse}
+          </Alert>
+        )}
         {/* Error alert */}
         {showErrorModal && (
           <Alert
@@ -894,6 +1019,8 @@ export default function Occupations() {
             </div>
             <DataTable columns={columns} data={data} pagination
               paginationComponent={CustomPagination}
+              customStyles={CustomStylesTable}
+            // className="myTable"
 
             />
           </>
@@ -1201,6 +1328,58 @@ export default function Occupations() {
           Create
         </Button>
       </Modal.Footer> */}
+      </Modal>
+      <Modal show={showViewClicked} onHide={handleViewClose} className="viewModel" style={{ background: "none" }}>
+        {/* <div className="viewModel"> */}
+        <Modal.Header closeButton>
+          <Modal.Title>Occupation Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ padding: "20px" }}>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Occupation Name:</span>{" "}
+              {occupationDetailsToView.occupationName}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Category:</span>{" "}
+              {occupationDetailsToView.category}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Subcategory:</span>{" "}
+              {occupationDetailsToView.subcategory}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
+              {occupationDetailsToView.description}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Risk Category:</span>{" "}
+              {occupationDetailsToView.riskCategory}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Template Name:</span>{" "}
+              {occupationDetailsToView.TemplateName}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Version:</span>{" "}
+              {occupationDetailsToView.version}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <span style={{ fontWeight: "bold" }}>Metadata:</span>{" "}
+              <ul>
+                {occupationDetailsToView.metadata && occupationDetailsToView.metadata.map((item, index) => (
+                  <li key={index}>{item.key}: {item.value}</li>
+                ))}
+              </ul>               </div>
+            {/* Render other profile details here */}
+          </div>
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleViewClose}>
+            Close
+          </Button>
+        </Modal.Footer> */}
+        {/* </div> */}
       </Modal>
     </div>
   );

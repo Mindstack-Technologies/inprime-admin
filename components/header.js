@@ -30,7 +30,7 @@ export default function Header() {
       const data = await response.json();
       // console.log(data)
       if (response.status === 200) {
-        console.log(`${data.data}`)
+        // console.log(`${data.data}`)
         console.log("Get is successful")
         setAdminUser(data?.data?.firstName)
         setAdminImage(data?.data?.profilePic)
