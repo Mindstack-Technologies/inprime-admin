@@ -209,6 +209,7 @@ export default function Occupations() {
     const bearerToken = localStorage.getItem('access_token');
     // console.log("test")
     // console.log(row.ActiveDeactive)
+
     const response = await fetch(
       `${BASE_URL}/crm/incomeAssessment/occupations?update=true`,
       {
@@ -328,25 +329,117 @@ export default function Occupations() {
     );
     const data = await response.json();
     if (response.status === 200) {
-      const newData = data.data.map((item) => ({
-        ...item,
-        occupationName: item.name,
-        category: item.category,
-        subcategory: item.subCategory,
-        description: item.description,
-        ActiveDeactive: item.active ? "Active" : "Not Active",
-        // metadata: item.metadata,
-        metadata: item.metadata
-          ? Object.entries(item.metadata).map(([key, value]) => ({
-            key,
-            value,
-          }))
-          : [],
-        createdOn: new Date(item.createdAt),
-      }));
-      console.log("Get is successful")
+      // const newDataPromises = data.data.map(async (item) => {
+      //   // Make API call to get occupation data using item.occupationId
+      //   const occupationResponse = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${item.occupationId}`, {
+      //     headers: {
+      //       'Authorization': `Bearer ${bearerToken}`
+      //     }
+      //   });
+      //   // console.log(occupationResponse)
+      //   const occupationData = await occupationResponse.json();
+      //   const occupationName = occupationData?.data?.[0]?.name;
+      //   return {
+      //     id: item.id,
+      //     templateName: item.formTitle,
+      //     version: item.version,
+      //     occupation: occupationName,
+      //     ActiveDeactive: item.active ? "Active" : "Not Active",
+      //     createdOn: new Date(item.createdAt),
+      //     published: item.status,
+      //     occupationID: item.occupationId,
+      //     json: item.json,
+      //     formName: item.formName,
+      //     formDescription: item.formDescription,
+      //     UniqueTemplateName :item.templateName
+      //   };
+      // });
+      // console.log("Get is successful")
+      // const newData = await Promise.all(newDataPromises);
+      // // console.log(newData)
+      // setData(newData);
 
+
+      const newDataPromises = data.data.map(async (item) => {
+        // Make API call to get occupation data using item.occupationId
+        const occupationResponse = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${item.templateId}`, {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        });
+        // console.log(occupationResponse)
+        const occupationData = await occupationResponse.json();
+        // console.log(occupationData)
+        const template_name = occupationData?.data?.[0]?.templateName;
+        const version = occupationData?.data?.[0]?.version;
+
+        // let template_name;
+        // let version;
+        // if (item.templateId) {
+        //   // Make API call to get occupation data using item.occupationId
+        //   const occupationResponse = await fetch(
+        //     `${BASE_URL}/crm/incomeAssessment/templates?id=${item.templateId}`,
+        //     {
+        //       headers: {
+        //         'Authorization': `Bearer ${bearerToken}`,
+        //       },
+        //     }
+        //   );
+        //   // console.log(occupationResponse)
+        //   const occupationData = await occupationResponse.json();
+        //   console.log(occupationData);
+        //   template_name = occupationData?.data?.[0]?.templateName;
+        //   version = occupationData?.data?.[0]?.version;
+        // }
+        return {
+          ...item,
+          occupationName: item.name,
+          category: item.category,
+          subcategory: item.subCategory,
+          description: item.description,
+          ActiveDeactive: item.active ? "Active" : "Not Active",
+          // metadata: item.metadata,
+          templateId: item.templateId,
+          templateName: template_name,
+          version: version,
+          metadata: item.metadata
+            ? Object.entries(item.metadata).map(([key, value]) => ({
+              key,
+              value,
+            }))
+            : [],
+          createdOn: new Date(item.createdAt),
+        };
+      });
+      console.log("Get is successful")
+      const newData = await Promise.all(newDataPromises);
+      // console.log(newData)
       setData(newData);
+
+
+
+      // const newData = data.data.map((item) => ({
+      //   ...item,
+      //   occupationName: item.name,
+      //   category: item.category,
+      //   subcategory: item.subCategory,
+      //   description: item.description,
+      //   ActiveDeactive: item.active ? "Active" : "Not Active",
+      //   // metadata: item.metadata,
+      //   templateId: item.templateId,
+      //   metadata: item.metadata
+      //     ? Object.entries(item.metadata).map(([key, value]) => ({
+      //       key,
+      //       value,
+      //     }))
+      //     : [],
+      //   createdOn: new Date(item.createdAt),
+      // }));
+      // console.log("Get is successful")
+      // console.log(newData)
+      // setData(newData);
+
+
     } else {
       // Handle the error
       console.log("Something went worng")
@@ -358,6 +451,7 @@ export default function Occupations() {
       subcategory: '',
       description: '',
       riskCategory: '',
+      TemplateName: '',
       metadata: [{ key: '', value: '' }]
     })
 
@@ -374,6 +468,8 @@ export default function Occupations() {
     if (submittingUsingEdit === true) {
 
       console.log("updating the occupation using edit")
+      // console.log(values.TemplateName)
+
       // Here you can add code to submit the form data to your backend or API
       const bearerToken = localStorage.getItem('access_token');
       // console.log("test")
@@ -390,6 +486,7 @@ export default function Occupations() {
           },
           body: JSON.stringify([{
             id: occupationId,
+            templateId: values.TemplateName,
             occupationCategory: category,
             occupationSubCategory: subcategory,
             occupation: occupationName,
@@ -405,10 +502,12 @@ export default function Occupations() {
           }]),
         }
       );
+      const responsedata = await response.json();
+
 
       if (response.ok) {
         // The request was successful
-        const data = await response.json();
+        // const responsedata = await response.json();
         // alert("Sucessfully added ")
         setShowSuccessModal(true);
 
@@ -420,8 +519,11 @@ export default function Occupations() {
       } else {
         // The request failed
         // Handle the error
-        setShowErrorModal(true);
-        setTimeout(() => setShowErrorModal(true), 10000);
+        // console.log(responsedata)
+        // console.log(responsedata.errorMessage)
+        seterrorMessageFromResponse(responsedata.errorMessage)
+        setShowErrorMessageModal(true);
+        setTimeout(() => setShowErrorMessageModal(false), 10000);
         // alert("Something went wrong ")
       }
 
@@ -505,7 +607,7 @@ export default function Occupations() {
 
   const handlePoPupEditClick = async (id,) => {
     setIsEditClicked(true)
-    console.log(isEditClicked)
+    // console.log(isEditClicked)
     setSubmittingUsingEdit(true)
     setshowingTemplateNameAndVersion(true)
     setOccupationId(id)
@@ -535,6 +637,7 @@ export default function Occupations() {
         subcategory: data.data[0].subCategory,
         description: data.data[0].description,
         riskCategory: data.data[0].riskCategory,
+        TemplateName: data?.data?.[0]?.templateId,
         metadata: metadataArray
         // metadata: [{ key: '', value: '' }]
 
@@ -549,7 +652,7 @@ export default function Occupations() {
         }
       );
       const templatesData = await templatesResponse.json();
-      console.log(templatesData)
+      // console.log(templatesData)
 
       if (templatesResponse.ok) {
         // Use the templatesData to update the state of your component
@@ -561,7 +664,7 @@ export default function Occupations() {
           formTitle: template.formTitle
         }));
         setTemplatesArray(templatesArray)
-        console.log(templatesArray)
+        // console.log(templatesArray)
 
       } else {
         // Handle error
@@ -579,6 +682,7 @@ export default function Occupations() {
         subcategory: '',
         description: '',
         riskCategory: '',
+        templateName: '',
         metadata: [{ key: '', value: '' }]
       })
 
@@ -610,7 +714,7 @@ export default function Occupations() {
       }
     );
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
 
     if (response.ok) {
       console.log("good")
@@ -626,6 +730,7 @@ export default function Occupations() {
         subcategory: data.data[0].subCategory,
         description: data.data[0].description,
         riskCategory: data.data[0].riskCategory,
+        TemplateName: data?.data?.[0]?.templateId,
         metadata: metadataArray
       })
       setShowCreateModal(true)
@@ -638,6 +743,7 @@ export default function Occupations() {
         subcategory: '',
         description: '',
         riskCategory: '',
+        TemplateName: '',
         metadata: [{ key: '', value: '' }]
       })
 
@@ -700,8 +806,8 @@ export default function Occupations() {
   // };
 
 
-
-
+  const [showErrorMessageModal, setShowErrorMessageModal] = useState(false)
+  const [errorMessageFromResponse, seterrorMessageFromResponse] = useState('')
 
   return (
     <div>
@@ -744,6 +850,16 @@ export default function Occupations() {
             className="alert-top"
           >
             Something went wrong
+          </Alert>
+        )}
+        {showErrorMessageModal && (
+          <Alert
+            variant="danger"
+            onClose={() => setShowErrorMessageModal(false)}
+            dismissible
+            className="alert-top"
+          >
+            {errorMessageFromResponse}
           </Alert>
         )}
         {loading ? (
@@ -944,26 +1060,24 @@ export default function Occupations() {
                       <Form.Group className="occupationModalGroup mb-3 me-2" style={{ width: "100%" }}>
                         <Form.Label>Template Name</Form.Label>
                         <Form.Select
-                          name="Template Name"
-                          value={values.templateName}
+                          name="TemplateName"
+                          value={values.TemplateName}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           disabled={isReadOnly}
                         >
-                          {/* <option value="">Select a Template Name</option>
-                          <option value="one">one</option>
-                          <option value="two">two</option>
-                          <option value="three">three</option> */}
                           <option value="">Select a Template Name</option>
                           {templatesArray.map(template => (
                             // <option key={template.id} value={`${template.templateName} (${template.version})`}>{`${template.templateName} (${template.version})`}</option>
                             // ))}
-                            <option key={template.id} value={template.templateName ? `${template.templateName} (${template.version})` : ''}>{template.templateName ? `${template.templateName} (${template.version})` : `(${template.version})`}</option>
-                            ))}
+                            // <option key={template.id} value={template.templateName ? `${template.templateName} (${template.version})` : ''}>{template.templateName ? `${template.templateName} (${template.version})` : `(${template.version})`}</option>
+                            // ))}
+                            <option key={template.id} value={template.id}>{template.templateName ? `${template.templateName} (${template.version})` : `(${template.version})`}</option>
+                          ))}
                         </Form.Select>
-                        {touched.riskCategory && errors.riskCategory && (
+                        {/* {touched.TemplateName && errors.TemplateName && (
                           <div className="form-text text-danger">{errors.riskCategory}</div>
-                        )}
+                        )} */}
                       </Form.Group>
                     )}
                     {/* <Form.Group className="occupationModalGroup mb-3 me-2"style={{width: "100%"}}>
