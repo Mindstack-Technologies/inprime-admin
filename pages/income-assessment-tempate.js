@@ -54,6 +54,8 @@ export default function IncomeAssessmentTemplate() {
   const [updateButtonIsClicked, setUpdateButtonIsClicked] = useState(false)
 
   const [saveErrorMessageSameTemplate, setSaveErrorMessageSameTemplate] = useState(false)
+  
+  const [options, setOptions] = useState([]);
 
 
   const router = useRouter();
@@ -115,11 +117,13 @@ export default function IncomeAssessmentTemplate() {
             },
             body: JSON.stringify(data),
           });
-          // console.log(response)
+          console.log(response)
+          const responsedata = await response.json();
+
           if (response.ok) {
-            const data = await response.json();
+            // const data = await response.json();
             // console.log(data);
-            if (data.errorCode === "400") {
+            if (responsedata.errorCode === "400") {
               setErrorMessage(data.errorMessage)
               setSaveErrorMessagePopup(true);
               setTimeout(() => setSaveErrorMessagePopup(false), 10000);
@@ -129,8 +133,12 @@ export default function IncomeAssessmentTemplate() {
               console.log("Post request is done")
             }
           } else {
-            setShowErrorModal(true);
-            setTimeout(() => setShowErrorModal(true), 10000);
+            setErrorMessage(responsedata.errorMessage)
+            setSaveErrorMessageSameTemplate(true);
+            setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
+            
+            // setShowErrorModal(true);
+            // setTimeout(() => setShowErrorModal(false), 10000);
             // console.log("here it got error")
           }
         } catch (error) {
@@ -193,12 +201,13 @@ export default function IncomeAssessmentTemplate() {
               setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
             } else {
+              setErrorMessage(outputdata.errorMessage)
+
               setSaveErrorMessageSameTemplate(true);
               setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
               // console.log("here it got error")
               // console.log(outputdata)
               // console.log(outputdata.errorMessage)
-              setErrorMessage(outputdata.errorMessage)
 
             }
           } catch (error) {
@@ -210,6 +219,7 @@ export default function IncomeAssessmentTemplate() {
       setSaveButtonIsClicked(false)
       setIsLoading(false);
     }
+
 
     // Update button is clciked
     else if (updateButtonIsClicked === true) {
@@ -422,12 +432,12 @@ export default function IncomeAssessmentTemplate() {
           } else {
             // setShowErrorModal(true);
             // setTimeout(() => setShowErrorModal(true), 10000);
+            setErrorMessage(outputdata.errorMessage)
             setSaveErrorMessageSameTemplate(true);
             setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
             // console.log("here it got error")
             // console.log(outputdata)
             // console.log(outputdata.errorMessage)
-            setErrorMessage(outputdata.errorMessage)
           }
         } catch (error) {
           console.error(error);
@@ -492,12 +502,12 @@ export default function IncomeAssessmentTemplate() {
             } else {
               // setShowErrorModal(true);
               // setTimeout(() => setShowErrorModal(true), 10000);
+              setErrorMessage(`${outputdata.errorMessage} So save First`)
               setSaveErrorMessageSameTemplate(true);
               setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
               // console.log("here it got error")
               // console.log(outputdata)
               // console.log(outputdata.errorMessage)
-              setErrorMessage(`${outputdata.errorMessage} So save First`)
             }
           } catch (error) {
             console.error(error);
@@ -519,7 +529,6 @@ export default function IncomeAssessmentTemplate() {
 
   // const versions = ['1.0', '2.0', '3.0'];
 
-  const [options, setOptions] = useState([]);
   // const [isSubmitting, setisSubmitting] = useState(false)
 
   useEffect(() => {
