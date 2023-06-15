@@ -79,21 +79,21 @@ function IncomeAssessmentPage() {
           year: "numeric",
         }),
       sortable: true,
-      width: "120px",
+      width: "130px",
 
     },
-    {
-      name: "Active/Deactive", selector: (row) => (
-        row.ActiveDeactive
-        // <div>
-        //   <SwitchComponent
-        //     apiValue={row.ActiveDeactive === 'Active'}
-        //     onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
-        //   />
-        // </div>
-      ),
-      width: "150px",
-    },
+    // {
+    //   name: "Active/Deactive", selector: (row) => (
+    //     row.ActiveDeactive
+    //     // <div>
+    //     //   <SwitchComponent
+    //     //     apiValue={row.ActiveDeactive === 'Active'}
+    //     //     onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
+    //     //   />
+    //     // </div>
+    //   ),
+    //   width: "150px",
+    // },
     {
       name: "Published", selector: (row) => row.published,
       width: "130px",
