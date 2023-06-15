@@ -525,7 +525,6 @@ function MyForm() {
           // form_action="/sucess"
           // form_method="POST"
           // form_action="javascript:void(0);"
-          form_method="POST"
           // data={jsonFormData.task_data}
           data={formData}
           className="my-form"
