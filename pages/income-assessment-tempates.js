@@ -418,10 +418,10 @@ function IncomeAssessmentPage() {
 
   };
 
-  const handleActionClick = (event) => {
-    setShowPopover(!showPopover);
-    target.current = event.target;
-  }
+  // const handleActionClick = (event) => {
+  //   setShowPopover(!showPopover);
+  //   target.current = event.target;
+  // }
 
 
   // const handleEdit = (row) => {

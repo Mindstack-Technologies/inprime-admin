@@ -96,7 +96,7 @@ export default function Header() {
             )}
           </div>
           <div className="col-lg-4 d-flex justify-content-end">
-            <Dropdown>
+            <Dropdown >
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {/* <Image
                   src="/images/user_pic.png"
@@ -105,9 +105,9 @@ export default function Header() {
                   alt=""
                 ></Image>{" "} */}
                 {adminImage ? (
-                  <Image src={adminImage} width="28" height="28" alt="" style={{borderRadius: "50%"}} />
+                  <Image src={adminImage} width="28" height="28" alt="" style={{borderRadius: "50%", marginRight: "8px"}} />
                 ) : (
-                  <img src="/images/profile-default.svg" width="28" height="28" alt="" style={{borderRadius: "50%"}}/>
+                  <img src="/images/profile-default.svg" width="28" height="28" alt="" style={{borderRadius: "50%", marginRight: "8px"}}/>
                 )}
                 {adminUser}
               </Dropdown.Toggle>
