@@ -53,10 +53,11 @@ export default function IncomeAssessmentTemplate() {
   const [saveButtonIsClicked, setSaveButtonIsClicked] = useState(false)
   const [updateButtonIsClicked, setUpdateButtonIsClicked] = useState(false)
 
-  const [saveErrorMessageSameTemplate, setSaveErrorMessageSameTemplate]= useState(false)
+  const [saveErrorMessageSameTemplate, setSaveErrorMessageSameTemplate] = useState(false)
 
 
   const router = useRouter();
+  const mode = router.query.mode;
 
 
   // Posting the from 
@@ -184,7 +185,7 @@ export default function IncomeAssessmentTemplate() {
             });
             // console.log(response)
             const outputdata = await response.json();
-            
+
             if (response.ok) {
               // const data = await response.json();
               // console.log(data);
@@ -416,7 +417,7 @@ export default function IncomeAssessmentTemplate() {
               setShowSuccessModal(true);
               setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
-              
+
             }
           } else {
             // setShowErrorModal(true);
@@ -492,11 +493,11 @@ export default function IncomeAssessmentTemplate() {
               // setShowErrorModal(true);
               // setTimeout(() => setShowErrorModal(true), 10000);
               setSaveErrorMessageSameTemplate(true);
-            setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
-            // console.log("here it got error")
-            // console.log(outputdata)
-            // console.log(outputdata.errorMessage)
-            setErrorMessage(`${outputdata.errorMessage} So save First`)
+              setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
+              // console.log("here it got error")
+              // console.log(outputdata)
+              // console.log(outputdata.errorMessage)
+              setErrorMessage(`${outputdata.errorMessage} So save First`)
             }
           } catch (error) {
             console.error(error);
@@ -516,7 +517,7 @@ export default function IncomeAssessmentTemplate() {
   };
 
 
-  const versions = ['1.0', '2.0', '3.0'];
+  // const versions = ['1.0', '2.0', '3.0'];
 
   const [options, setOptions] = useState([]);
   // const [isSubmitting, setisSubmitting] = useState(false)
@@ -682,8 +683,8 @@ export default function IncomeAssessmentTemplate() {
             Something went wrong
           </Alert>
         )}
-        
-        
+
+
         {showReactgeneratorEmpty && (
           <Alert
             variant="danger"
@@ -711,7 +712,7 @@ export default function IncomeAssessmentTemplate() {
           }) => (
             <Form className="mb-5 pl-3 pr-4 assessment-form">
               <div className="text-right">
-                <button
+                {/* <button
                   type="submit"
                   onClick={() => setSaveButtonIsClicked(true)}
                   // onClick={handleButtonClick}
@@ -759,7 +760,57 @@ export default function IncomeAssessmentTemplate() {
                   ) : (
                     "Update"
                   )}
-                </button>
+                </button> */}
+
+                {(mode === 'duplicate' || !mode) && (
+                  <button
+                    type="submit"
+                    onClick={() => setSaveButtonIsClicked(true)}
+                    disabled={isLoading}
+                    className="btn btn-primary mb-3 mt-2 mr-2"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                          className="mr-2"
+                        />
+                        Loading...
+                      </>
+                    ) : (
+                      'Save'
+                    )}
+                  </button>
+                )}
+
+                {mode && mode === 'edit' && (
+                  <button
+                    type="submit"
+                    onClick={() => setUpdateButtonIsClicked(true)}
+                    disabled={isUpdateLoading}
+                    className="btn btn-primary mb-3 mt-2 mr-2"
+                  >
+                    {isUpdateLoading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                          className="mr-2"
+                        />
+                        Loading...
+                      </>
+                    ) : (
+                      'Update'
+                    )}
+                  </button>
+                )}
 
                 <button
                   type="submit"
@@ -823,7 +874,7 @@ export default function IncomeAssessmentTemplate() {
 
                     // value={values.form_title}
                     className="form-control"
-                    placeholder="Enter form Unique Template Name"
+                    placeholder="Enter Form Unique Template Name"
                   />
                   <ErrorMessage name="templateName">
                     {(msg) => <div className="form-text text-danger">{msg}</div>}
@@ -844,7 +895,7 @@ export default function IncomeAssessmentTemplate() {
 
                     // value={values.form_title}
                     className="form-control"
-                    placeholder="Enter form title"
+                    placeholder="Enter Form Title"
                   />
                   <ErrorMessage name="form_title">
                     {(msg) => <div className="form-text text-danger">{msg}</div>}
@@ -862,7 +913,7 @@ export default function IncomeAssessmentTemplate() {
 
                     // value={values.form_name}
                     className="form-control"
-                    placeholder="Enter form Name"
+                    placeholder="Enter Form Name"
                   />
                   <ErrorMessage name="form_name">
                     {(msg) => <div className="form-text text-danger">{msg}</div>}

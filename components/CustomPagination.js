@@ -186,7 +186,7 @@ const CustomPagination = ({
  
 
   return (
-    <div className="d-flex justify-content-between">
+    <div className="d-flex justify-content-between p-2">
       {/* Render the "Show entries" section on the left */}
       <div className="d-flex align-items-center showEntriesOfCastomPagination">
         <span>Show</span>

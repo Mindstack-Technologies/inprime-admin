@@ -55,7 +55,11 @@ export default function App({ Component, pageProps }) {
       // Check if the token is expired
       // console.log(payload.exp)
       // console.log(currentTime)
-      if (payload.exp < currentTime ) {
+      // const expDate = new Date(payload.exp * 1000);
+      // const currentDate = new Date(currentTime * 1000);
+      // console.log(expDate.toLocaleString());
+      // console.log(currentDate.toLocaleString());
+      if (payload.exp < currentTime) {
         // If the token is expired, remove it from local storage
         localStorage.removeItem('access_token');
       } else {
