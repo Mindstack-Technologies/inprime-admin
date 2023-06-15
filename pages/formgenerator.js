@@ -390,6 +390,26 @@ const jsonFormData = {
 // const jsonFormData = '{"task_data":[{"id":"EE3CC1F6-3C6E-4A31-820B-905A4BC7268F","element":"TextInput","text":"Text Input","required":false,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"text_input_6567269D-3404-4BF2-9029-84D87EF839E2","label":"Placeholder label"}]}'
 // const formData = JSON.parse(jsonFormData);
 
+// const generateValidators = (data) => {
+//   const validators = {};
+
+//   data.forEach((element) => {
+//     if (element.field_name) {
+//       validators[element.field_name] = {
+//         rule: (value) => {
+//           return value && value.length > 0;
+//         },
+//         message: "This field is required."
+//       };
+//     }
+//   });
+
+//   return validators;
+// };
+
+
+
+
 function MyForm() {
   const [domLoaded, setDomLoaded] = useState(false);
   const router = useRouter();
@@ -438,6 +458,50 @@ function MyForm() {
       fetchData();
     }
   }, []);
+  // const handleSubmit = (data) => {
+  //   console.log(data);
+  // };
+
+  // const handleSubmit = (data) => {
+  //   // Check if all required fields have values
+  //   let isValid = true;
+  //   formData.forEach((element) => {
+  //     if (element.required && (!data[element.field_name] || data[element.field_name].length === 0)) {
+  //       isValid = false;
+  //     }
+  //   });
+
+  //   if (isValid) {
+  //     // Submit the form
+  //     console.log(data);
+  //   } else {
+  //     // Display an error message
+  //     alert("Please fill in all required fields.");
+  //   }
+  // };
+
+  const handleSubmit = (data) => {
+    // Check if all required fields have values
+    let isValid = true;
+    formData.forEach((element) => {
+      if (element.required && (!data[element.field_name] || (data[element.field_name] && data[element.field_name].length === 0))) {
+        isValid = false;
+      }
+    });
+  
+    if (isValid) {
+      // Submit the form
+      console.log(data);
+    } else {
+      // Display an error message
+      alert("Please fill in all required fields.");
+    }
+  };
+
+
+
+  // const validators = generateValidators(formData);
+
   // console.log(formData)
 
   // useEffect(() => {
@@ -458,11 +522,15 @@ function MyForm() {
 
       {domLoaded && (
         <ReactFormGenerator
-          form_action="/success"
-          form_method="POST"
+          // form_action="/sucess"
+          // form_method="POST"
+          // form_action="javascript:void(0);"
           // data={jsonFormData.task_data}
           data={formData}
           className="my-form"
+          onSubmit={handleSubmit}
+          // validators={validators}
+
         />
       )}
     </>

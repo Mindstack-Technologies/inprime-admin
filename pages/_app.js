@@ -25,21 +25,51 @@ export default function App({ Component, pageProps }) {
       },
     ],
   };
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem('access_token');
+
+  //   if (storedToken) {
+  //     // If the token is present, redirect to any page except for login and register
+  //     if (router.pathname === '/login'
+  //       // || router.pathname === '/register'
+  //     ) {
+  //       router.push('/');
+  //     }
+  //   } else {
+  //     // If the token is not present, redirect to login or register
+  //     if (router.pathname !== '/login'
+  //       // && router.pathname !== '/register'
+  //     ) {
+  //       router.push('/login');
+  //     }
+  //   }
+  // }, []);
   useEffect(() => {
     const storedToken = localStorage.getItem('access_token');
-
     if (storedToken) {
-      // If the token is present, redirect to any page except for login and register
-      if (router.pathname === '/login'
-        // || router.pathname === '/register'
-      ) {
-        router.push('/');
+      // Manually parse the token to extract the payload
+      const base64Url = storedToken.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      const payload = JSON.parse(window.atob(base64));
+      const currentTime = Date.now() / 1000;
+      // Check if the token is expired
+      // console.log(payload.exp)
+      // console.log(currentTime)
+      // const expDate = new Date(payload.exp * 1000);
+      // const currentDate = new Date(currentTime * 1000);
+      // console.log(expDate.toLocaleString());
+      // console.log(currentDate.toLocaleString());
+      if (payload.exp < currentTime) {
+        // If the token is expired, remove it from local storage
+        localStorage.removeItem('access_token');
+      } else {
+        // If the token is not expired, continue with your existing logic
+        if (router.pathname === '/login') {
+          router.push('/');
+        }
       }
     } else {
-      // If the token is not present, redirect to login or register
-      if (router.pathname !== '/login'
-        // && router.pathname !== '/register'
-      ) {
+      if (router.pathname !== '/login') {
         router.push('/login');
       }
     }
@@ -54,3 +84,4 @@ export default function App({ Component, pageProps }) {
     </>
   );
 }
+

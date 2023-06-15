@@ -14,6 +14,8 @@ import Popover from 'react-bootstrap/Popover';
 import Overlay from 'react-bootstrap/Overlay';
 import Dropdown from "react-bootstrap/Dropdown";
 import { Alert, Modal } from "react-bootstrap";
+import CustomPagination from "../components/CustomPagination";
+import CustomStylesTable from "@/components/CustomStylesTable";
 
 
 function IncomeAssessmentPage() {
@@ -26,41 +28,48 @@ function IncomeAssessmentPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [selected, setSelected] = useState('All');
+  const [dropdownOccupationOptions, setDropdownOccupationOptions] = useState([]);
+  const [selectedOccupation, setSelectedOccupation] = useState(null);
+  const [selectedOccupationValue, setSelectedOccupationValue] = useState('All');
 
   const router = useRouter();
 
 
-  function SwitchComponent({ apiValue, onToggle }) {
-    // const [checked, setChecked] = useState(apiValue);
+  // function SwitchComponent({ apiValue, onToggle }) {
+  //   // const [checked, setChecked] = useState(apiValue);
 
-    // const handleToggle = () => {
-    //   setChecked(!checked);
-    //   onToggle(!checked);
-    // };
+  //   // const handleToggle = () => {
+  //   //   setChecked(!checked);
+  //   //   onToggle(!checked);
+  //   // };
 
-    return (
-      // <label>
-      //   <input type="checkbox" checked={checked} onChange={handleToggle} />
-      //   {checked ? 'On' : 'Off'}
-      // </label>
-      <Form>
-        <Form.Check
-          type="switch"
-          id="custom-switch"
-          label={apiValue ? 'Active' : 'Not Active'}
-          checked={apiValue}
-          onChange={(e) => onToggle(e.target.checked)}
-          className="purple-switch"
-        />
-      </Form>
-    );
-  }
+  //   return (
+  //     // <label>
+  //     //   <input type="checkbox" checked={checked} onChange={handleToggle} />
+  //     //   {checked ? 'On' : 'Off'}
+  //     // </label>
+  //     <Form>
+  //       <Form.Check
+  //         type="switch"
+  //         id="custom-switch"
+  //         label={apiValue ? 'Active' : 'Not Active'}
+  //         checked={apiValue}
+  //         onChange={(e) => onToggle(e.target.checked)}
+  //         className="purple-switch"
+  //       />
+  //     </Form>
+  //   );
+  // }
 
   const columns = [
     // { name: "#", selector: (row) => row.id },
-    { name: "Template Name", selector: (row) => row.templateName },
-    { name: "Occupation", selector: (row) => row.occupation },
-    { name: "Version", selector: (row) => row.version },
+    {
+      name: "Template Name", selector: (row) => row.templateName,
+
+    },
+    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName, },
+    { name: "Occupation", selector: (row) => row.occupation, },
+    { name: "Version", selector: (row) => row.version, width: "100px" },
     {
       name: "Created On",
       selector: (row) =>
@@ -69,18 +78,26 @@ function IncomeAssessmentPage() {
           month: "long",
           year: "numeric",
         }),
+      sortable: true,
+      width: "130px",
+
     },
+    // {
+    //   name: "Active/Deactive", selector: (row) => (
+    //     row.ActiveDeactive
+    //     // <div>
+    //     //   <SwitchComponent
+    //     //     apiValue={row.ActiveDeactive === 'Active'}
+    //     //     onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
+    //     //   />
+    //     // </div>
+    //   ),
+    //   width: "150px",
+    // },
     {
-      name: "Active/Deactive", selector: (row) => (
-        <div>
-          <SwitchComponent
-            apiValue={row.ActiveDeactive === 'Active'}
-            onToggle={(newValue) => HandleActiveDeactiveButton(row, newValue)}
-          />
-        </div>
-      )
+      name: "Published", selector: (row) => row.published,
+      width: "130px",
     },
-    { name: "Published", selector: (row) => row.published },
 
     // {
     //   name: "Action",
@@ -133,69 +150,89 @@ function IncomeAssessmentPage() {
           </Button>
         </div>
       ),
+      width: "100px",
     },
   ];
 
   const [showErrorModalMessage, setShowErrorModalMessage] = useState('')
   const [showErrorActiveDeactiveModal, setShowErrorActiveDeactiveModal] = useState(false)
 
+
+
   // Active and deactive button
-  const HandleActiveDeactiveButton = async (row, newValue) => {
-    // console.log(newValue)
-    const bearerToken = localStorage.getItem('access_token');
-    // console.log("test")
-    // console.log(row.occupationID)
-    // console.log(row.id)
-    // console.log(row.ActiveDeactive)
-    const requestBody = {
-      templateId: row.id,
-      active: newValue
-    };
-    // console.log(requestBody)
-    // console.log(JSON.stringify(requestBody))
-    const response = await fetch(
-      `${BASE_URL}/crm/incomeAssessment/template?occupationId=${row.occupationID}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${bearerToken}`
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
-    // console.log(response)
-    const data = await response.json();
+  // const HandleActiveDeactiveButton = async (row, newValue) => {
+  //   // console.log(newValue)
+  //   const bearerToken = localStorage.getItem('access_token');
+  //   // console.log("test")
+  //   // console.log(row.occupationID)
+  //   // console.log(row.id)
+  //   // console.log(row.ActiveDeactive)
+  //   const requestBody = {
+  //     templateId: row.id,
+  //     active: newValue
+  //   };
+  //   // console.log(requestBody)
+  //   // console.log(JSON.stringify(requestBody))
+  //   const response = await fetch(
+  //     `${BASE_URL}/crm/incomeAssessment/template?occupationId=${row.occupationID}`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": `Bearer ${bearerToken}`
+  //       },
+  //       body: JSON.stringify(requestBody),
+  //     }
+  //   );
+  //   // console.log(response)
+  //   const data = await response.json();
 
-    if (response.ok) {
-      // The request was successful
-      // const data = await response.json();
-      // console.log(data)
-      // alert("Sucessfully added ")
-      setShowSuccessModal(true);
+  //   if (response.ok) {
+  //     // The request was successful
+  //     // const data = await response.json();
+  //     // console.log(data)
+  //     // alert("Sucessfully added ")
+  //     setShowSuccessModal(true);
 
 
-      console.log("Sucessfully added")
-      fetchData()
-      setTimeout(() => setShowSuccessModal(false), 10000);
-      // console.log(data)
-    } else {
-      // The request failed
-      // Handle the error
-      // console.log(data.errorMessage)
-      setShowErrorModalMessage(data.errorMessage)
+  //     console.log("Sucessfully added")
+  //     fetchData()
+  //     setTimeout(() => setShowSuccessModal(false), 10000);
+  //     // console.log(data)
+  //   } else {
+  //     // The request failed
+  //     // Handle the error
+  //     // console.log(data.errorMessage)
+  //     setShowErrorModalMessage(data.errorMessage)
 
-      setShowErrorActiveDeactiveModal(true);
-      setTimeout(() => setShowErrorActiveDeactiveModal(false), 10000);
-      // alert("Something went wrong ")
-    }
-  }
+  //     setShowErrorActiveDeactiveModal(true);
+  //     setTimeout(() => setShowErrorActiveDeactiveModal(false), 10000);
+
+
+  //     // useEffect( () => {
+  //     //   // const bearerToken = localStorage.getItem('access_token');
+  //     //   const testresponse =  fetch(`${BASE_URL}/crm/incomeAssessment/templates?occupationId=${occupationID}`,
+  //     //     {
+  //     //       headers: {
+  //     //         'Authorization': `Bearer ${bearerToken}`
+  //     //       }
+  //     //     }
+  //     //   )
+  //     //   const data =  testresponse.json();
+  //     //   console.log(data)
+
+  //     // })
+  //     // alert("Something went wrong ")
+  //   }
+  // }
 
 
   // Update the Popover component to use the custom styles
   function Popup({ row, onClose,
     handleDublicateClick
   }) {
+
+
     const handleEditClick = async () => {
       const bearerToken = localStorage.getItem('access_token');
 
@@ -211,10 +248,31 @@ function IncomeAssessmentPage() {
       // console.log(data)
       // Do something with the data
       // console.log(data.data[0]);
-      router.push(`/income-assessment-tempate?occupationID=${row.occupationID}`);
+      router.push(`/income-assessment-tempate?occupationID=${row.occupationID}&mode=edit`);
       localStorage.setItem("income-assessment-data", JSON.stringify(data?.data?.[0]))
       // console.log(JSON.stringify(data))
     };
+
+    const handleDuplicateClick = async () => {
+      const bearerToken = localStorage.getItem('access_token');
+
+      // Make the GET API request
+      const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${row.id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        }
+      );
+      const data = await response.json();
+      // console.log(data)
+      // Do something with the data
+      // console.log(data.data[0]);
+      router.push(`/income-assessment-tempate?occupationID=${row.occupationID}&mode=duplicate`);
+      localStorage.setItem("income-assessment-data", JSON.stringify(data?.data?.[0]))
+      // console.log(JSON.stringify(data))
+    };
+
 
 
     const router = useRouter();
@@ -223,6 +281,7 @@ function IncomeAssessmentPage() {
     };
 
     return (
+
       <Overlay target={target} show={true} placement="bottom" rootClose={true} onHide={onClose}>
         {(props) => (
           <Popover id="popover-contained" {...props}>
@@ -234,16 +293,22 @@ function IncomeAssessmentPage() {
               view*/}
 
               <p onClick={handleViewClick}>
-                view
+                View
               </p>
-              <p onClick={handleEditClick}>
+              {/* <p onClick={handleEditClick}>
                 Edit
-              </p>
+              </p> */}
+              {row.published === "DRAFT" && (
+                <p onClick={handleEditClick}>
+                  Edit
+                </p>
+              )}
               <p
-                // onClick={handleDublicateClick}
-                onClick={(() => handleDublicateClick(row))}
+                onClick={handleDuplicateClick}
+              // onClick={handleDublicateClick}
+              // onClick={(() => handleDublicateClick(row))}
               >
-                Dublicate
+                Duplicate
               </p>
             </Popover.Body>
           </Popover>
@@ -256,7 +321,22 @@ function IncomeAssessmentPage() {
 
   useEffect(() => {
     fetchData();
-  }, [selected]);
+  }, [selected, selectedOccupation]);
+
+
+  // useEffect ( async ()=>{
+  //   const bearerToken = localStorage.getItem('access_token');
+  //   response = await fetch (`${BASE_URL}/crm/incomeAssessment/templates?occupationId=${occupationID}`,
+  //   {
+  //     headers: {
+  //       'Authorization': `Bearer ${bearerToken}`
+  //     }
+  //   }
+  // )
+  // const data =await response.json();
+  // console.log(data)
+
+  // })
 
 
   const fetchData = async () => {
@@ -269,6 +349,12 @@ function IncomeAssessmentPage() {
     } else if (selected === 'Published') {
       apiUrl += '?status=PUBLISHED';
     }
+
+    if (selectedOccupation) {
+      apiUrl += `${apiUrl.includes('?') ? '&' : '?'}occupationId=${selectedOccupation}`;
+    }
+
+    console.log(apiUrl)
     // const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates`,
     const response = await fetch(apiUrl,
 
@@ -317,6 +403,7 @@ function IncomeAssessmentPage() {
           json: item.json,
           formName: item.formName,
           formDescription: item.formDescription,
+          UniqueTemplateName: item.templateName
         };
       });
       console.log("Get is successful")
@@ -331,10 +418,10 @@ function IncomeAssessmentPage() {
 
   };
 
-  const handleActionClick = (event) => {
-    setShowPopover(!showPopover);
-    target.current = event.target;
-  }
+  // const handleActionClick = (event) => {
+  //   setShowPopover(!showPopover);
+  //   target.current = event.target;
+  // }
 
 
   // const handleEdit = (row) => {
@@ -363,6 +450,8 @@ function IncomeAssessmentPage() {
   }
   const handlePoPupDublicateClick = async (row) => {
     const bearerToken = localStorage.getItem('access_token');
+
+    console.log(row.UniqueTemplateName + " copy")
     // const dubllicateBody = {
     //   formTitle: row.templateName,
     //   formDescription: row.formDescription,
@@ -379,6 +468,7 @@ function IncomeAssessmentPage() {
           "Authorization": `Bearer ${bearerToken}`
         },
         body: JSON.stringify({
+          templateName: row.UniqueTemplateName + " copy",
           formTitle: row.templateName,
           formDescription: row.formDescription,
           formName: row.formName,
@@ -413,6 +503,33 @@ function IncomeAssessmentPage() {
     }
 
   }
+
+
+
+  // getitng occupation for dropdown 
+  // const [dropdownOccupationOptions, setDropdownOccupationOptions] = useState([]);
+  // const [selectedOccupation, setSelectedOccupation]= useState('All');
+
+  useEffect(() => {
+    const bearerToken = localStorage.getItem('access_token');
+    const fetchOccupationData = async () => {
+      const response = await fetch(
+        `${BASE_URL}/crm/incomeAssessment/occupations`,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`
+          }
+        }
+      );
+      const occuaptionData = await response.json();
+      console.log(occuaptionData)
+      setDropdownOccupationOptions(occuaptionData.data);
+      console.log('Get is successful')
+    };
+
+    fetchOccupationData();
+  }, []);
+
 
   return (
     <div>
@@ -486,9 +603,26 @@ function IncomeAssessmentPage() {
                     />
                   </InputGroup>
                 </div>
-                <div className="col-lg-4">
+                <div className="col-lg-2">
                 </div>
-                <div className="col-lg-2 d-flex justify-content-end">
+                <div className="col-lg-2 d-flex justify-content-end dorpdown-category-name">
+                  <p className="m-0">Based on Occupation</p>
+                  <Dropdown className="dorpdown-category">
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="dorpdown-category-selection">
+                      {selectedOccupationValue}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="dropdown-category-menu">
+                      <Dropdown.Item onClick={() => { setSelectedOccupation(null); setSelectedOccupationValue('All') }}>All</Dropdown.Item>
+                      {dropdownOccupationOptions.map(option => (
+                        <Dropdown.Item key={option.id} onClick={() => { setSelectedOccupation(option.id); setSelectedOccupationValue(option.name) }}>
+                          {option.name}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+                <div className="col-lg-2 d-flex justify-content-end dorpdown-category-name">
+                  <p className="m-0">Based on Status</p>
                   <Dropdown className="dorpdown-category">
                     <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="dorpdown-category-selection">
                       {selected}
@@ -509,8 +643,15 @@ function IncomeAssessmentPage() {
               </div>
               {showPopup && <Popup row={selectedRow} onClose={() => setShowPopup(false)}
                 handleDublicateClick={handlePoPupDublicateClick}
-              />}
-              <DataTable columns={columns} data={data} pagination />
+              />
+              }
+              <DataTable columns={columns} data={data} pagination
+                paginationComponent={CustomPagination}
+                customStyles={CustomStylesTable}
+
+
+
+              />
               {/* {domLoaded ? (
             <DataTable columns={columns} data={data} pagination />
           ) : (

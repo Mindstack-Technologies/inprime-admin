@@ -13,6 +13,8 @@ export default function Header() {
   const [profileData, setProfileData] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [adminImage, setAdminImage] = useState('');
+  const router = useRouter();
+
 
   useEffect(() => {
 
@@ -30,13 +32,17 @@ export default function Header() {
       const data = await response.json();
       // console.log(data)
       if (response.status === 200) {
-        console.log(`${data.data}`)
+        // console.log(`${data.data}`)
         console.log("Get is successful")
         setAdminUser(data?.data?.firstName)
         setAdminImage(data?.data?.profilePic)
         setProfileData(data);
 
         // setData(newData);
+      }else if(response.status === 401){
+        localStorage.removeItem('access_token');
+        router.push('/login')
+
       } else {
         // Handle the error
         // alert("Something went wrong");
@@ -54,7 +60,6 @@ export default function Header() {
 
 
 
-  const router = useRouter();
   const pathname = router.pathname;
   const handleLogout = async () => {
     localStorage.removeItem('access_token');
@@ -91,7 +96,7 @@ export default function Header() {
             )}
           </div>
           <div className="col-lg-4 d-flex justify-content-end">
-            <Dropdown>
+            <Dropdown >
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {/* <Image
                   src="/images/user_pic.png"
@@ -100,9 +105,9 @@ export default function Header() {
                   alt=""
                 ></Image>{" "} */}
                 {adminImage ? (
-                  <Image src={adminImage} width="28" height="28" alt="" style={{borderRadius: "50%"}} />
+                  <Image src={adminImage} width="28" height="28" alt="" style={{borderRadius: "50%", marginRight: "8px"}} />
                 ) : (
-                  <img src="/images/profile-default.svg" width="28" height="28" alt="" style={{borderRadius: "50%"}}/>
+                  <img src="/images/profile-default.svg" width="28" height="28" alt="" style={{borderRadius: "50%", marginRight: "8px"}}/>
                 )}
                 {adminUser}
               </Dropdown.Toggle>
@@ -110,9 +115,6 @@ export default function Header() {
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => setShowProfile(true)}>Show profile</Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout} >Log out</Dropdown.Item>
-                {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
               </Dropdown.Menu>
             </Dropdown>
           </div>
