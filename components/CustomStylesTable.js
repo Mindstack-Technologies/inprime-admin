@@ -19,9 +19,8 @@ const CustomStylesTable = {
             style: {
                 backgroundColor: '#ADD8E6', // Change the background color of the header cells
                 fontSize: '12px', // Change the font size of the header cells
-
-                background: "rgba(235, 236, 241, 0.3)",
-
+                // backgroundColor: 'white',
+                background: 'rgba(235, 236, 241, 1)',
                 border: "1px solid #EBECF1",
                 borderRadius: "4px 4px 0px 0px",
                 fontFamily: "Inter",
@@ -54,8 +53,18 @@ const CustomStylesTable = {
                 // border: "1px solid #EBECF1",
 
             }
-        }
+        },
+        tableWrapper: {
+            style: {
+              display: 'block',
+              minHeight: "70vh",
+              height: '100%',
+              maxHeight: '70vh',
+              overflowY: 'auto',
+            },
+          },
         // Add more custom styles here
     };
   
   export default CustomStylesTable ;
+
