@@ -645,13 +645,36 @@ function IncomeAssessmentPage() {
                 handleDublicateClick={handlePoPupDublicateClick}
               />
               }
-              <DataTable columns={columns} data={data} pagination
+              {/* <DataTable columns={columns} data={data} pagination
                 paginationComponent={CustomPagination}
                 customStyles={CustomStylesTable}
+                // className="table-container"
+                // className="myTable"
 
+              /> */}
 
+              <div style={{ height: 'auto', }}>
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  pagination
+                  paginationComponent={CustomPagination}
+                  customStyles={CustomStylesTable}
+                  // customStyles={{
+                  //   tableWrapper: {
+                  //     style: {
+                  //       display: 'block',
+                  //       maxHeight: '300px',
+                  //       overflowY: 'auto',
+                  //     },
+                  //   },
+                  // }}
+                  responsive
+                  fixedHeader
+                  highlightOnHover
+                />
+              </div>
 
-              />
               {/* {domLoaded ? (
             <DataTable columns={columns} data={data} pagination />
           ) : (

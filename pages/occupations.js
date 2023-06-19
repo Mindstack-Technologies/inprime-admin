@@ -962,12 +962,34 @@ export default function Occupations() {
                 </Button>
               </div>
             </div>
-            <DataTable columns={columns} data={data} pagination
+            {/* <DataTable columns={columns} data={data} pagination
               paginationComponent={CustomPagination}
               customStyles={CustomStylesTable}
             // className="myTable"
+            // className="table-container"
 
-            />
+            /> */}
+             <div style={{ height: 'auto', }}>
+                <DataTable
+                  columns={columns}
+                  data={data}
+                  pagination
+                  paginationComponent={CustomPagination}
+                  customStyles={CustomStylesTable}
+                  // customStyles={{
+                  //   tableWrapper: {
+                  //     style: {
+                  //       display: 'block',
+                  //       maxHeight: '300px',
+                  //       overflowY: 'auto',
+                  //     },
+                  //   },
+                  // }}
+                  responsive
+                  fixedHeader
+                  highlightOnHover
+                />
+              </div>
           </>
 
         )}
