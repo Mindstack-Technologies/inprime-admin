@@ -65,11 +65,23 @@ function IncomeAssessmentPage() {
     // { name: "#", selector: (row) => row.id },
     {
       name: "Template Name", selector: (row) => row.templateName,
-
+      sortable: true,
+      sortFunction: (a, b) => a.templateName.toLowerCase().localeCompare(b.templateName.toLowerCase())
     },
-    { name: "Unique Template Name", selector: (row) => row.UniqueTemplateName, },
-    { name: "Occupation", selector: (row) => row.occupation, },
-    { name: "Version", selector: (row) => row.version, width: "100px" },
+    {
+      name: "Unique Template Name", selector: (row) => row.UniqueTemplateName,
+      sortable: true,
+      sortFunction: (a, b) => a.UniqueTemplateName.toLowerCase().localeCompare(b.UniqueTemplateName.toLowerCase())
+    },
+    {
+      name: "Occupation", selector: (row) => row.occupation,
+      sortable: true,
+      sortFunction: (a, b) => a.occupation.toLowerCase().localeCompare(b.occupation.toLowerCase())
+    },
+    {
+      name: "Version", selector: (row) => row.version, width: "110px",
+      sortable: true,
+    },
     {
       name: "Created On",
       selector: (row) =>
@@ -95,8 +107,10 @@ function IncomeAssessmentPage() {
     //   width: "150px",
     // },
     {
-      name: "Published", selector: (row) => row.published,
+      name: "Status", selector: (row) => row.published,
       width: "130px",
+      sortable: true,
+
     },
 
     // {

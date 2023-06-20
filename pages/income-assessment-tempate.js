@@ -54,7 +54,7 @@ export default function IncomeAssessmentTemplate() {
   const [updateButtonIsClicked, setUpdateButtonIsClicked] = useState(false)
 
   const [saveErrorMessageSameTemplate, setSaveErrorMessageSameTemplate] = useState(false)
-  
+
   const [options, setOptions] = useState([]);
 
 
@@ -129,14 +129,24 @@ export default function IncomeAssessmentTemplate() {
               setTimeout(() => setSaveErrorMessagePopup(false), 10000);
             } else {
               setShowSuccessModal(true);
-              setTimeout(() => setShowSuccessModal(false), 10000);
+              setTimeout(() => {
+                router.push("/income-assessment-tempates");
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                  setShowSuccessModal(false);
+                }, 3000);
+              }, 1000);
+              // setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              setSaveButtonIsClicked(false)
+              setIsLoading(false);
+              // router.push("/income-assessment-tempates")
             }
           } else {
             setErrorMessage(responsedata.errorMessage)
             setSaveErrorMessageSameTemplate(true);
             setTimeout(() => setSaveErrorMessageSameTemplate(false), 10000);
-            
+
             // setShowErrorModal(true);
             // setTimeout(() => setShowErrorModal(false), 10000);
             // console.log("here it got error")
@@ -198,8 +208,18 @@ export default function IncomeAssessmentTemplate() {
               // const data = await response.json();
               // console.log(data);
               setShowSuccessModal(true);
-              setTimeout(() => setShowSuccessModal(false), 10000);
+              setTimeout(() => {
+                router.push("/income-assessment-tempates");
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                  setShowSuccessModal(false);
+                }, 3000);
+              }, 1000);
+              // setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              setSaveButtonIsClicked(false)
+              setIsLoading(false);
+              // router.push("/income-assessment-tempates")
             } else {
               setErrorMessage(outputdata.errorMessage)
 
@@ -282,8 +302,19 @@ export default function IncomeAssessmentTemplate() {
               setTimeout(() => setSaveErrorMessagePopup(false), 10000);
             } else {
               setShowSuccessModal(true);
-              setTimeout(() => setShowSuccessModal(false), 10000);
+              setTimeout(() => {
+                router.push("/income-assessment-tempates");
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                  setShowSuccessModal(false);
+                }, 3000);
+              }, 1000);
+              // setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              setUpdateButtonIsClicked(false)
+              setIsUpdateLoading(false);
+              // router.push("/income-assessment-tempates")
+
             }
           } else {
             setShowErrorModal(true);
@@ -345,11 +376,22 @@ export default function IncomeAssessmentTemplate() {
               const data = await response.json();
               // console.log(data);
               setShowSuccessModal(true);
-              setTimeout(() => setShowSuccessModal(false), 10000);
+              setTimeout(() => {
+                router.push("/income-assessment-tempates");
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                  setShowSuccessModal(false);
+                }, 3000);
+              }, 1000);
+              // setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              setUpdateButtonIsClicked(false)
+              setIsUpdateLoading(false);
+              // router.push("/income-assessment-tempates")
+
             } else {
               setShowErrorModal(true);
-              setTimeout(() => setShowErrorModal(true), 10000);
+              setTimeout(() => setShowErrorModal(false), 10000);
             }
           } catch (error) {
             console.error(error);
@@ -425,8 +467,18 @@ export default function IncomeAssessmentTemplate() {
               setTimeout(() => setSubmitErrorMessagePopup(true), 10000);
             } else {
               setShowSuccessModal(true);
-              setTimeout(() => setShowSuccessModal(false), 10000);
+              setTimeout(() => {
+                router.push("/income-assessment-tempates");
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                  setShowSuccessModal(false);
+                }, 3000);
+              }, 1000);
+              // setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              setSaveButtonIsClicked(false)
+              setSubmitBiuttonisLoading(false)
+              // router.push("/income-assessment-tempates")
 
             }
           } else {
@@ -497,8 +549,20 @@ export default function IncomeAssessmentTemplate() {
               // const data = await response.json();
               // console.log(data);
               setShowSuccessModal(true);
-              setTimeout(() => setShowSuccessModal(false), 10000);
+              setTimeout(() => {
+                router.push("/income-assessment-tempates");
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                  setShowSuccessModal(false);
+                }, 3000);
+              }, 1000);
+              // setTimeout(() => setShowSuccessModal(false), 10000);
               console.log("Post request is done")
+              setSaveButtonIsClicked(false)
+              setSubmitBiuttonisLoading(false)
+
+              // router.push("/income-assessment-tempates")
+
             } else {
               // setShowErrorModal(true);
               // setTimeout(() => setShowErrorModal(true), 10000);
@@ -821,29 +885,32 @@ export default function IncomeAssessmentTemplate() {
                   </button>
                 )}
 
-                <button
-                  type="submit"
-                  // onClick={handleButtonClick}
-                  // disabled={isSubmitting}
-                  disabled={submitBiuttonisLoading}
-                  className="btn btn-primary   mb-3 mt-2 mr-2"
-                >
-                  {submitBiuttonisLoading ? (
-                    <>
-                      <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                        className="mr-2"
-                      />
-                      Loading...
-                    </>
-                  ) : (
-                    "Submit"
-                  )}
-                </button>
+                {mode && (
+
+                  <button
+                    type="submit"
+                    // onClick={handleButtonClick}
+                    // disabled={isSubmitting}
+                    disabled={submitBiuttonisLoading}
+                    className="btn btn-primary   mb-3 mt-2 mr-2"
+                  >
+                    {submitBiuttonisLoading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                          className="mr-2"
+                        />
+                        Loading...
+                      </>
+                    ) : (
+                      "Submit"
+                    )}
+                  </button>
+                )}
 
               </div>
               <div className="row">
