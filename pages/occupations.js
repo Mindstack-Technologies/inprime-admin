@@ -454,7 +454,6 @@ export default function Occupations() {
       const newData = await Promise.all(newDataPromises);
       // console.log(newData)
       setData(newData);
-      console.log(newData)
 
 
 

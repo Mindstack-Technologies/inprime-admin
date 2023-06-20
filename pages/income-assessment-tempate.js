@@ -72,7 +72,7 @@ export default function IncomeAssessmentTemplate() {
       setIsLoading(true);
 
       console.log('save button is clicked')
-      console.log(values.templateName)
+      // console.log(values.templateName)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
@@ -117,7 +117,7 @@ export default function IncomeAssessmentTemplate() {
             },
             body: JSON.stringify(data),
           });
-          console.log(response)
+          // console.log(response)
           const responsedata = await response.json();
 
           if (response.ok) {
@@ -246,7 +246,7 @@ export default function IncomeAssessmentTemplate() {
       setIsUpdateLoading(true);
 
       console.log('Update button is clicked')
-      console.log(templateId)
+      // console.log(templateId)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
@@ -408,7 +408,7 @@ export default function IncomeAssessmentTemplate() {
     else {
       setSubmitBiuttonisLoading(true)
       console.log("submit button is clicked")
-      console.log(templateId)
+      // console.log(templateId)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
@@ -530,7 +530,7 @@ export default function IncomeAssessmentTemplate() {
             formName: values.form_name,
             task_data: onlyArry,
           };
-          console.log(data)
+          // console.log(data)
 
           try {
             const response = await fetch(url, {
