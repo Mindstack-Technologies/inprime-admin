@@ -291,7 +291,7 @@ function IncomeAssessmentPage() {
 
     const router = useRouter();
     const handleViewClick = () => {
-      router.push(`/formgenerator?occupationID=${row.id}`);
+      router.push(`/formgenerator?templateID=${row.id}`);
     };
 
     return (

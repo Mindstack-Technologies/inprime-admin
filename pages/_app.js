@@ -72,7 +72,7 @@ export default function App({ Component, pageProps }) {
       }
     } else {
       // if (router.pathname !== '/login') {
-        if (router.pathname !== '/login' && router.pathname !== '/formgenerator') {
+        if (router.pathname !== '/login' ) {
         router.push('/login');
       }
     }
