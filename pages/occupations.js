@@ -99,10 +99,20 @@ export default function Occupations() {
     // { name: "#", selector: (row) => row.id },
     {
       name: "Occupation", selector: (row) => row.occupationName, sortable: true,
+      sortFunction: (a, b) => a.occupationName.toLowerCase().localeCompare(b.occupationName.toLowerCase())
+
       // width: "auto"
     },
     {
       name: "Template Name", selector: (row) => row.templateName,
+      sortable: true,
+      // sortFunction: (a, b) => a.templateName.toLowerCase().localeCompare(b.templateName.toLowerCase())
+      sortFunction: (a, b) => {
+        if (a.templateName === undefined && b.templateName === undefined) return 0;
+        if (a.templateName === undefined) return 1;
+        if (b.templateName === undefined) return -1;
+        return a.templateName.toLowerCase().localeCompare(b.templateName.toLowerCase());
+      }
       // width: "auto"
     },
     {
@@ -111,10 +121,16 @@ export default function Occupations() {
     },
     {
       name: "Category", selector: (row) => row.category,
+      sortable: true,
+      sortFunction: (a, b) => a.category.toLowerCase().localeCompare(b.category.toLowerCase())
+
       // width: "auto"
     },
     {
       name: "Subcategory", selector: (row) => row.subcategory,
+      sortable: true,
+      sortFunction: (a, b) => a.subcategory.toLowerCase().localeCompare(b.subcategory.toLowerCase())
+
       // width: "auto"
     },
     // { name: "Active/Deactive", selector: (row) => (
@@ -410,6 +426,9 @@ export default function Occupations() {
           // console.log(occupationData);
           template_name = occupationData?.data?.[0]?.templateName;
           version = occupationData?.data?.[0]?.version;
+          if(template_name === undefined){
+            template_name=null;
+          }
         }
         return {
           ...item,

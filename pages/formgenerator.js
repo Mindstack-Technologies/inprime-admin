@@ -428,9 +428,9 @@ function MyForm() {
 
   useEffect(() => {
     // const OccupationID = localStorage.getItem('OccupationID');
-    const OccupationID = router.query.occupationID;
-    // console.log(OccupationID)
-    if (OccupationID) {
+    const templateID = router.query.templateID;
+    // console.log(router.query.occupationID)
+    if (templateID) {
       const bearerToken = localStorage.getItem('access_token');
 
       // console.log(OccupationID)
@@ -438,7 +438,7 @@ function MyForm() {
       async function fetchData() {
         try {
 
-          const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${OccupationID}`,
+          const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${templateID}`,
           {
             headers: {
               'Authorization': `Bearer ${bearerToken}`
@@ -457,20 +457,24 @@ function MyForm() {
   
       fetchData();
     }
-  }, []);
-  // const handleSubmit = (data) => {
-  //   console.log(data);
-  // };
+  }, [ router.query]);
+
+
+  const handleSubmit = (data) => {
+    console.log(data);
+  };
+
 
   // const handleSubmit = (data) => {
+
   //   // Check if all required fields have values
   //   let isValid = true;
   //   formData.forEach((element) => {
-  //     if (element.required && (!data[element.field_name] || data[element.field_name].length === 0)) {
+  //     if (element.required && (!data[element.field_name] || (data[element.field_name] && data[element.field_name].length === 0))) {
   //       isValid = false;
   //     }
   //   });
-
+  
   //   if (isValid) {
   //     // Submit the form
   //     console.log(data);
@@ -479,24 +483,6 @@ function MyForm() {
   //     alert("Please fill in all required fields.");
   //   }
   // };
-
-  const handleSubmit = (data) => {
-    // Check if all required fields have values
-    let isValid = true;
-    formData.forEach((element) => {
-      if (element.required && (!data[element.field_name] || (data[element.field_name] && data[element.field_name].length === 0))) {
-        isValid = false;
-      }
-    });
-  
-    if (isValid) {
-      // Submit the form
-      console.log(data);
-    } else {
-      // Display an error message
-      alert("Please fill in all required fields.");
-    }
-  };
 
 
 

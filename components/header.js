@@ -75,7 +75,7 @@ export default function Header() {
         <div className="row mx-0">
           <div className="col-lg-8">
             {pathname == "/occupations" ? (
-              <h4>Occupations</h4>
+              <h4>Manage Occupations</h4>
             ) : pathname == "/income-assessment-tempates" ? (
               <h4>Income Assessment Templates </h4>
             ) : pathname == "/income-assessment-tempate" ? (
