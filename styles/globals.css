@@ -547,6 +547,7 @@ border-radius: 8px; */
   border: 1px solid #00357C;
   border-radius: 8px;
   color: #FFFFFF !important;
+  padding: 5.5px 8px !important;
 }
 
 .my-button-secondary {
@@ -554,6 +555,7 @@ border-radius: 8px; */
   border: 1px solid #FFFFFF;
   border-radius: 8px;
   color: #333333 !important;
+  padding: 5.5px 8px !important;
 
 }
 

@@ -64,12 +64,15 @@ export default function App({ Component, pageProps }) {
         localStorage.removeItem('access_token');
       } else {
         // If the token is not expired, continue with your existing logic
-        if (router.pathname === '/login') {
-          router.push('/');
+        // if (router.pathname === '/login') {
+          if (router.pathname === '/login' ) {
+          
+          router.push('/occupations');
         }
       }
     } else {
-      if (router.pathname !== '/login') {
+      // if (router.pathname !== '/login') {
+        if (router.pathname !== '/login' ) {
         router.push('/login');
       }
     }
