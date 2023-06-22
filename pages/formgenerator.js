@@ -47,9 +47,8 @@ import "react-form-builder2/dist/app.css";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../baseURL";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import GeoTagging from "@/components/Custom-FromBuliderTools/GeoTagging";
-
 
 // const jsonFormData = {"task_data":[{"id":"9B729AB6-FC2B-423B-8618-059DC96D37CC","element":"Header","text":"Header Text","static":true,"required":false,"bold":false,"italic":false,"content":"<p style=\"text-align:center;\">Income Assessment of Salaried Individual\t\t\t\t\t\t\t ","canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"dirty":false},{"id":"DE5FF831-59F8-4AFD-B22C-C443A7AFB24D","element":"TextInput","text":"Text Input","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"text_input_26C2EC70-D0C7-4AA2-B4A5-F69562102C42","label":"Employer Name ","dirty":false},{"id":"93C8518D-6015-46D2-8FB1-092C4748FA00","element":"RadioButtons","text":"Multiple Choice","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"inline":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"radiobuttons_322FAA86-FD0B-4056-A76B-E3847469DAA2","label":"Sector ","options":[{"value":"organised","text":"Organised","key":"radiobuttons_option_15934A8E-A3EB-4EA2-8C03-B1EF1FA462A8"},{"value":"unorganised","text":"Unorganised","key":"radiobuttons_option_3E9FAF51-4C7D-40E8-B86E-6499C4527FA3"}],"dirty":false},{"id":"4842A896-FF3E-4C75-86DC-7631C3940A93","element":"RadioButtons","text":"Multiple Choice","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"radiobuttons_2B1F7FF0-D851-42AA-A45B-19FD023AD29B","label":"Industry ","options":[{"value":"agriculture","text":"Agriculture","key":"radiobuttons_option_97BD1579-0461-46A0-B4E6-46AB84346E3A"},{"value":"manufactur","text":"Manufactur","key":"radiobuttons_option_ABBCAE0C-2BC2-4FBD-89BE-3BC9C75B2BAB"},{"value":"construction","text":"Construction","key":"radiobuttons_option_110E27F3-95A2-4B81-985A-E2496352FB9F"},{"value":"trade","text":"Trade","key":"0809D97F-9BC1-4DDF-BE38-944EBDF9C4D2"},{"value":"transportation","text":"Transportation","key":"C7351201-6629-4559-BA12-68CC47F1A34C"},{"value":"hospitality","text":"Hospitality","key":"7F4E731E-8DD1-4FBA-AFF1-6DCB657AA14D"},{"value":"other_services","text":"Other Services","key":"A7E26F94-5894-4C7C-AC3D-946B9D5DE2DC"}],"dirty":false},{"id":"F7BD13E6-371A-4CD6-B561-1C8315301280","element":"RadioButtons","text":"Multiple Choice","required":true,"canHaveAnswer":true,"canHavePageBreakBefore":true,"canHaveAlternateForm":true,"canHaveDisplayHorizontal":true,"inline":true,"canHaveOptionCorrect":true,"canHaveOptionValue":true,"canPopulateFromApi":true,"field_name":"radiobuttons_59EF12F3-2CB0-462E-9D98-1A1F6666F115","label":"Type of Organisation ","options":[{"value":"government","text":"Government","key":"radiobuttons_option_7B1745FF-F145-4C21-9B8A-FD34052E5C14"},{"value":"proprietor","text":"Proprietor","key":"radiobuttons_option_2829826F-F857-47F4-90BD-A60515E7FE1E"},{"value":"pvt_ltd","text":"PVT LTD","key":"radiobuttons_option_F9B76EB4-6B08-41CF-B506-B1A125119912"},{"value":"retailers","text":"Retailers","key":"5A4C53FC-E6AC-4C46-9171-697228AE8CA1"},{"value":"psu","text":"PSU","key":"C9BC86AB-A768-4F1D-BEFE-D9E70786131E"},{"value":"partnership","text":"Partnership","key":"0D88E73C-D3B0-4082-9ACB-A51F7EFD76D7"},{"value":"public_ltd","text":"Public LTD","key":"83B374AF-9F19-4BD7-80F0-C81799535841"}],"dirty":false}]}
 const jsonFormData = {
@@ -409,31 +408,32 @@ const jsonFormData = {
 //   return validators;
 // };
 
-
-
-
 function MyForm() {
   const [domLoaded, setDomLoaded] = useState(false);
   const router = useRouter();
-//   const [formData, setFormData] = useState(null);
+  //   const [formData, setFormData] = useState(null);
 
-//   useEffect(() => {
-//     const jsonData = localStorage.getItem('formData');
-//     if (jsonData) {
-//       setFormData(JSON.parse(jsonData));
-//     }
-//   }, []);
-//   console.log(formData)
+  //   useEffect(() => {
+  //     const jsonData = localStorage.getItem('formData');
+  //     if (jsonData) {
+  //       setFormData(JSON.parse(jsonData));
+  //     }
+  //   }, []);
+  //   console.log(formData)
 
   const [formData, setFormData] = useState(null);
-  
+
   const MyInput = React.forwardRef((props, ref) => {
     const { name, defaultValue, disabled } = props;
-    console.log(props)
+    // console.log(props);
 
     return (
-      <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled}  />
-
+      <input
+        ref={ref}
+        name={name}
+        defaultValue={defaultValue}
+        disabled={disabled}
+      />
     );
   });
 
@@ -474,55 +474,47 @@ function MyForm() {
   const TestComponent = () => <h2>Hello</h2>;
   // Registry.register('MyGeoTagging', GeoTagging);
   try {
-    Registry.register('MyGeoTagging', GeoTagging);
-    Registry.register('MyInput', MyInput);
-    Registry.register('TestComponent', TestComponent);
-
-
-  } catch (error) {
-
-  }
-  
+    Registry.register("MyGeoTagging", GeoTagging);
+    Registry.register("MyInput", MyInput);
+    Registry.register("TestComponent", TestComponent);
+  } catch (error) {}
 
   useEffect(() => {
     // const OccupationID = localStorage.getItem('OccupationID');
     const templateID = router.query.templateID;
     // console.log(router.query.occupationID)
     if (templateID) {
-      const bearerToken = localStorage.getItem('access_token');
+      const bearerToken = localStorage.getItem("access_token");
 
       // console.log(OccupationID)
       // setFormData(JSON.parse(jsonData));
       async function fetchData() {
         try {
-
-          const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates?id=${templateID}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${bearerToken}`
+          const response = await fetch(
+            `${BASE_URL}/crm/incomeAssessment/templates?id=${templateID}`,
+            {
+              headers: {
+                Authorization: `Bearer ${bearerToken}`,
+              },
             }
-          }
           );
           const data = await response.json();
-          console.log(data.data[0].json)
+          console.log(data.data[0].json);
           setFormData(data.data[0].json);
-              setDomLoaded(true);
-
+          setDomLoaded(true);
         } catch (error) {
           console.error(error);
         }
       }
-  
+
       fetchData();
     }
-  }, [ router.query]);
-
+  }, [router.query]);
 
   const handleSubmit = (data) => {
     console.log(data);
-    console.log(JSON.stringify(data) )
+    console.log(JSON.stringify(data));
   };
-
 
   // const handleSubmit = (data) => {
 
@@ -533,7 +525,7 @@ function MyForm() {
   //       isValid = false;
   //     }
   //   });
-  
+
   //   if (isValid) {
   //     // Submit the form
   //     console.log(data);
@@ -543,8 +535,6 @@ function MyForm() {
   //   }
   // };
 
-
-
   // const validators = generateValidators(formData);
 
   // console.log(formData)
@@ -553,10 +543,8 @@ function MyForm() {
   //   setDomLoaded(true);
   // }, []);
 
-
-
   const registeredElements = Registry.list();
-  console.log(registeredElements);
+  // console.log(registeredElements);
   return (
     <>
       <link
@@ -579,11 +567,27 @@ function MyForm() {
           data={formData}
           className="my-form"
           onSubmit={handleSubmit}
-          answer_data={[{"name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","custom_name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","value":"{\"Latitude\": 12.927015, \"Logitude\": 74.8577849}"},{"name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","custom_name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","value":"{\"Latitude\": undefined, \"Logitude\": undefined}"},{"name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","custom_name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","value":""},{"name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","custom_name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","value":"sdf"}]}
+          answer_data={[
+            {
+              name: "my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36",
+              custom_name:
+                "my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36",
+              value: '{"latitude":12.8457411,"longitude":74.8523311}',
+            },
+            {
+              name: "my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7",
+              custom_name: "my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7",
+              value: "",
+            },
+            {
+              name: "text_input_93768CCD-2102-4E72-9C84-61448E2B47F5",
+              custom_name: "text_input_93768CCD-2102-4E72-9C84-61448E2B47F5",
+              value: "sdf",
+            },
+          ]}
           // answer_data={[{"name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","custom_name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","value":"74.8577849"},{"name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","custom_name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","value":"undefined"},{"name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","custom_name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","value":""},{"name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","custom_name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","value":"sdf"}]}
           // answer_data={[{"name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","custom_name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","value":"12.927015, 74.8577849"},{"name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","custom_name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","value":"undefined, undefined"},{"name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","custom_name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","value":""},{"name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","custom_name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","value":"sdf"}]}
           // validators={validators}
-
         />
       )}
     </>
