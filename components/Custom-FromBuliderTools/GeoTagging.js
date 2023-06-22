@@ -45,7 +45,7 @@ const GeoTagging = React.forwardRef((props, ref) => {
   };
 
   const json_parse = JSON.parse(defaultValue);
-  console.log("defaultValue.longitude", json_parse.latitude);
+
   const json_string = JSON.stringify({
     latitude: location?.latitude,
     longitude: location?.longitude,
@@ -53,7 +53,6 @@ const GeoTagging = React.forwardRef((props, ref) => {
   return (
     <div>
       {/* <input ref={ref} disabled = "false" type="checkbox" value/> */}
-      {defaultValue.Logitude}
       <button onClick={handleGetLocation}>Get Location</button>
       <input
         ref={ref}
