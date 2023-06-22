@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FormBuilder, { Registry }from "react-form-builder2";
+import FormBuilder, { Registry } from "react-form-builder2";
 import "react-form-builder2/dist/app.css";
 import Demobar from "@/components/DemoBar";
 import AdminLayout from "@/layouts/AdminLayout";
@@ -10,7 +10,7 @@ import Head from "next/head";
 import { Alert, Modal } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 import { useRouter } from 'next/router';
-
+import GeoTagging from "@/components/Custom-FromBuliderTools/GeoTagging";
 
 const onPost = (data) => {
   const jsonData = JSON.stringify(data);
@@ -32,37 +32,93 @@ const Schema = Yup.object().shape({
 export default function IncomeAssessmentTemplate() {
 
 
-// Custom form tools items
+  // Custom form tools items
 
 
 
-//   const MyInput = ((props, ref) => {
-//     const { name, defaultValue, disabled } = props;
-//     // console.log(myProp); // logs the value of myProp
+  //   const MyInput = ((props, ref) => {
+  //     const { name, defaultValue, disabled } = props;
+  //     // console.log(myProp); // logs the value of myProp
 
-//     return     <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled} />
-
-    
-// });
-// const MyInput = React.forwardRef((props, ref) => {
-//   const { name, defaultValue, disabled } = props;
-//   return (<>
-//     <p>hello</p>
-//   {/* <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled} /> */}
-//   </>
-//   );
-// });
-// const MyInput = () => <input />;
-const MyInput = React.forwardRef((props, ref) => {
-  return <input ref={ref} />;
-});
-
-const TestComponent = () => <h2>Hello</h2>;
-// Registry.register('MyInput', MyInput);
-// Registry.register('TestComponent', TestComponent);
+  //     return     <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled} />
 
 
-const items = [{
+  // });
+  // const MyInput = React.forwardRef((props, ref) => {
+  //   const { name, defaultValue, disabled } = props;
+  //   return (<>
+  //     <p>hello</p>
+  //   {/* <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled} /> */}
+  //   </>
+  //   );
+  // });
+  // const MyInput = () => <input />;
+  // const MyInput = React.forwardRef((props, ref) => {
+  //   return <input ref={ref} />;
+  // });
+
+  const MyInput = ((props) => {
+    const { name, defaultValue, disabled } = props;
+    console.log(props)
+    return (
+      <input name={name} defaultValue={defaultValue} disabled={disabled} />
+
+    );
+  });
+
+  // const GeoTagging = (props) => {
+  //   const [location, setLocation] = useState(null);
+
+  //   const handleGetLocation = () => {
+  //     if (navigator.geolocation) {
+  //       navigator.geolocation.getCurrentPosition(
+  //         (position) => {
+  //           const { latitude, longitude } = position.coords;
+  //           setLocation({ latitude, longitude });
+  //         },
+  //         (error) => {
+  //           console.error(error);
+  //         }
+  //       );
+  //     } else {
+  //       console.error('Geolocation is not supported by this browser.');
+  //     }
+  //   };
+
+  //   return (
+  //     <div>
+  //       <button onClick={handleGetLocation}>Get Location</button>
+  //       {location && (
+  //         <div>
+  //           Latitude: {location.latitude}
+  //           <br />
+  //           Longitude: {location.longitude}
+  //         </div>
+  //       )}
+  //       {/* <p>hello</p> */}
+  //     </div>
+  //   );
+  // };
+
+  const TestComponent = () => <h2>Hello</h2>;
+  // Registry.register('MyGeoTagging', GeoTagging);
+  try {
+    Registry.register('MyGeoTagging', GeoTagging);
+    Registry.register('MyInput', MyInput);
+    Registry.register('TestComponent', TestComponent);
+
+
+  } catch (error) {
+
+  }
+  const registeredElements = Registry.list();
+  console.log(registeredElements);
+  // Registry.register('MyGeoTagging', GeoTagging);
+  // Registry.register('MyInput', MyInput);
+  // Registry.register('TestComponent', TestComponent);
+
+
+  const items = [{
     key: 'TestComponent',
     element: 'CustomElement',
     component: TestComponent,
@@ -73,124 +129,139 @@ const items = [{
     static: true,
     props: { test: 'test_comp' },
     label: 'Label Test',
-}, 
-// {
-//     key: 'MyInput',
-//     element: 'CustomElement',
-//     component: MyInput,
-//     type: 'custom',
-//     forwardRef: true,
-//     field_name: 'my_input_',
-//     name: 'My Input',
-//     icon: 'fa fa-cog',
-//     props: { test: 'test_input' },
-//     label: 'Label Input',
-// },
-
-{
-  key: 'MyInput',
-  element: 'CustomElement',
-  component: MyInput,
-  type: 'custom',
-  forwardRef: true,
-  field_name: 'my_input_',
-  name: 'My Input',
-  icon: 'fa fa-cog',
-  props: {
-    test: 'test_input',
-    myProp: 'myValue' // passing the myProp prop here
   },
-  label: 'Label Input',
-},
-// {
-//     key: 'MyInput',
-//     element: 'Custom',
-//     component: MyInput,
-//     type: 'custom',
-//     forwardRef: true,
-//     field_name: 'my_input_',
-//     name: 'My Input',
-//     icon: 'fa fa-cog',
-//     props: { test: 'test_input' },
-//     label: 'Label Input',
-// },
-// Additional standard components, you don't need full definition if no modification is required. 
-//   {  
-//     key: 'Header',
-//   }, {
-//     key: 'TextInput',
-//   }, {
-//     key: 'TextArea',
-//   }, {
-//     key: 'RadioButtons',
-//   }, {
-//     key: 'Checkboxes',
-//   }, {
-//     key: 'Image',
-//   }
-{ key: 'Header' },
-{ key: 'Label' },
-{ key: 'Paragraph' },
-{ key: 'LineBreak' },
-{ key: 'Dropdown' },
-{ key: 'Tags' },
-{ key: 'Checkboxes' },
-// { key: 'MultipleChoice' },
-{ key: 'TextInput' },
-// { key: 'Email' },
-{ key: 'NumberInput' },
-// { key: 'PhoneNumber' },
-// { key: 'MultiLineInput' },
-{ key: 'TwoColumnRow' },
-{ key: 'ThreeColumnRow' },
-{ key: 'FourColumnRow' },
-// { key: 'FiveColumnRow' },
-{ key: 'TextArea' },
-{ key: 'Image' },
-{ key: 'Rating' },
-{ key: 'RadioButtons' },
-// { key: 'Date' },
-{ key: 'DatePicker' },
-{ key: 'Signature' },
-// { key: 'Website' },
-{ key: 'HyperLink' },
-{ key: 'Download' },
-{ key: 'Range' },
-{ key: 'Camera' },
-// { key: 'FileAttachment' },
-{ key: 'FileUpload' },
-//23
-//25
-// {
-//     key: 'Row',
-//     element: 'Row',
-//     components: [
-//         {
-//             key: 'Column',
-//             element: 'Column',
-//             colSpan: 6,
-//             components: [
-//                 {
-//                     key: 'TextInput',
-//                     // Add any additional properties for the TextInput element here
-//                 },
-//             ],
-//         },
-//         // {
-//         //     key: 'Column',
-//         //     element: 'Column',
-//         //     colSpan: 6,
-//         //     components: [
-//         //         {
-//         //             key: 'TextInput',
+  // {
+  //     key: 'MyInput',
+  //     element: 'CustomElement',
+  //     component: MyInput,
+  //     type: 'custom',
+  //     forwardRef: true,
+  //     field_name: 'my_input_',
+  //     name: 'My Input',
+  //     icon: 'fa fa-cog',
+  //     props: { test: 'test_input' },
+  //     label: 'Label Input',
+  // },
 
-//         //             // Add form elements to the second column here
-//         //         }
-//         //     ],
-//         // },
-//     ],
-// }
-];
+  {
+    key: 'MyInput',
+    element: 'CustomElement',
+    component: MyInput,
+    type: 'custom',
+    forwardRef: true,
+    field_name: 'my_input_',
+    name: 'My Input',
+    icon: 'fa fa-cog',
+    props: {
+      test: 'test_input',
+      myProp: 'myValue' // passing the myProp prop here
+    },
+    label: 'Label Input',
+  },
+  {
+    key: 'MyGeoTagging',
+    element: 'CustomElement',
+    type: 'custom',
+    forwardRef: true,
+    field_name: 'my_input_geotagging',
+    name: 'GeoTagging',
+    icon: 'fa fa-map-marker',
+    static: true,
+    // content: 'GeoTagging Component',
+    props: { test: 'test_input' },
+
+    component: GeoTagging,
+
+  },
+  // {
+  //     key: 'MyInput',
+  //     element: 'Custom',
+  //     component: MyInput,
+  //     type: 'custom',
+  //     forwardRef: true,
+  //     field_name: 'my_input_',
+  //     name: 'My Input',
+  //     icon: 'fa fa-cog',
+  //     props: { test: 'test_input' },
+  //     label: 'Label Input',
+  // },
+  // Additional standard components, you don't need full definition if no modification is required. 
+  //   {  
+  //     key: 'Header',
+  //   }, {
+  //     key: 'TextInput',
+  //   }, {
+  //     key: 'TextArea',
+  //   }, {
+  //     key: 'RadioButtons',
+  //   }, {
+  //     key: 'Checkboxes',
+  //   }, {
+  //     key: 'Image',
+  //   }
+  { key: 'Header' },
+  { key: 'Label' },
+  { key: 'Paragraph' },
+  { key: 'LineBreak' },
+  { key: 'Dropdown' },
+  { key: 'Tags' },
+  { key: 'Checkboxes' },
+  // { key: 'MultipleChoice' },
+  { key: 'TextInput' },
+  // { key: 'Email' },
+  { key: 'NumberInput' },
+  // { key: 'PhoneNumber' },
+  // { key: 'MultiLineInput' },
+  { key: 'TwoColumnRow' },
+  { key: 'ThreeColumnRow' },
+  { key: 'FourColumnRow' },
+  // { key: 'FiveColumnRow' },
+  { key: 'TextArea' },
+  { key: 'Image' },
+  { key: 'Rating' },
+  { key: 'RadioButtons' },
+  // { key: 'Date' },
+  { key: 'DatePicker' },
+  { key: 'Signature' },
+  // { key: 'Website' },
+  { key: 'HyperLink' },
+  { key: 'Download' },
+  { key: 'Range' },
+  { key: 'Camera' },
+  // { key: 'FileAttachment' },
+  { key: 'FileUpload' },
+    //23
+    //25
+    // {
+    //     key: 'Row',
+    //     element: 'Row',
+    //     components: [
+    //         {
+    //             key: 'Column',
+    //             element: 'Column',
+    //             colSpan: 6,
+    //             components: [
+    //                 {
+    //                     key: 'TextInput',
+    //                     // Add any additional properties for the TextInput element here
+    //                 },
+    //             ],
+    //         },
+    //         // {
+    //         //     key: 'Column',
+    //         //     element: 'Column',
+    //         //     colSpan: 6,
+    //         //     components: [
+    //         //         {
+    //         //             key: 'TextInput',
+
+    //         //             // Add form elements to the second column here
+    //         //         }
+    //         //     ],
+    //         // },
+    //     ],
+    // }
+  ];
 
 
 
@@ -1201,6 +1272,7 @@ const items = [{
         {download &&
           <FormBuilder.ReactFormBuilder
             onPost={onPost}
+            answer_data ={registeredElements}
             // data={JSON.stringify(formsData)}
             data={formsData}
             toolbarItems={items}
