@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FormBuilder from "react-form-builder2";
+import FormBuilder, { Registry }from "react-form-builder2";
 import "react-form-builder2/dist/app.css";
 import Demobar from "@/components/DemoBar";
 import AdminLayout from "@/layouts/AdminLayout";
@@ -30,6 +30,180 @@ const Schema = Yup.object().shape({
 
 
 export default function IncomeAssessmentTemplate() {
+
+
+// Custom form tools items
+
+
+
+//   const MyInput = ((props, ref) => {
+//     const { name, defaultValue, disabled } = props;
+//     // console.log(myProp); // logs the value of myProp
+
+//     return     <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled} />
+
+    
+// });
+// const MyInput = React.forwardRef((props, ref) => {
+//   const { name, defaultValue, disabled } = props;
+//   return (<>
+//     <p>hello</p>
+//   {/* <input ref={ref} name={name} defaultValue={defaultValue} disabled={disabled} /> */}
+//   </>
+//   );
+// });
+// const MyInput = () => <input />;
+const MyInput = React.forwardRef((props, ref) => {
+  return <input ref={ref} />;
+});
+
+const TestComponent = () => <h2>Hello</h2>;
+// Registry.register('MyInput', MyInput);
+// Registry.register('TestComponent', TestComponent);
+
+
+const items = [{
+    key: 'TestComponent',
+    element: 'CustomElement',
+    component: TestComponent,
+    type: 'custom',
+    field_name: 'test_component',
+    name: 'Something You Want',
+    icon: 'fa fa-cog',
+    static: true,
+    props: { test: 'test_comp' },
+    label: 'Label Test',
+}, 
+// {
+//     key: 'MyInput',
+//     element: 'CustomElement',
+//     component: MyInput,
+//     type: 'custom',
+//     forwardRef: true,
+//     field_name: 'my_input_',
+//     name: 'My Input',
+//     icon: 'fa fa-cog',
+//     props: { test: 'test_input' },
+//     label: 'Label Input',
+// },
+
+{
+  key: 'MyInput',
+  element: 'CustomElement',
+  component: MyInput,
+  type: 'custom',
+  forwardRef: true,
+  field_name: 'my_input_',
+  name: 'My Input',
+  icon: 'fa fa-cog',
+  props: {
+    test: 'test_input',
+    myProp: 'myValue' // passing the myProp prop here
+  },
+  label: 'Label Input',
+},
+// {
+//     key: 'MyInput',
+//     element: 'Custom',
+//     component: MyInput,
+//     type: 'custom',
+//     forwardRef: true,
+//     field_name: 'my_input_',
+//     name: 'My Input',
+//     icon: 'fa fa-cog',
+//     props: { test: 'test_input' },
+//     label: 'Label Input',
+// },
+// Additional standard components, you don't need full definition if no modification is required. 
+//   {  
+//     key: 'Header',
+//   }, {
+//     key: 'TextInput',
+//   }, {
+//     key: 'TextArea',
+//   }, {
+//     key: 'RadioButtons',
+//   }, {
+//     key: 'Checkboxes',
+//   }, {
+//     key: 'Image',
+//   }
+{ key: 'Header' },
+{ key: 'Label' },
+{ key: 'Paragraph' },
+{ key: 'LineBreak' },
+{ key: 'Dropdown' },
+{ key: 'Tags' },
+{ key: 'Checkboxes' },
+// { key: 'MultipleChoice' },
+{ key: 'TextInput' },
+// { key: 'Email' },
+{ key: 'NumberInput' },
+// { key: 'PhoneNumber' },
+// { key: 'MultiLineInput' },
+{ key: 'TwoColumnRow' },
+{ key: 'ThreeColumnRow' },
+{ key: 'FourColumnRow' },
+// { key: 'FiveColumnRow' },
+{ key: 'TextArea' },
+{ key: 'Image' },
+{ key: 'Rating' },
+{ key: 'RadioButtons' },
+// { key: 'Date' },
+{ key: 'DatePicker' },
+{ key: 'Signature' },
+// { key: 'Website' },
+{ key: 'HyperLink' },
+{ key: 'Download' },
+{ key: 'Range' },
+{ key: 'Camera' },
+// { key: 'FileAttachment' },
+{ key: 'FileUpload' },
+//23
+//25
+// {
+//     key: 'Row',
+//     element: 'Row',
+//     components: [
+//         {
+//             key: 'Column',
+//             element: 'Column',
+//             colSpan: 6,
+//             components: [
+//                 {
+//                     key: 'TextInput',
+//                     // Add any additional properties for the TextInput element here
+//                 },
+//             ],
+//         },
+//         // {
+//         //     key: 'Column',
+//         //     element: 'Column',
+//         //     colSpan: 6,
+//         //     components: [
+//         //         {
+//         //             key: 'TextInput',
+
+//         //             // Add form elements to the second column here
+//         //         }
+//         //     ],
+//         // },
+//     ],
+// }
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -1029,6 +1203,7 @@ export default function IncomeAssessmentTemplate() {
             onPost={onPost}
             // data={JSON.stringify(formsData)}
             data={formsData}
+            toolbarItems={items}
 
           //url ={url}
           // saveUrl={saveUrl}
