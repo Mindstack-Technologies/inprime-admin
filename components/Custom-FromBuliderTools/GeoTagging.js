@@ -1,24 +1,6 @@
 import React, { useState } from "react";
 import { updateElement } from "react-form-builder2";
 
-// const GeoTagging = (props) => {
-//   const [location, setLocation] = useState(null);
-
-//   const handleGetLocation = () => {
-//     if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition(
-//         (position) => {
-//           const { latitude, longitude } = position.coords;
-//           setLocation({ latitude, longitude });
-//         },
-//         (error) => {
-//           console.error(error);
-//         }
-//       );
-//     } else {
-//       console.error('Geolocation is not supported by this browser.');
-//     }
-//   };
 const GeoTagging = React.forwardRef((props, ref) => {
   const { data, defaultValue } = props;
   const [location, setLocation] = useState(null);
@@ -43,13 +25,31 @@ const GeoTagging = React.forwardRef((props, ref) => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
-
-  const json_parse = JSON.parse(defaultValue);
-
-  const json_string = JSON.stringify({
+  // console.log(defaultValue)
+  var json_string = JSON.stringify({
     latitude: location?.latitude,
     longitude: location?.longitude,
-  });
+  }) ;
+var json_parse
+  if (defaultValue && typeof defaultValue === 'string') {
+    json_parse = JSON.parse(defaultValue);
+    // console.log(json_parse)
+    // console.log(JSON.parse(json_string))
+    // console.log(json_string)
+    // console.log(defaultValue)
+    json_string = defaultValue
+    // console.log(defaul)
+    // json_string = 
+    // json_parse = JSON.parse(json_string)
+  } else {
+    json_parse = JSON.parse(json_string)
+    // console.log(json_string)
+    //  console.log('json phrase is empty')
+    //  console.log( json_parse)
+     
+    // handle invalid defaultValue
+  }
+ 
   return (
     <div>
       {/* <input ref={ref} disabled = "false" type="checkbox" value/> */}
@@ -59,13 +59,14 @@ const GeoTagging = React.forwardRef((props, ref) => {
         disabled="true"
         type=""
         defaultValue={`${defaultValue}`}
+        // value
         value={json_string}
       />
       <br />
       <br />
-      Latitude: {json_parse.latitude}
+      Latitude: {json_parse?.latitude}
       <br />
-      Longitude: {json_parse.longitude}
+      Longitude: {json_parse?.longitude}
       {/* <input ref={ref} disabled = "false" type="" defaultValue={defaultValue} value={location?.longitude}/> */}
       {/* <label for="sampleCheckbox">Sample Checkbox:</label>
 <input ref={ref}type="checkbox" id="sampleCheckbox" name="sampleCheckbox" value={location?.latitude || ""}/>
@@ -86,21 +87,3 @@ const GeoTagging = React.forwardRef((props, ref) => {
 });
 
 export default GeoTagging;
-// const GeoTagging = () => {
-
-//     return (
-//       <div>
-//         {/* <button onClick={handleGetLocation}>Get Location</button>
-//         {location && (
-//           <div>
-//             Latitude: {location.latitude}
-//             <br />
-//             Longitude: {location.longitude}
-//           </div>
-//         )} */}
-//         <p>hello</p>
-//       </div>
-//     );
-//   };
-
-// export default GeoTagging;

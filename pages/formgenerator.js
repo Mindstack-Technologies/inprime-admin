@@ -567,24 +567,26 @@ function MyForm() {
           data={formData}
           className="my-form"
           onSubmit={handleSubmit}
-          answer_data={[
-            {
-              name: "my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36",
-              custom_name:
-                "my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36",
-              value: '{"latitude":12.8457411,"longitude":74.8523311}',
-            },
-            {
-              name: "my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7",
-              custom_name: "my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7",
-              value: "",
-            },
-            {
-              name: "text_input_93768CCD-2102-4E72-9C84-61448E2B47F5",
-              custom_name: "text_input_93768CCD-2102-4E72-9C84-61448E2B47F5",
-              value: "sdf",
-            },
-          ]}
+        //   answer_data={
+        //     [
+        //     {
+        //       name: "my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36",
+        //       custom_name:
+        //         "my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36",
+        //       value: '{"latitude":12.8457411,"longitude":74.8523311}',
+        //     },
+        //     {
+        //       name: "my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7",
+        //       custom_name: "my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7",
+        //       value: "",
+        //     },
+        //     {
+        //       name: "text_input_93768CCD-2102-4E72-9C84-61448E2B47F5",
+        //       custom_name: "text_input_93768CCD-2102-4E72-9C84-61448E2B47F5",
+        //       value: "sdf",
+        //     },
+        //   ]
+        // }
           // answer_data={[{"name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","custom_name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","value":"74.8577849"},{"name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","custom_name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","value":"undefined"},{"name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","custom_name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","value":""},{"name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","custom_name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","value":"sdf"}]}
           // answer_data={[{"name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","custom_name":"my_input_geotagging1C829071-658F-48D0-866B-4E5948F64F36","value":"12.927015, 74.8577849"},{"name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","custom_name":"my_input_geotagging2AEB11D4-FF2C-4A75-AF1A-36EF632D80AF","value":"undefined, undefined"},{"name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","custom_name":"my_input_EDFB510A-5730-4E9F-ABF4-7E05B14D39C7","value":""},{"name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","custom_name":"text_input_93768CCD-2102-4E72-9C84-61448E2B47F5","value":"sdf"}]}
           // validators={validators}
