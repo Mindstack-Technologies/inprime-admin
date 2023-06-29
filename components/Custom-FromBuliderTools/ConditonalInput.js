@@ -1,0 +1,1059 @@
+// import React, { useState } from 'react';
+// import MyInput from './MyInput';
+// // import { Registry } from 'react-form-builder2';
+// // import MyInput from './MyInput';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const [conditions, setConditions] = useState([false]);
+
+//   const handleCheckboxChange = (index) => (event) => {
+//     const newConditions = [...conditions];
+//     newConditions[index] = event.target.checked;
+//     setConditions(newConditions);
+//   };
+
+//   const handleAddCondition = () => {
+//     setConditions([...conditions, false]);
+//   };
+//   console.log(props);
+//   return (
+//     <div>
+//       {conditions.map((condition, index) => (
+//         <div key={index} >
+//           <label>
+//             Condition {index + 1}:
+//             <input
+//               type="checkbox"
+//               checked={condition}
+//               onChange={handleCheckboxChange(index)}
+//               ref={ref}
+//             />
+//           </label>
+//           <MyInput></MyInput>
+
+//           {/* {condition && (
+// //             <label>
+// //               Input {index + 1}:
+// //               <input type="text"              
+// //             //    ref={Ref}
+// // />
+// //             </label>
+// <MyInput></MyInput>
+//           )} */}
+//         </div>
+//       ))}
+//       <button onClick={handleAddCondition}>Add Condition</button>
+//       <p>test</p>
+//     </div>
+//   );
+// });
+
+// // Registry.register('MyConditionalInput', MyConditionalInput);
+// export default MyConditionalInput;
+
+
+// import React from 'react';
+// import { FormElement } from 'react-form-builder2';
+
+// class CustomElement extends FormElement {
+//   static toolbarEntry() {
+//     return {
+//       element: 'CustomElement',
+//       name: 'Custom Element',
+//       group: 'Custom',
+//       icon: 'fa fa-star',
+//     };
+//   }
+
+//   static defaultOptions() {
+//     return {
+//       label: 'Custom Element',
+//       choices: [
+//         { value: 'choice1', label: 'Choice 1', input: '' },
+//         { value: 'choice2', label: 'Choice 2', input: '' },
+//       ],
+//     };
+//   }
+
+//   renderComponent() {
+//     const { choices } = this.props.data;
+//     const { value } = this.state;
+
+//     return (
+//       <div>
+//         <label>{this.props.data.label}</label>
+//         <select
+//           className="form-control"
+//           value={value}
+//           onChange={(e) => this.setState({ value: e.target.value })}
+//         >
+//           {choices.map((choice) => (
+//             <option key={choice.value} value={choice.value}>
+//               {choice.label}
+//             </option>
+//           ))}
+//         </select>
+//         {choices
+//           .filter((choice) => choice.value === value)
+//           .map((choice) => (
+//             <input
+//               key={choice.value}
+//               type="text"
+//               className="form-control"
+//               placeholder={`Input for ${choice.label}`}
+//               defaultValue={choice.input}
+//               onBlur={(e) => {
+//                 choice.input = e.target.value;
+//                 this.setState({ choices });
+//               }}
+//             />
+//           ))}
+//       </div>
+//     );
+//   }
+// }
+
+// export default CustomElement;
+
+// import React, { useState } from 'react';
+// import { FormElement } from 'react-form-builder2';
+
+// const CustomElement = React.forwardRef((props) => {
+//   const [value, setValue] = useState('');
+
+//   const { choices } = props.data;
+//   console.log(props.data)
+//   return (
+//     <div>
+//       <label>{props.data.label}</label>
+//       <select
+//         className="form-control"
+//         value={value}
+//         onChange={(e) => setValue(e.target.value)}
+//       >
+//         {choices.map((choice) => (
+//           <option key={choice.value} value={choice.value}>
+//             {choice.label}
+//           </option>
+//         ))}
+//       </select>
+//       {value === 'choice1' && (
+//         <input type="text" className="form-control" placeholder="Input for Choice 1" />
+//       )}
+//       {value === 'choice2' && (
+//         <input type="file" className="form-control" />
+//       )}
+//     </div>
+//   );
+// });
+
+// // CustomElement.toolbarEntry = () => {
+// //   return {
+// //     element: 'CustomElement',
+// //     name: 'Custom Element',
+// //     group: 'Custom',
+// //     icon: 'fa fa-star',
+// //   };
+// // };
+
+// CustomElement.defaultOptions = () => {
+//   return {
+//     label: 'Custom Element',
+//     choices: [
+//       { value: 'choice1', label: 'Choice 1' },
+//       { value: 'choice2', label: 'Choice 2' },
+//     ],
+//   };
+// };
+
+// export default CustomElement;
+
+
+
+// import React, { useState } from 'react';
+
+// const CustomElement = (props) => {
+//   const [value, setValue] = useState('');
+
+//   const { choices } = props.data;
+//   console.log(props.data)
+
+//   return (
+//     <div>
+//       <label>{props.data.label}</label>
+//       <select
+//         className="form-control"
+//         value={value}
+//         onChange={(e) => setValue(e.target.value)}
+//       >
+//         {choices.map((choice) => (
+//           <option key={choice.value} value={choice.value}>
+//             {choice.label}
+//           </option>
+//         ))}
+//       </select>
+//       {value === 'choice1' && (
+//         <input type="text" className="form-control" placeholder="Input for Choice 1" />
+//       )}
+//       {value === 'choice2' && (
+//         <input type="file" className="form-control" />
+//       )}
+//     </div>
+//   );
+// };
+
+// // CustomElement.toolbarEntry = () => {
+// //   return {
+// //     element: 'CustomElement',
+// //     name: 'Custom Element',
+// //     group: 'Custom',
+// //     icon: 'fa fa-star',
+// //   };
+// // };
+
+// CustomElement.defaultOptions = () => {
+//   return {
+
+//     label: 'Custom Element',
+//     choices: [
+//       { value: 'choice1', label: 'Choice 1' },
+//       { value: 'choice2', label: 'Choice 2' },
+//     ],
+//   };
+// };
+
+// export default CustomElement;
+
+
+// import React, { useState } from 'react';
+
+// const ConditionalInput = (props) => {
+//   const [value, setValue] = useState('');
+
+//   const { choices } = props.data;
+
+//   return (
+//     <div>
+//       <label>{props.data.label}</label>
+//       <select
+//         className="form-control"
+//         value={value}
+//         onChange={(e) => setValue(e.target.value)}
+//       >
+//         {choices?.map((choice) => (
+//           <option key={choice.value} value={choice.value}>
+//             {choice.label}
+//           </option>
+//         ))}
+//       </select>
+//       {value === 'choice1' && (
+//         <input type="text" className="form-control" placeholder="Input for Choice 1" />
+//       )}
+//       {value === 'choice2' && (
+//         <input type="file" className="form-control" />
+//       )}
+//     </div>
+//   );
+// };
+
+// ConditionalInput.toolbarEntry = () => {
+//   return {
+//     element: 'CustomElement',
+//     name: 'Conditional Input',
+//     group: 'Custom',
+//     icon: 'fa fa-star',
+//   };
+// };
+
+// ConditionalInput.defaultOptions = () => {
+//   return {
+//     label: 'Conditional Input',
+//     choices: [
+//       { value: 'choice1', label: 'Choice 1' },
+//       { value: 'choice2', label: 'Choice 2' },
+//     ],
+//   };
+// };
+
+// export default ConditionalInput;
+
+
+
+
+
+
+// import React, { useState } from 'react';
+
+// const ConditionalInput = ({ options }) => {
+//   console.log(options)
+//   const [selectedOption, setSelectedOption] = useState(null);
+
+//   const handleOptionChange = (event) => {
+//     setSelectedOption(event.target.value);
+//   };
+
+//   const selectedOptionInputs =
+//     selectedOption && options.find((option) => option.value === selectedOption).inputs;
+
+//   return (
+//     <div>
+//       <label>Select an option:</label>
+//       {options?.map((option) => (
+//         <div key={option.value}>
+//           <input
+//             type="radio"
+//             name="conditionalInputOption"
+//             value={option.value}
+//             onChange={handleOptionChange}
+//           />
+//           <label>{option.label}</label>
+//         </div>
+//       ))}
+
+//       {selectedOptionInputs &&
+//         selectedOptionInputs.map((input, index) => (
+//           <div key={index}>
+//             <label>Enter input for {selectedOption}:</label>
+//             <input type={input.type} />
+//           </div>
+//         ))}
+//     </div>
+//   );
+// };
+
+// export default ConditionalInput;
+
+
+
+// import React, { useState } from 'react';
+// import { ElementStore } from 'react-form-builder2';
+// import MyInput from './MyInput';
+
+
+// import { SET_NAME } from '../../redux/transfer/transferDetails'
+// import { useDispatch, useSelector } from 'react-redux';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+
+
+//   const dispatch = useDispatch()
+
+//   const store = useSelector((store) => store)
+
+//   console.log(store)
+
+//   const [conditions, setConditions] = useState([false, false]);
+//   // ElementStore.dispatch("updateOrder", ["123", "456"] );
+//   // store.dispatch('updateOrder', data);
+//   const handleCheckboxChange = (index) => (event) => {
+//     const newConditions = [...conditions];
+//     newConditions[index] = event.target.checked;
+//     setConditions(newConditions);
+
+//   };
+
+//   const handleAddCondition = () => {
+//     setConditions([...conditions, false]);
+//   };
+
+//   dispatch(SET_NAME("nothing"))
+
+//   console.log("props", props)
+//   // props.nothing = "test"
+
+//   // [
+//   //   1: {
+//   //     label: "ASdad",
+//   //     input : {
+//   //       label: "",
+//   //       placeholder: ""
+//   //     }
+//   //   }]
+//   // ]
+
+//   // const {testing} = useSelector((state) => state.profile)
+//   // console.log(JSON.stringify(testing.name))
+
+//   console.log(store.profile.name)
+//   // dispatch(SET_NAME(name.current.value))
+
+//   return (
+//     <div>
+//       <div>
+//         {/* {conditions.slice(0, 2).map((condition, index) => ( */}
+//         {conditions.map((condition, index) => (
+
+//           <div key={index}>
+//             <label>
+//               Condition {index + 1}:
+//               <input
+//                 type="checkbox"
+//                 checked={condition}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+
+//               />
+//             </label>
+//           </div>
+//         ))}
+//       </div>
+//       {conditions.slice(0, 2).map((condition, index) =>
+//         condition ? (
+//           <div key={index}>
+//             <input data="test" />
+//           </div>
+//         ) : null
+//       )}
+//       <button onClick={handleAddCondition}>Add Condition</button>
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+
+
+
+// // MyConditionalInput.js
+// import React, { useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const dispatch = useDispatch();
+//   const store = useSelector((store) => store);
+//   console.log(store);
+
+//   const [conditions, setConditions] = useState([false, false]);
+//   const handleCheckboxChange = (index) => (event) => {
+//     const newConditions = [...conditions];
+//     newConditions[index] = event.target.checked;
+//     setConditions(newConditions);
+//   };
+
+//   const handleAddCondition = () => {
+//     setConditions([...conditions, false]);
+//   };
+
+//   // dispatch(SET_NAME('nothing'));
+//   console.log('props', props);
+//   // console.log(store.profile.name);
+
+//   const labelName = useSelector((state) => state.label.name);
+
+//   console.log("Mycondittianal input", labelName)
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               {labelName} {index + 1}:
+//               <input
+//                 type="checkbox"
+//                 checked={condition}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+//               />
+//             </label>
+//           </div>
+//         ))}
+//       </div>
+//       {conditions.slice(0, 2).map((condition, index) =>
+//         condition ? (
+//           <div key={index}>
+//             <input data="test" />
+//           </div>
+//         ) : null
+//       )}
+//       <button onClick={handleAddCondition}>Add Condition</button>
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+
+
+// // Updated MyConditionalInput.js
+// import React, { useState } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const dispatch = useDispatch();
+//   const store = useSelector((store) => store);
+//   console.log(store);
+
+//   const [conditions, setConditions] = useState([false, false]);
+//   const handleCheckboxChange = (index) => (event) => {
+//     const newConditions = [...conditions];
+//     newConditions[index] = event.target.checked;
+//     setConditions(newConditions);
+//   };
+
+//   const handleAddCondition = () => {
+//     setConditions([...conditions, false]);
+//   };
+
+//   // dispatch(SET_NAME('nothing'));
+//   console.log('props', props);
+//   // console.log(store.profile.name);
+
+//   const labelNames = useSelector((state) => state.label.names);
+
+//   {console.log("checking label name in conditon",labelNames)}
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               {labelNames[index]} {index + 1}:
+//               <input
+//                 type="checkbox"
+//                 checked={condition}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+//               />
+//             </label>
+//           </div>
+//         ))}
+//       </div>
+//       {conditions.slice(0, 2).map((condition, index) =>
+//         condition ? (
+//           <div key={index}>
+//             <input data="test" />
+//           </div>
+//         ) : null
+//       )}
+//       <button onClick={handleAddCondition}>Add Condition</button>
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+// // MyConditionalInput.js
+// import React, { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const dispatch = useDispatch();
+//   const store = useSelector((store) => store);
+//   console.log(store);
+
+//   const [conditions, setConditions] = useState([false, false]);
+//   const handleCheckboxChange = (index) => (event) => {
+//     const newConditions = [...conditions];
+//     newConditions[index] = event.target.checked;
+//     setConditions(newConditions);
+//   };
+
+//   const handleAddCondition = () => {
+//     setConditions([...conditions, false]);
+//   };
+
+//   // dispatch(SET_NAME('nothing'));
+//   console.log('props', props);
+//   // console.log(store.profile.name);
+
+//   const labelNames = useSelector((state) => state.label.names);
+
+//   useEffect(() => {
+//     setConditions((conditions) =>
+//       conditions.length < labelNames.length
+//         ? [...conditions, ...Array(labelNames.length - conditions.length).fill(false)]
+//         : conditions.slice(0, labelNames.length)
+//     );
+//   }, [labelNames.length]);
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               {labelNames[index]} {index + 1}:
+//               <input
+//                 type="radio"
+//                 checked={condition}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+//               />
+//             </label>
+//           </div>
+//         ))}
+//       </div>
+//       {conditions.map((condition, index) =>
+//         condition ? (
+//           <div key={index}>
+//             <input data="test" />
+//           </div>
+//         ) : null
+//       )}
+//       <button onClick={handleAddCondition}>Add Condition</button>
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+
+
+
+// // Updated version with radio button and ristriction MyConditionalInput.js
+// import React, { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const dispatch = useDispatch();
+//   const store = useSelector((store) => store);
+//   console.log(store);
+
+//   const [conditions, setConditions] = useState([false, false]);
+//   const handleCheckboxChange = (index) => (event) => {
+//     setConditions((conditions) =>
+//       conditions.map((condition, i) => (i === index ? event.target.checked : false))
+//     );
+//   };
+
+//   // dispatch(SET_NAME('nothing'));
+//   console.log('props', props);
+//   // console.log(store.profile.name);
+
+//   const labelNames = useSelector((state) => state.label.names);
+
+//   useEffect(() => {
+//     setConditions((conditions) =>
+//       conditions.length < labelNames.length
+//         ? [...conditions, ...Array(labelNames.length - conditions.length).fill(false)]
+//         : conditions.slice(0, labelNames.length)
+//     );
+//   }, [labelNames.length]);
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               {/* {labelNames[index]} {index + 1}: */}
+//               {labelNames[index]} {index + 1}:
+//               <input
+//                 type="radio"
+//                 checked={condition}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+//               />
+//             </label>
+//           </div>
+//         ))}
+//       </div>
+//       {conditions.map((condition, index) =>
+//         condition ? (
+//           <div key={index}>
+//             <input data="test" />
+//           </div>
+//         ) : null
+//       )}
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+
+
+// //  Updated version with radio button and ristriction and the more input MyConditionalInput.js
+// import React, { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const dispatch = useDispatch();
+//   const store = useSelector((store) => store);
+//   console.log(store);
+
+//   const [conditions, setConditions] = useState([
+//     { active: false },
+//     { active: false },
+//   ]);
+//   // const handleCheckboxChange = (index) => (event) => {
+//   //   setConditions((conditions) =>
+//   //     conditions.map((condition, i) =>
+//   //       i === index ? { ...condition, active: event.target.checked } : condition
+//   //     )
+//   //   );
+//   // };
+//   const handleCheckboxChange = (index) => (event) => {
+//     setConditions((conditions) =>
+//       conditions.map((condition, i) =>
+//         i === index ? { ...condition, active: event.target.checked } : { ...condition, active: false }
+//       )
+//     );
+//   };
+
+//   // dispatch(SET_NAME('nothing'));
+//   console.log('props', props);
+//   // console.log(store.profile.name);
+
+//   const labelNames = useSelector((state) => state.label.names);
+//   const inputs = useSelector((state) => state.label.inputs);
+//   console.log('conditional input', inputs);
+
+//   useEffect(() => {
+//     setConditions((conditions) =>
+//       conditions.length < labelNames.length
+//         ? [
+//             ...conditions,
+//             ...Array(labelNames.length - conditions.length).fill({
+//               active: false,
+//             }),
+//           ]
+//         : conditions.slice(0, labelNames.length)
+//     );
+//   }, [labelNames.length]);
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               {labelNames[index]} :
+//               <input
+//                 type="radio"
+//                 checked={condition.active}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+//               />
+//             </label>
+//             {condition.active && (
+//               <div>
+//                 {inputs[index].map(( inputLabel, inputIndex) => (
+//                   <div key={inputIndex}>
+//                     {console.log(inputIndex)}
+//                 <label>{inputLabel}:</label>
+
+//                     <input data="test" />
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+
+// // it hvae updated vues files and console .log MyConditionalInput.js
+// import React, { useState, useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+// const MyConditionalInput = React.forwardRef((props, ref) => {
+//   const dispatch = useDispatch();
+//   const store = useSelector((store) => store);
+//   console.log(store);
+
+//   const [conditions, setConditions] = useState([
+//     { active: false },
+//     { active: false },
+//   ]);
+
+//   const handleCheckboxChange = (index) => (event) => {
+//     setConditions((conditions) =>
+//       conditions.map((condition, i) =>
+//         i === index
+//           ? { ...condition, active: event.target.checked }
+//           : { ...condition, active: false }
+//       )
+//     );
+//   };
+
+//   const labelNames = useSelector((state) => state.label.names);
+//   const inputs = useSelector((state) => state.label.inputs);
+//   const inputTypes = useSelector((state) => state.label.inputTypes);
+  
+//   console.log('conditons:', conditions)
+//   console.log('labelNames:', labelNames);
+//   console.log('inputs:', inputs);
+//   console.log('inputTypes:', inputTypes);
+
+//   const inputDetails = inputs.map((inputArray, conditionIndex) =>
+//   inputArray.map((inputLabel, inputIndex) => ({
+//     conditionName: labelNames[conditionIndex],
+//     inputType: inputTypes[conditionIndex][inputIndex],
+//     inputLabel,
+//     conditionActive: conditions[conditionIndex].active,
+//   }))
+// );
+
+// console.log('inputDetails:', inputDetails);
+
+// const conditionDetails = conditions.map((condition, conditionIndex) => ({
+//   conditionName: labelNames[conditionIndex],
+//   conditionStatus: condition.active,
+//   inputs: inputs[conditionIndex].map((inputLabel, inputIndex) => ({
+//     inputType: inputTypes[conditionIndex][inputIndex],
+//     inputLabel,
+//   })),
+// }));
+
+// console.log('conditionDetails:', conditionDetails);
+
+//   useEffect(() => {
+//     setConditions((conditions) =>
+//       conditions.length < labelNames.length
+//         ? [
+//             ...conditions,
+//             ...Array(labelNames.length - conditions.length).fill({
+//               active: false,
+//             }),
+//           ]
+//         : conditions.slice(0, labelNames.length)
+//     );
+//   }, [labelNames.length]);
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               {labelNames[index]} {index + 1}:
+//               <input
+//                 type="radio"
+//                 checked={condition.active}
+//                 onChange={handleCheckboxChange(index)}
+//                 ref={ref}
+//               />
+//             </label>
+//             {condition.active && (
+//               <div>
+//                 {inputs[index].map((inputLabel, inputIndex) => (
+//                   <div key={inputIndex}>
+//                     <label>{inputLabel}:</label>
+//                     {inputTypes[index][inputIndex] === 'text' ? (
+//                       <input data="test" />
+//                     ) : (
+//                       <input type="file" accept="image/png, image/jpeg"/>
+//                     )}
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;
+
+
+
+// MyConditionalInput.js
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SET_NAME } from '../../redux/transfer/transferDetails';
+
+const MyConditionalInput = React.forwardRef((props, ref) => {
+  const dispatch = useDispatch();
+  const store = useSelector((store) => store);
+  console.log('store:', store);
+
+  const [conditions, setConditions] = useState([
+    { active: false },
+    { active: false },
+  ]);
+
+  console.log('conditions:', conditions);
+
+  const handleCheckboxChange = (index) => (event) => {
+    setConditions((conditions) =>
+      conditions.map((condition, i) =>
+        i === index
+          ? { ...condition, active: event.target.checked }
+          : { ...condition, active: false }
+      )
+    );
+  };
+
+  const labelNames = useSelector((state) => state.label.names);
+  const inputs = useSelector((state) => state.label.inputs);
+  const inputTypes = useSelector((state) => state.label.inputTypes);
+
+  console.log('labelNames:', labelNames);
+  console.log('inputs:', inputs);
+  console.log('inputTypes:', inputTypes);
+
+  const [inputValues, setInputValues] = useState(
+    inputs.map((inputArray) =>
+      inputArray.map(() => ({ textValue: '', fileValue: null }))
+    )
+  );
+
+  const handleTextChange = (conditionIndex, inputIndex) => (event) => {
+    setInputValues((inputValues) =>
+      inputValues.map((inputArray, i) =>
+        i === conditionIndex
+          ? inputArray.map((inputValue, j) =>
+              j === inputIndex
+                ? { ...inputValue, textValue: event.target.value }
+                : inputValue
+            )
+          : inputArray
+      )
+    );
+  };
+
+  const handleFileChange = (conditionIndex, inputIndex) => (event) => {
+    setInputValues((inputValues) =>
+      inputValues.map((inputArray, i) =>
+        i === conditionIndex
+          ? inputArray.map((inputValue, j) =>
+              j === inputIndex
+                ? { ...inputValue, fileValue: event.target.files[0] }
+                : inputValue
+            )
+          : inputArray
+      )
+    );
+  };
+
+  console.log('inputValues:', inputValues);
+
+  useEffect(() => {
+    setConditions((conditions) =>
+      conditions.length < labelNames.length
+        ? [
+            ...conditions,
+            ...Array(labelNames.length - conditions.length).fill({
+              active: false,
+            }),
+          ]
+        : conditions.slice(0, labelNames.length)
+    );
+    setInputValues(
+      inputs.map((inputArray) =>
+        inputArray.map(() => ({ textValue: '', fileValue: null }))
+      )
+    );
+  }, [labelNames.length]);
+
+  return (
+    <div>
+      <div>
+        {conditions.map((condition, index) => (
+          <div key={index}>
+            <label>
+              {labelNames[index]} {index + 1}:
+              <input
+                type="radio"
+                checked={condition.active}
+                onChange={handleCheckboxChange(index)}
+                ref={ref}
+              />
+            </label>
+            {console.log(`Radio button ${index + 1} checked:`, condition.active)}
+            {condition.active && (
+              <div>
+                {inputs[index].map((inputLabel, inputIndex) => {
+                  console.log(inputLabel);
+                  return (
+                    <div key={inputIndex}>
+                      <label>{inputLabel}:</label>
+                      {inputTypes[index][inputIndex] === 'text' ? (
+                        <input
+                          data="test"
+                          value={inputValues[index][inputIndex].textValue}
+                          onChange={handleTextChange(index, inputIndex)}
+                        />
+                      ) : (
+                        <>
+                          <input
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            onChange={handleFileChange(index, inputIndex)}
+                          />
+                          {inputValues[index][inputIndex].fileValue && (
+                            <p>
+                              Selected file:{' '}
+                              {
+                                inputValues[index][inputIndex].fileValue.name
+                              }
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+export default MyConditionalInput;
+
+
+
+
+// import React, { forwardRef } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { updateCondition } from '../../redux/transfer/conditionalSlice';
+
+// const MyConditionalInput = forwardRef((props, ref) => {
+//   const conditions = useSelector((state) => state.conditions);
+//   const dispatch = useDispatch();
+
+//   const handleOptionChange = (index) => (event) => {
+//     dispatch(updateCondition({ index, value: event.target.value }));
+//   };
+
+//   return (
+//     <div>
+//       <div>
+//         {conditions.map((condition, index) => (
+//           <div key={index}>
+//             <label>
+//               Condition {index + 1}:
+//               <select
+//                 value={condition}
+//                 onChange={handleOptionChange(index)}
+//                 ref={ref}
+//               >
+//                 <option value="false">False</option>
+//                 <option value="true">True</option>
+//               </select>
+//             </label>
+//           </div>
+//         ))}
+//       </div>
+//       {conditions.map((condition, index) =>
+//         condition === 'true' ? (
+//           <div key={index}>
+//             <input data="test" />
+//           </div>
+//         ) : null
+//       )}
+//     </div>
+//   );
+// });
+
+// export default MyConditionalInput;

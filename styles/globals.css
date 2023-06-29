@@ -1,5 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap");
 
+
+
+
+
+/* Packge css*/
+.my-grid {
+  border: 1px solid #ccc;
+}
+
+.my-grid .rdg-cell {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.my-grid .rdg-header-cell {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
 h1,
 h2,
 h3,
@@ -417,6 +445,9 @@ input {
 
 .dropdown-category-menu {
   padding: 5px;
+  max-height: 300px;
+  /* display: block; */
+  overflow-y: auto;
 
 }
 

@@ -368,7 +368,7 @@ function IncomeAssessmentPage() {
       apiUrl += `${apiUrl.includes('?') ? '&' : '?'}occupationId=${selectedOccupation}`;
     }
 
-    console.log(apiUrl)
+    // console.log(apiUrl)
     // const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates`,
     const response = await fetch(apiUrl,
 
@@ -426,7 +426,7 @@ function IncomeAssessmentPage() {
       setData(newData);
     } else {
       // Handle the error
-      alert("Something went wrong");
+      console.error("Something went wrong");
     }
     setLoading(false);
 
@@ -536,7 +536,7 @@ function IncomeAssessmentPage() {
         }
       );
       const occuaptionData = await response.json();
-      console.log(occuaptionData)
+      // console.log(occuaptionData)
       setDropdownOccupationOptions(occuaptionData.data);
       console.log('Get is successful')
     };
@@ -627,7 +627,7 @@ function IncomeAssessmentPage() {
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-category-menu">
                       <Dropdown.Item onClick={() => { setSelectedOccupation(null); setSelectedOccupationValue('All') }}>All</Dropdown.Item>
-                      {dropdownOccupationOptions.map(option => (
+                      {dropdownOccupationOptions?.map(option => (
                         <Dropdown.Item key={option.id} onClick={() => { setSelectedOccupation(option.id); setSelectedOccupationValue(option.name) }}>
                           {option.name}
                         </Dropdown.Item>

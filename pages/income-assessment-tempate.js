@@ -7,10 +7,19 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { BASE_URL } from "../baseURL";
 import Head from "next/head";
-import { Alert, Modal } from "react-bootstrap";
+import { Alert, InputGroup, Modal } from "react-bootstrap";
 import { Spinner } from "react-bootstrap";
 import { useRouter } from 'next/router';
 import GeoTagging from "@/components/Custom-FromBuliderTools/GeoTagging";
+import MyDataGrid from "@/components/Custom-FromBuliderTools/Grid";
+import MyConditionalInput from "../components/Custom-FromBuliderTools/ConditonalInput";
+import MyFormElementsEdit from "../components/Custom-FromBuliderTools/MyFormElementsEdit";
+// import MyFormElementsEdit from "../node_modules/react-form-builder2/lib/form-elements-edit";
+import dynamic from 'next/dynamic';
+
+
+import MyInput from "@/components/Custom-FromBuliderTools/MyInput";
+
 
 const onPost = (data) => {
   const jsonData = JSON.stringify(data);
@@ -31,7 +40,10 @@ const Schema = Yup.object().shape({
 
 export default function IncomeAssessmentTemplate() {
 
-
+  const ReactFormBuilder = dynamic(
+    () => import('react-form-builder2').then((mod) => mod.ReactFormBuilder),
+    { ssr: false }
+  );
   // Custom form tools items
 
 
@@ -57,14 +69,14 @@ export default function IncomeAssessmentTemplate() {
   //   return <input ref={ref} />;
   // });
 
-  const MyInput = ((props) => {
-    const { name, defaultValue, disabled } = props;
-    console.log(props)
-    return (
-      <input name={name} defaultValue={defaultValue} disabled={disabled} />
+  // const MyInput = ((props) => {
+  //   const { name, defaultValue, disabled } = props;
+  //   console.log(props)
+  //   return (
+  //     <input name={name} defaultValue={defaultValue} disabled={disabled} />
 
-    );
-  });
+  //   );
+  // });
 
   // const GeoTagging = (props) => {
   //   const [location, setLocation] = useState(null);
@@ -101,11 +113,33 @@ export default function IncomeAssessmentTemplate() {
   // };
 
   const TestComponent = () => <h2>Hello</h2>;
+  const selectoptions = [
+   
+      { value: 'option1', label: 'Option 1', inputs: [{ type: 'text' }] },
+      { value: 'option2', label: 'Option 2', inputs: [{ type: 'text' }] },
+    
+    // {
+    //   value: 'option1',
+    //   label: 'Option 1',
+    //   inputs: [
+    //     { type: 'text', label: 'Enter text for Option 1' },
+    //     { type: 'number', label: 'Enter number for Option 1' },
+    //   ],
+    // },
+    // {
+    //   value: 'option2',
+    //   label: 'Option 2',
+    //   inputs: [{ type: 'date', label: 'Enter date for Option 2' }],
+    // },
+  ];
+  
   // Registry.register('MyGeoTagging', GeoTagging);
   try {
     Registry.register('MyGeoTagging', GeoTagging);
     Registry.register('MyInput', MyInput);
     Registry.register('TestComponent', TestComponent);
+    Registry.register('MyDataGrid', MyDataGrid);
+    Registry.register('MyConditionalInput', MyConditionalInput);
 
 
   } catch (error) {
@@ -113,9 +147,6 @@ export default function IncomeAssessmentTemplate() {
   }
   const registeredElements = Registry.list();
   console.log(registeredElements);
-  // Registry.register('MyGeoTagging', GeoTagging);
-  // Registry.register('MyInput', MyInput);
-  // Registry.register('TestComponent', TestComponent);
 
 
   const items = [{
@@ -130,19 +161,6 @@ export default function IncomeAssessmentTemplate() {
     props: { test: 'test_comp' },
     label: 'Label Test',
   },
-  // {
-  //     key: 'MyInput',
-  //     element: 'CustomElement',
-  //     component: MyInput,
-  //     type: 'custom',
-  //     forwardRef: true,
-  //     field_name: 'my_input_',
-  //     name: 'My Input',
-  //     icon: 'fa fa-cog',
-  //     props: { test: 'test_input' },
-  //     label: 'Label Input',
-  // },
-
   {
     key: 'MyInput',
     element: 'CustomElement',
@@ -154,7 +172,7 @@ export default function IncomeAssessmentTemplate() {
     icon: 'fa fa-cog',
     props: {
       test: 'test_input',
-      myProp: 'myValue' // passing the myProp prop here
+      myProp: 'myValue' 
     },
     label: 'Label Input',
   },
@@ -173,32 +191,36 @@ export default function IncomeAssessmentTemplate() {
     component: GeoTagging,
 
   },
-  // {
-  //     key: 'MyInput',
-  //     element: 'Custom',
-  //     component: MyInput,
-  //     type: 'custom',
-  //     forwardRef: true,
-  //     field_name: 'my_input_',
-  //     name: 'My Input',
-  //     icon: 'fa fa-cog',
-  //     props: { test: 'test_input' },
-  //     label: 'Label Input',
-  // },
-  // Additional standard components, you don't need full definition if no modification is required. 
-  //   {  
-  //     key: 'Header',
-  //   }, {
-  //     key: 'TextInput',
-  //   }, {
-  //     key: 'TextArea',
-  //   }, {
-  //     key: 'RadioButtons',
-  //   }, {
-  //     key: 'Checkboxes',
-  //   }, {
-  //     key: 'Image',
-  //   }
+  { key: 'MyDataGrid', 
+  name: 'Data Grid', 
+  element: 'CustomElement',
+  type: 'custom',
+  field_name: 'my_input_MyDataGrid', 
+  icon: 'fa fa-table' ,
+  component: MyDataGrid,
+
+},
+
+// {
+//   key: 'ConditionalInput',
+//   name: 'Conditional Input',
+//   element: 'CustomElement',
+//   icon: 'fa fa-check-square',
+//   field_name: 'my_input_ConditionalInput',
+//   type: 'custom',
+//   component: MyConditionalInput,
+//   // props: { selectoptions },
+// },
+{
+  key: 'MyConditionalInput',
+  name: 'Conditional Input',
+  element: 'CustomElement',
+  icon: 'fa fa-check-square', 
+  field_name: 'my_input_MyConditionalInput', 
+  type: 'custom',
+  component: MyConditionalInput,
+  
+}, 
   { key: 'Header' },
   { key: 'Label' },
   { key: 'Paragraph' },
@@ -232,39 +254,10 @@ export default function IncomeAssessmentTemplate() {
   { key: 'FileUpload' },
     //23
     //25
-    // {
-    //     key: 'Row',
-    //     element: 'Row',
-    //     components: [
-    //         {
-    //             key: 'Column',
-    //             element: 'Column',
-    //             colSpan: 6,
-    //             components: [
-    //                 {
-    //                     key: 'TextInput',
-    //                     // Add any additional properties for the TextInput element here
-    //                 },
-    //             ],
-    //         },
-    //         // {
-    //         //     key: 'Column',
-    //         //     element: 'Column',
-    //         //     colSpan: 6,
-    //         //     components: [
-    //         //         {
-    //         //             key: 'TextInput',
-
-    //         //             // Add form elements to the second column here
-    //         //         }
-    //         //     ],
-    //         // },
-    //     ],
-    // }
   ];
 
 
-
+console.log(items)
 
 
 
@@ -1171,7 +1164,7 @@ export default function IncomeAssessmentTemplate() {
                     value={values.occupation}
                   >
                     <option value="" >Select an Occupation</option>
-                    {options.map((options) => (
+                    {options?.map((options) => (
 
                       <option key={options.id} value={options.id}>
                         {options.name}
@@ -1276,10 +1269,18 @@ export default function IncomeAssessmentTemplate() {
             // data={JSON.stringify(formsData)}
             data={formsData}
             toolbarItems={items}
+            // customToolbarItems={items}
 
+            // renderEditForm={props => <MyFormElementsEdit {...props} />}
+            renderEditForm={props => {
+              console.log("form bulider props", props);
+              return <MyFormElementsEdit {...props} />;
+            }}
           //url ={url}
           // saveUrl={saveUrl}
           />}
+          {/* <Grid/> */}
+          {/* <MyDataGrid/> */}
       </AdminLayout>
       {/* Success modal */}
       {/* <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>

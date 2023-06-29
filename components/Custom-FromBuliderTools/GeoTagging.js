@@ -1,7 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { updateElement } from "react-form-builder2";
 
+
+
 const GeoTagging = React.forwardRef((props, ref) => {
+
+
+
+
+  // const Map = ({ center, zoom }) => {
+  //   const mapRef = useRef();
+  
+  //   useEffect(() => {
+  //     const map = new window.google.maps.Map(mapRef.current, {
+  //       center,
+  //       zoom,
+  //     });
+  //   }, [center, zoom]);
+  
+  //   return <div ref={mapRef} style={{ height: '100%', width: '100%' }} />;
+  // };
+
+
+
+
+
+
   const { data, defaultValue } = props;
   const [location, setLocation] = useState(null);
   const logitudeLatitude = [];
@@ -57,7 +81,8 @@ var json_parse
       <input
         ref={ref}
         disabled="true"
-        type=""
+        // type=""
+        type="hidden"
         defaultValue={`${defaultValue}`}
         // value
         value={json_string}
@@ -82,6 +107,11 @@ var json_parse
         </div>
       )}
       {/* <p>hello</p> */}
+
+
+      <div>
+      {/* <Map center={{ lat: 37.7749, lng: -122.4194 }} zoom={8} /> */}
+    </div>
     </div>
   );
 });

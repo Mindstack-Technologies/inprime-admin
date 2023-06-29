@@ -8,7 +8,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { TouchTransition } from "react-dnd-multi-backend";
-
+import { Provider } from "react-redux";
+import reduxStore from '../redux/store/store';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -79,10 +80,12 @@ export default function App({ Component, pageProps }) {
   }, []);
   return (
     <>
+    <Provider store={reduxStore}>
       <DndProvider backend={TouchBackend} options={HTML5toTouch}>
 
         <Component {...pageProps} />
       </DndProvider>
+      </Provider>
 
     </>
   );

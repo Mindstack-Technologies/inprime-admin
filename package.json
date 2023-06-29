@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.2.3",
     "formik": "^2.2.9",
     "isomorphic-fetch": "^3.0.0",
@@ -17,14 +18,15 @@
     "next": "^13.4.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
+    "react-data-grid": "^7.0.0-beta.34",
     "react-data-table-component": "^7.5.3",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dnd-multi-backend": "^8.0.0",
     "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "^18.2.0",
-    "react-draft-wysiwyg": "^1.15.0",
     "react-form-builder2": "^0.13.2",
+    "react-redux": "^8.1.1",
     "styled-components": "^5.3.10",
     "yup": "^1.1.1"
   }
