@@ -867,6 +867,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SET_NAME } from '../../redux/transfer/transferDetails';
+import { setID,appendNewComponent } from '../../redux/transfer/transferDetails';
+
 
 const MyConditionalInput = React.forwardRef((props, ref) => {
   const { data, defaultValue } = props;
@@ -875,7 +877,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   console.log("props of the conditional input", props)
   const id = props.data.id
 
-  let new_component = {
+  var new_component = {
     id:"",
     names: ['Condition', 'Condition'],
     inputs: [['Input label'], ['Input label']],
@@ -889,10 +891,16 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   console.log(store.label.length)
 
   if(store.label.length == 1){
-    store.label = [new_component];
-  }else{
-    store.label.push(new_component);
+    console.log('store.label)',store.label);
+
+    // store.label[0].id = id;
+    console.log(id)
+    dispatch(setID({id: id}))
+    // console.log('id form the component',id)
+    console.log('store.label)',store.label);
   }
+
+  
 
   console.log('store:', store);
 
@@ -913,9 +921,12 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
     );
   };
 
-  const labelNames = useSelector((state) => state.label[state.label.length - 1].names);
-  const inputs = useSelector((state) => state.label[state.label.length - 1].inputs);
-  const inputTypes = useSelector((state) => state.label[state.label.length - 1].inputTypes);
+  // const labelNames = useSelector((state) => state.label[state.label.length - 1].names);
+  // const inputs = useSelector((state) => state.label[state.label.length - 1].inputs);
+  // const inputTypes = useSelector((state) => state.label[state.label.length - 1].inputTypes);
+  const labelNames = useSelector((state) => state.label.names);
+  const inputs = useSelector((state) =>state.label.inputs);
+  const inputTypes = useSelector((state) => state.label.inputTypes);
 
   console.log('labelNames:', labelNames);
   console.log('inputs:', inputs);
@@ -987,7 +998,8 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
         {conditions.map((condition, index) => (
           <div key={index}>
             <label>
-              {labelNames[index]} {index + 1}:
+              {/* {labelNames[index]} {index + 1}: */}
+              {labelNames[index]} :
               <input
                 type="radio"
                 checked={condition.active}

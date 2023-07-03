@@ -246,23 +246,43 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const labelSlice = createSlice({
   name: 'label',
-  initialState: [{
+  initialState: {
     id:"",
     names: ['Condition', 'Condition'],
     inputs: [['Input label'], ['Input label']],
     inputTypes: [['text'], ['text']],
-  }],
+  },
   reducers: {
     setLabelName(state, action) {
+          // console.log("STATE", state);
+          // console.log("payload",action);
+ 
+          const { index, id, name  } = action.payload;
           console.log("STATE", state);
-          const { index, name, id } = action.payload;
+          console.log("payload",action);
+ 
+          console.log(id);
 
-          // console.log("STATE",state);
+
+          // let i = 0;
+          // for(let s of state){
+          //   console.log("state id",s.id);
+          //   if(s.id == id){
+          //     state[i].names[index] = name;
+          //   }
+          //   i++;
+          // }
+       
 
 
+          
 
 
             state.names[index] = name;
+    },
+    updateObject(state, action){
+      const { object } = action.payload;
+      state = object;
     },
     // addLabelName(state, action) {
     //   const { id } = action.payload;
@@ -359,6 +379,22 @@ const labelSlice = createSlice({
       const { conditionIndex, inputIndex, inputType } = action.payload;
       state.inputTypes[conditionIndex][inputIndex] = inputType;
     },
+    setID(state, action){
+
+      const {id}=action.payload;
+
+      console.log("ID sent",id);
+      // state[state.length - 1].id=id;
+
+      console.log("STATE OF COMP",state);
+
+
+    },
+    appendNewComponent(state, action){
+      const {newComponent}=action.payload;
+      // state.push(newComponent);
+      console.log(state)
+    }
   },
 });
 
@@ -370,5 +406,7 @@ export const {
   removeInput,
   setInputName,
   setInputType,
+  updateObject,
+  setID
 } = labelSlice.actions;
 export default labelSlice.reducer;

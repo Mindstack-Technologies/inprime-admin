@@ -591,10 +591,20 @@ class FormElementsEdit extends React.Component {
   // };
 
 
-  handleLabelNameChange = (index) => (event) => {
-    console.log(this.props.label[0].names)
-    // const id = this.props.label[0].id
-    this.props.setLabelName({ index, name: event.target.value, });
+  handleLabelNameChange = (index,id) => (event) => {
+    console.log(index);
+    // console.log(this.props.label[0].names)
+
+    console.log("ID", id);
+    // console.log(event.target.value);
+    try{
+      this.props.setLabelName({ index,id, name: event.target.value});
+
+    }catch(e){
+      this.props.setLabelName({ index,id, name: event.target.value});
+
+    }
+
     // this.props.label[0].setLabelName({ index, name: event.target.value,  });
 
   };
@@ -764,27 +774,42 @@ class FormElementsEdit extends React.Component {
 
   render() {
 
-    // const { labelNames, inputs, inputTypes } = this.props;
 
+    const { labelNames, inputs, inputTypes, id } = this.props;
 
+    
+
+ console.log(id)
 
     const { label } = this.props;
 
     console.log(this.props)
 
-    let current_component = label.filter((val) => { return val.id == this.props.element.id })
+    // var current_component = label.filter((val) => { return val.id == this.props.element.id })
 
-    console.log(current_component);
+    // console.log(current_component);
+    // var labelNames =[];
+    // var inputs =[];
+    // var inputTypes =[];
+    // var id = "";
 
-    var labelNames = current_component[0].names;
-    var inputs = current_component[0].inputs;
-    var inputTypes = current_component[0].inputTypes;
+// if(current_component.length>0){
+//   id = current_component[0].id;
+//   labelNames = current_component[0].names;
+//   inputs = current_component[0].inputs;
+//   inputTypes  = current_component[0].inputTypes;
     
 
-    console.log("label name filtered", labelNames)
-    console.log('My element edit  inputs', inputs);
+//     console.log("label name filtered", labelNames)
+//     console.log('My element edit  inputs', inputs);
+
+// }
 
 
+// var labelNames =this.props.label.names;
+// var inputs =this.props.label.inputs;
+// var inputTypes =this.props.label.inputTypes;
+// var id = this.props.element.id;
 
     if (this.state.dirty) {
       this.props.element.dirty = true;
@@ -1261,7 +1286,7 @@ class FormElementsEdit extends React.Component {
                     <input
                       type="text"
                       value={labelName}
-                      onChange={this.handleLabelNameChange(0)}
+                      onChange={this.handleLabelNameChange(index,id)}
                     />
                   </label>
                   {labelNames.length > 1 && (
@@ -1386,10 +1411,10 @@ FormElementsEdit.defaultProps = { className: 'edit-element-fields' };
 // });
 
 const mapStateToProps = (state) => ({
-  label: state.label
-  // labelNames: state.label.names,
-  // inputs: state.label.inputs,
-  // inputTypes: state.label.inputTypes,
+  // label: state.label
+  labelNames: state.label.names,
+  inputs: state.label.inputs,
+  inputTypes: state.label.inputTypes,
 
 })
 
