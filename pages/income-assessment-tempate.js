@@ -24,7 +24,7 @@ import MyInput from "@/components/Custom-FromBuliderTools/MyInput";
 const onPost = (data) => {
   const jsonData = JSON.stringify(data);
   localStorage.setItem('formData', jsonData);
-  // console.log( jsonData);
+  console.log("json data of the form builder" ,jsonData);
   // console.log(data)
 };
 
@@ -113,25 +113,8 @@ export default function IncomeAssessmentTemplate() {
   // };
 
   const TestComponent = () => <h2>Hello</h2>;
-  const selectoptions = [
-   
-      { value: 'option1', label: 'Option 1', inputs: [{ type: 'text' }] },
-      { value: 'option2', label: 'Option 2', inputs: [{ type: 'text' }] },
-    
-    // {
-    //   value: 'option1',
-    //   label: 'Option 1',
-    //   inputs: [
-    //     { type: 'text', label: 'Enter text for Option 1' },
-    //     { type: 'number', label: 'Enter number for Option 1' },
-    //   ],
-    // },
-    // {
-    //   value: 'option2',
-    //   label: 'Option 2',
-    //   inputs: [{ type: 'date', label: 'Enter date for Option 2' }],
-    // },
-  ];
+  
+
   
   // Registry.register('MyGeoTagging', GeoTagging);
   try {
@@ -344,6 +327,7 @@ console.log(items)
           task_data: formsData,
         };
         // console.log(data)
+        console.log("body data", data)
 
         try {
           const response = await fetch(url, {
@@ -357,6 +341,7 @@ console.log(items)
           });
           // console.log(response)
           const responsedata = await response.json();
+          console.log(responsedata)
 
           if (response.ok) {
             // const data = await response.json();
@@ -419,7 +404,7 @@ console.log(items)
         // };
         else {
           const data = {
-            occupationId: values.occupation,
+            // occupationId: values.occupation,
             formTitle: values.form_title,
             // version: values.version,
             templateName: values.templateName,
@@ -427,7 +412,7 @@ console.log(items)
             formName: values.form_name,
             task_data: onlyArry,
           };
-          // console.log(data)
+          console.log("body data", data)
 
           try {
             const response = await fetch(url, {
@@ -441,6 +426,7 @@ console.log(items)
             });
             // console.log(response)
             const outputdata = await response.json();
+            console.log(outputdata)
 
             if (response.ok) {
               // const data = await response.json();
@@ -509,7 +495,7 @@ console.log(items)
         const bearerToken = localStorage.getItem('access_token');
 
         const data = {
-          occupationId: values.occupation,
+          // occupationId: values.occupation,
           formTitle: values.form_title,
           // version: values.version,
           formDescription: values.description,
@@ -588,7 +574,7 @@ console.log(items)
         // };
         else {
           const data = {
-            occupationId: values.occupation,
+            // occupationId: values.occupation,
             formTitle: values.form_title,
             // version: values.version,
             formDescription: values.description,

@@ -783,7 +783,7 @@
 //   const labelNames = useSelector((state) => state.label.names);
 //   const inputs = useSelector((state) => state.label.inputs);
 //   const inputTypes = useSelector((state) => state.label.inputTypes);
-  
+
 //   console.log('conditons:', conditions)
 //   console.log('labelNames:', labelNames);
 //   console.log('inputs:', inputs);
@@ -869,8 +869,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SET_NAME } from '../../redux/transfer/transferDetails';
 
 const MyConditionalInput = React.forwardRef((props, ref) => {
+  const { data, defaultValue } = props;
+
   const dispatch = useDispatch();
+  console.log("props of the conditional input", props)
+  const id = props.data.id
+
+  let new_component = {
+    id:"",
+    names: ['Condition', 'Condition'],
+    inputs: [['Input label'], ['Input label']],
+    inputTypes: [['text'], ['text']],
+  };
+
+  new_component.id = id;
+
   const store = useSelector((store) => store);
+
+  console.log(store.label.length)
+
+  if(store.label.length == 1){
+    store.label = [new_component];
+  }else{
+    store.label.push(new_component);
+  }
+
   console.log('store:', store);
 
   const [conditions, setConditions] = useState([
@@ -890,9 +913,9 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
     );
   };
 
-  const labelNames = useSelector((state) => state.label.names);
-  const inputs = useSelector((state) => state.label.inputs);
-  const inputTypes = useSelector((state) => state.label.inputTypes);
+  const labelNames = useSelector((state) => state.label[state.label.length - 1].names);
+  const inputs = useSelector((state) => state.label[state.label.length - 1].inputs);
+  const inputTypes = useSelector((state) => state.label[state.label.length - 1].inputTypes);
 
   console.log('labelNames:', labelNames);
   console.log('inputs:', inputs);
@@ -909,10 +932,10 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       inputValues.map((inputArray, i) =>
         i === conditionIndex
           ? inputArray.map((inputValue, j) =>
-              j === inputIndex
-                ? { ...inputValue, textValue: event.target.value }
-                : inputValue
-            )
+            j === inputIndex
+              ? { ...inputValue, textValue: event.target.value }
+              : inputValue
+          )
           : inputArray
       )
     );
@@ -923,10 +946,10 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       inputValues.map((inputArray, i) =>
         i === conditionIndex
           ? inputArray.map((inputValue, j) =>
-              j === inputIndex
-                ? { ...inputValue, fileValue: event.target.files[0] }
-                : inputValue
-            )
+            j === inputIndex
+              ? { ...inputValue, fileValue: event.target.files[0] }
+              : inputValue
+          )
           : inputArray
       )
     );
@@ -938,11 +961,11 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
     setConditions((conditions) =>
       conditions.length < labelNames.length
         ? [
-            ...conditions,
-            ...Array(labelNames.length - conditions.length).fill({
-              active: false,
-            }),
-          ]
+          ...conditions,
+          ...Array(labelNames.length - conditions.length).fill({
+            active: false,
+          }),
+        ]
         : conditions.slice(0, labelNames.length)
     );
     setInputValues(
@@ -954,7 +977,13 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
 
   return (
     <div>
-      <div>
+      <div >
+        <input type="hidden"
+          defaultValue={`${defaultValue}`}
+          // value
+          value={inputValues}
+          ref={ref}
+        ></input>
         {conditions.map((condition, index) => (
           <div key={index}>
             <label>
@@ -963,14 +992,15 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
                 type="radio"
                 checked={condition.active}
                 onChange={handleCheckboxChange(index)}
-                ref={ref}
+              // ref={ref}
+
               />
             </label>
-            {console.log(`Radio button ${index + 1} checked:`, condition.active)}
+            {/* {console.log(`Radio button ${index + 1} checked:`, condition.active)} */}
             {condition.active && (
               <div>
                 {inputs[index].map((inputLabel, inputIndex) => {
-                  console.log(inputLabel);
+                  // console.log(inputLabel);
                   return (
                     <div key={inputIndex}>
                       <label>{inputLabel}:</label>
