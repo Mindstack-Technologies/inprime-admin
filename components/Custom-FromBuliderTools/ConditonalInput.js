@@ -866,8 +866,10 @@
 // MyConditionalInput.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_NAME } from '../../redux/transfer/transferDetails';
-import { setID,appendNewComponent } from '../../redux/transfer/transferDetails';
+// import { SET_NAME } from '../../redux/transfer/transferDetails';
+import { setID } from '../../redux/transfer/transferDetails';
+
+import { appendNewComponent } from '../../redux/transfer/transferDetails';
 
 
 const MyConditionalInput = React.forwardRef((props, ref) => {
@@ -875,10 +877,11 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
 
   const dispatch = useDispatch();
   console.log("props of the conditional input", props)
-  const id = props.data.id
+  const id = props.data.id;
+  var current_index = 0;
 
   var new_component = {
-    id:"",
+    id: "",
     names: ['Condition', 'Condition'],
     inputs: [['Input label'], ['Input label']],
     inputTypes: [['text'], ['text']],
@@ -890,17 +893,30 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
 
   console.log(store.label.length)
 
-  if(store.label.length == 1){
-    console.log('store.label)',store.label);
 
-    // store.label[0].id = id;
-    console.log(id)
-    dispatch(setID({id: id}))
-    // console.log('id form the component',id)
-    console.log('store.label)',store.label);
+
+
+
+
+  let existingLable = store.label.filter((l) => { return l.id == id })
+
+  if (existingLable.length == 0) {
+    console.log('existingLable.length == 0')
+    dispatch(appendNewComponent({ newComponent: new_component }))
   }
 
-  
+  store.label.forEach(element => {
+    if (element.id == id) {
+      return;
+    }
+    current_index++;
+  });
+
+  console.log("current_index", current_index);
+
+
+
+
 
   console.log('store:', store);
 
@@ -921,12 +937,16 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
     );
   };
 
-  // const labelNames = useSelector((state) => state.label[state.label.length - 1].names);
-  // const inputs = useSelector((state) => state.label[state.label.length - 1].inputs);
-  // const inputTypes = useSelector((state) => state.label[state.label.length - 1].inputTypes);
-  const labelNames = useSelector((state) => state.label.names);
-  const inputs = useSelector((state) =>state.label.inputs);
-  const inputTypes = useSelector((state) => state.label.inputTypes);
+
+
+
+  // const labelNames = useSelector((state) => state.label[current_index] ? state.label[current_index].names:[]);
+  // const inputs = useSelector((state) => state.label[current_index] ? state.label[current_index].inputs:[]);
+  // const inputTypes = useSelector((state) => state.label[current_index] ? state.label[current_index].inputTypes:[]);
+  const label = useSelector((state) => state.label.find((label) => label.id === id));
+  const labelNames = label ? label.names : [];
+  const inputs = label ? label.inputs : [];
+  const inputTypes = label ? label.inputTypes : [];
 
   console.log('labelNames:', labelNames);
   console.log('inputs:', inputs);
@@ -992,7 +1012,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
         <input type="hidden"
           defaultValue={`${defaultValue}`}
           // value
-          value={inputValues}
+          value={"inputValues"}
           ref={ref}
         ></input>
         {conditions.map((condition, index) => (

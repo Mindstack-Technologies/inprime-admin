@@ -246,45 +246,133 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const labelSlice = createSlice({
   name: 'label',
-  initialState: {
-    id:"",
+  initialState: [{
+    id: "",
     names: ['Condition', 'Condition'],
     inputs: [['Input label'], ['Input label']],
     inputTypes: [['text'], ['text']],
-  },
+  }],
   reducers: {
     setLabelName(state, action) {
-          // console.log("STATE", state);
-          // console.log("payload",action);
- 
-          const { index, id, name  } = action.payload;
-          console.log("STATE", state);
-          console.log("payload",action);
- 
-          console.log(id);
-
-
-          // let i = 0;
-          // for(let s of state){
-          //   console.log("state id",s.id);
-          //   if(s.id == id){
-          //     state[i].names[index] = name;
-          //   }
-          //   i++;
-          // }
-       
-
-
-          
-
-
-            state.names[index] = name;
+      const { index, id, name } = action.payload;
+      console.log(id);
+      let i = 0;
+      for (let s of state) {
+        console.log("state id", s.id);
+        if (s.id == id) {
+          state[i].names[index] = name;
+        }
+        i++;
+      }
     },
-    updateObject(state, action){
+    updateObject(state, action) {
       const { object } = action.payload;
       state = object;
     },
-    // addLabelName(state, action) {
+
+    addLabelName(state, action) {
+      const id = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          console.log('going inside')
+          state[i].names.push('Condition');
+          state[i].inputs.push(['Input label']);
+          state[i].inputTypes.push(['text']);
+        }
+        i++;
+      }
+    },
+    removeLabelName(state, action) {
+      const { index, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id === id) {
+          state[i].names.splice(index, 1);
+          state[i].inputs.splice(index, 1);
+          state[i].inputTypes.splice(index, 1);
+        }
+        i++;
+      }
+    },
+    addInput(state, action) {
+      const { index, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        console.log("state id", s.id);
+        if (s.id == id) {
+          state[i].inputs[index].push('Input label');
+          state[i].inputTypes[index].push('text');
+        }
+        i++;
+      }
+    },
+    removeInput(state, action) {
+      const { conditionIndex, inputIndex, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          if (state[i].inputs[conditionIndex].length > 1) {
+            state[i].inputs[conditionIndex].splice(inputIndex, 1);
+            state[i].inputTypes[conditionIndex].splice(inputIndex, 1);
+          }
+        }
+        i++;
+      }
+    },
+    setInputName(state, action) {
+
+      const { conditionIndex, inputIndex, name, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          state[i].inputs[conditionIndex][inputIndex] = name;
+        }
+        i++;
+      }
+    },
+    setInputType(state, action) {
+      const { conditionIndex, inputIndex, inputType, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          state[i].inputTypes[conditionIndex][inputIndex] = inputType;
+        }
+        i++;
+      }
+    },
+    setID(state, action) {
+      const id = action.payload;
+      state[0].id = id;
+    },
+    appendNewComponent(state, action) {
+      const { newComponent } = action.payload;
+      if (state[0].id == 0) {
+        state[0].id = newComponent.id;
+      } else {
+        state.push(newComponent);
+      }
+    }
+  },
+});
+
+export const {
+  setLabelName,
+  addLabelName,
+  removeLabelName,
+  addInput,
+  removeInput,
+  setInputName,
+  setInputType,
+  updateObject,
+  setID,
+  appendNewComponent
+} = labelSlice.actions;
+export default labelSlice.reducer;
+
+
+
+// addLabelName(state, action) {
     //   const { id } = action.payload;
     //   const label = state.find(label => label.id === id);
     //   if (label) {
@@ -343,70 +431,3 @@ const labelSlice = createSlice({
     //   state.inputs.push(['Input label']);
     //   state.inputTypes.push(['text']);
     // },
-    addLabelName(state) {
-      console.log('Adding label name');
-
-      console.log('New state:', state);
-
-      state.names.push('Condition');
-      state.inputs.push(['Input label']);
-      state.inputTypes.push(['text']);
-      console.log('New state updated:', state);
-
-    
-    },
-    removeLabelName(state, action) {
-      state.names.splice(action.payload, 1);
-      state.inputs.splice(action.payload, 1);
-      state.inputTypes.splice(action.payload, 1);
-    },
-    addInput(state, action) {
-      state.inputs[action.payload].push('Input label');
-      state.inputTypes[action.payload].push('text');
-    },
-    removeInput(state, action) {
-      const { conditionIndex, inputIndex } = action.payload;
-      if (state.inputs[conditionIndex].length > 1) {
-        state.inputs[conditionIndex].splice(inputIndex, 1);
-        state.inputTypes[conditionIndex].splice(inputIndex, 1);
-      }
-    },
-    setInputName(state, action) {
-      const { conditionIndex, inputIndex, name } = action.payload;
-      state.inputs[conditionIndex][inputIndex] = name;
-    },
-    setInputType(state, action) {
-      const { conditionIndex, inputIndex, inputType } = action.payload;
-      state.inputTypes[conditionIndex][inputIndex] = inputType;
-    },
-    setID(state, action){
-
-      const {id}=action.payload;
-
-      console.log("ID sent",id);
-      // state[state.length - 1].id=id;
-
-      console.log("STATE OF COMP",state);
-
-
-    },
-    appendNewComponent(state, action){
-      const {newComponent}=action.payload;
-      // state.push(newComponent);
-      console.log(state)
-    }
-  },
-});
-
-export const {
-  setLabelName,
-  addLabelName,
-  removeLabelName,
-  addInput,
-  removeInput,
-  setInputName,
-  setInputType,
-  updateObject,
-  setID
-} = labelSlice.actions;
-export default labelSlice.reducer;

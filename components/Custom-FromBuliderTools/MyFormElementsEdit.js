@@ -591,51 +591,60 @@ class FormElementsEdit extends React.Component {
   // };
 
 
-  handleLabelNameChange = (index,id) => (event) => {
+  handleLabelNameChange = (index, id) => (event) => {
     console.log(index);
     // console.log(this.props.label[0].names)
 
-    console.log("ID", id);
+    // console.log("ID", id);
     // console.log(event.target.value);
-    try{
-      this.props.setLabelName({ index,id, name: event.target.value});
+    this.props.setLabelName({ index,id, name: event.target.value});
 
-    }catch(e){
-      this.props.setLabelName({ index,id, name: event.target.value});
+    // try{
+    //   this.props.setLabelName({ index,id, name: event.target.value});
 
-    }
+    // }catch(e){
+    //   this.props.setLabelName({ index,id, name: event.target.value});
+
+    // }
 
     // this.props.label[0].setLabelName({ index, name: event.target.value,  });
 
   };
 
-  handleAddLabelName = () => {
-    this.props.addLabelName();
+  handleAddLabelName = (id)  => () => {
+    // console.log
+    console.log("ID", id);
+    this.props.addLabelName(id);
   };
 
-  handleRemoveLabelName = (index) => () => {
-    this.props.removeLabelName(index);
+  handleRemoveLabelName = (index, id) => () => {
+    console.log("id", id)
+    this.props.removeLabelName({index, id});
   };
 
-  handleAddInput = (index) => () => {
-    this.props.addInput(index);
+  handleAddInput = (index, id) => () => {
+    console.log('id', id )
+    this.props.addInput({index, id});
   };
 
-  handleRemoveInput = (conditionIndex, inputIndex) => () => {
-    this.props.removeInput({ conditionIndex, inputIndex });
+  handleRemoveInput = (conditionIndex, inputIndex, id) => () => {
+    this.props.removeInput({ conditionIndex, inputIndex, id});
   };
-  handleInputNameChange = (conditionIndex, inputIndex) => (event) => {
+  handleInputNameChange = (conditionIndex, inputIndex, id) => (event) => {
+    console.log("ID", id);
+
     this.props.setInputName({
       conditionIndex,
       inputIndex,
-      name: event.target.value,
+      name: event.target.value, id
     });
   };
-  handleInputTypeChange = (conditionIndex, inputIndex) => (event) => {
+  handleInputTypeChange = (conditionIndex, inputIndex, id) => (event) => {
     this.props.setInputType({
       conditionIndex,
       inputIndex,
       inputType: event.target.value,
+      id
     });
   };
 
@@ -774,42 +783,33 @@ class FormElementsEdit extends React.Component {
 
   render() {
 
+    // const { labelNames, inputs, inputTypes } = this.props;
 
-    const { labelNames, inputs, inputTypes, id } = this.props;
 
-    
-
- console.log(id)
 
     const { label } = this.props;
 
     console.log(this.props)
 
-    // var current_component = label.filter((val) => { return val.id == this.props.element.id })
+    var current_component = label.filter((val) => { return val.id == this.props.element.id })
 
-    // console.log(current_component);
-    // var labelNames =[];
-    // var inputs =[];
-    // var inputTypes =[];
-    // var id = "";
+    console.log(current_component);
+    var labelNames =[];
+    var inputs =[];
+    var inputTypes =[];
+    var id = "";
 
-// if(current_component.length>0){
-//   id = current_component[0].id;
-//   labelNames = current_component[0].names;
-//   inputs = current_component[0].inputs;
-//   inputTypes  = current_component[0].inputTypes;
+if(current_component.length>0){
+  id = current_component[0].id;
+  labelNames = current_component[0].names;
+  inputs = current_component[0].inputs;
+  inputTypes  = current_component[0].inputTypes;
     
 
-//     console.log("label name filtered", labelNames)
-//     console.log('My element edit  inputs', inputs);
+    console.log("label name filtered", labelNames)
+    console.log('My element edit  inputs', inputs);
 
-// }
-
-
-// var labelNames =this.props.label.names;
-// var inputs =this.props.label.inputs;
-// var inputTypes =this.props.label.inputTypes;
-// var id = this.props.element.id;
+}
 
     if (this.state.dirty) {
       this.props.element.dirty = true;
@@ -1290,7 +1290,7 @@ class FormElementsEdit extends React.Component {
                     />
                   </label>
                   {labelNames.length > 1 && (
-                    <button onClick={this.handleRemoveLabelName(index)}>
+                    <button onClick={this.handleRemoveLabelName(index, id)}>
                       Remove Label Name
                     </button>
                   )}
@@ -1314,14 +1314,14 @@ class FormElementsEdit extends React.Component {
                           <input
                             type="text"
                             value={inputLabel}
-                            onChange={this.handleInputNameChange(index, inputIndex)}
+                            onChange={this.handleInputNameChange(index, inputIndex, id)}
                           />
                         </label>
                         <label>
                           Input type:
                           <select
                             value={inputTypes[index][inputIndex]}
-                            onChange={this.handleInputTypeChange(index, inputIndex)}
+                            onChange={this.handleInputTypeChange(index, inputIndex, id)}
                           >
                             <option value="text">Text</option>
                             <option value="file">File</option>
@@ -1329,18 +1329,18 @@ class FormElementsEdit extends React.Component {
                         </label>
                         {inputs[index].length > 1 && (
                           <button
-                            onClick={this.handleRemoveInput(index, inputIndex)}
+                            onClick={this.handleRemoveInput(index, inputIndex, id)}
                           >
                             Remove Input
                           </button>
                         )}
                       </div>
                     ))}
-                    <button onClick={this.handleAddInput(index)}>Add Input</button>
+                    <button onClick={this.handleAddInput(index, id)}>Add Input</button>
                   </div>
                 </div>
               ))}
-              <button onClick={this.handleAddLabelName}>Add Label Name</button>
+              <button onClick={this.handleAddLabelName(id)}>Add Label Name</button>
             </div>
 
             {/* {this.state.element.options?.map((option, index) => (
@@ -1411,10 +1411,10 @@ FormElementsEdit.defaultProps = { className: 'edit-element-fields' };
 // });
 
 const mapStateToProps = (state) => ({
-  // label: state.label
-  labelNames: state.label.names,
-  inputs: state.label.inputs,
-  inputTypes: state.label.inputTypes,
+  label: state.label
+  // labelNames: state.label.names,
+  // inputs: state.label.inputs,
+  // inputTypes: state.label.inputTypes,
 
 })
 
