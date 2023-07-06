@@ -864,40 +864,78 @@
 
 
 // MyConditionalInput.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { SET_NAME } from '../../redux/transfer/transferDetails';
 import { setID } from '../../redux/transfer/transferDetails';
+import { updateObject } from '../../redux/transfer/transferDetails';
 
-import { appendNewComponent } from '../../redux/transfer/transferDetails';
+import { appendNewComponent, setLogData } from '../../redux/transfer/transferDetails';
 
 
 const MyConditionalInput = React.forwardRef((props, ref) => {
   const { data, defaultValue } = props;
 
+  console.log("propss data vlues saved in the conditon", props.data.value)
+
+
   const dispatch = useDispatch();
   console.log("props of the conditional input", props)
   const id = props.data.id;
-  var current_index = 0;
+  const data_form_props = props.data.value
+  console.log("data_form_props", data_form_props)
+  localStorage.setItem('ids', id)
 
-  var new_component = {
-    id: "",
-    names: ['Condition', 'Condition'],
-    inputs: [['Input label'], ['Input label']],
-    inputTypes: [['text'], ['text']],
-  };
+  var current_index = 0;
+  var new_component
+  // var new_component = {
+  //   id: "",
+  //   names: ['Condition', 'Condition'],
+  //   inputs: [['Input label'], ['Input label']],
+  //   inputTypes: [['text'], ['text']],
+  // };
+  const one = data_form_props?.map(condition => condition.label);
+  const two = data_form_props?.map(condition => condition.inputs.map(input => input.label));
+  const three = data_form_props?.map(condition => condition.inputs.map(input => input.value ==""  ? 'text' : input.fileAttached ? 'file' : null));
+  // console.log("file or input ", one)
+//   const two = data_form_props.inputs.map(input => input[0]);
+// const three = data_form_props.inputTypes.map(inputType => inputType[0]);
+// const one = data_form_props.names;
+// conso
+
+  if (data_form_props) {
+    console.log('inside thsi one ')
+    var new_component = {
+      id: '',
+      // names: data_form_props.map(condition => condition.label),
+      // inputs: data_form_props.map(condition => condition.inputs.map(input => input.label)),
+      // inputTypes: data_form_props.map(condition => condition.inputs.map(input => input.value== '' ? 'text' : input.fileAttached ? 'file' : null)),
+      names: one ,
+      inputs: two,
+      inputTypes: three,
+      // names: ['Condition', 'Condition'],
+      //   inputs: [['Input label'], ['Input label']],
+      //   inputTypes: [['text'], ['text']],
+      // logData: ''
+    };
+  } else {
+    console.log('inside another one ')
+    var new_component = {
+      id: id,
+      names: ['Condition', 'Condition'],
+      inputs: [['Input label'], ['Input label']],
+      inputTypes: [['text'], ['text']],
+      // logData: ''
+
+    };
+  }
+
 
   new_component.id = id;
 
   const store = useSelector((store) => store);
 
   console.log(store.label.length)
-
-
-
-
-
-
   let existingLable = store.label.filter((l) => { return l.id == id })
 
   if (existingLable.length == 0) {
@@ -913,10 +951,6 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   });
 
   console.log("current_index", current_index);
-
-
-
-
 
   console.log('store:', store);
 
@@ -937,9 +971,6 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
     );
   };
 
-
-
-
   // const labelNames = useSelector((state) => state.label[current_index] ? state.label[current_index].names:[]);
   // const inputs = useSelector((state) => state.label[current_index] ? state.label[current_index].inputs:[]);
   // const inputTypes = useSelector((state) => state.label[current_index] ? state.label[current_index].inputTypes:[]);
@@ -947,6 +978,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   const labelNames = label ? label.names : [];
   const inputs = label ? label.inputs : [];
   const inputTypes = label ? label.inputTypes : [];
+
 
   console.log('labelNames:', labelNames);
   console.log('inputs:', inputs);
@@ -988,6 +1020,55 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
 
   console.log('inputValues:', inputValues);
 
+
+  const logData = conditions.map((condition, conditionIndex) => {
+    const conditionData = {
+      label: labelNames[conditionIndex],
+      active: condition.active,
+      inputs: inputs[conditionIndex]?.map((inputLabel, inputIndex) => {
+        const inputData = {
+          label: inputLabel,
+        };
+        if (inputTypes[conditionIndex][inputIndex] === 'text') {
+          inputData.value = inputValues[conditionIndex][inputIndex]?.textValue;
+        } else {
+          inputData.fileAttached = inputValues[conditionIndex][inputIndex].fileValue ? inputValues[conditionIndex][inputIndex]?.fileValue.name : 'No file attached';
+        }
+        return inputData;
+      }),
+    };
+    return conditionData;
+  });
+  console.log("called",JSON.stringify(logData));
+  dispatch(setLogData({ logData}));
+
+  // const [labelNames, setLabelNames] = useState([]);
+
+  // const datass = JSON.parse(props.data.value)
+  // const datass = props.data.value
+  // console.log(`datass`, datass )  
+
+  // labelNames = datass.map(condition => condition.label);
+  // inputs = datass.map(condition => condition.inputs.map(input => input.label));
+
+  // inputTypes = datass.map(condition => condition.inputs.map(input => input.value ? 'text' : input.fileAttached ? 'file' : null));
+  // inputTypes = [["text"], ["text"], ["file"]];
+  // const inputTypessss = datass.map(condition => condition.inputs.map(input => input.value ? 'text' : input.fileAttached ? 'text' : null));
+  // console.log('inputTypessss',inputTypessss)
+
+
+  const totaldata = {
+    conditions,
+    labelNames,
+    inputs,
+    inputTypes,
+    inputValues,
+  };
+  const jsonString = JSON.stringify(logData);
+  console.log("total data", jsonString)
+
+  localStorage.setItem('totalData', jsonString);
+
   useEffect(() => {
     setConditions((conditions) =>
       conditions.length < labelNames.length
@@ -1004,17 +1085,35 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
         inputArray.map(() => ({ textValue: '', fileValue: null }))
       )
     );
-  }, [labelNames.length]);
+  }, [labelNames.length, inputs]);
+  const json_string = "inputTypes"
+  // const json_string = JSON.stringify({inputValues})
+  console.log("defaultValue", defaultValue)
+  console.log(json_string)
+
+  console.log(id)
+
 
   return (
     <div>
       <div >
-        <input type="hidden"
+        <input
+          ref={ref}
+          type="hidden"
           defaultValue={`${defaultValue}`}
           // value
-          value={"inputValues"}
-          ref={ref}
+          value={jsonString}
         ></input>
+        {/* <input
+        ref={ref}
+        // disabled="true"
+        // type=""
+        // type="hidden"
+        defaultValue={`${defaultValue}`}
+        // value
+        // value
+      /> */}
+
         {conditions.map((condition, index) => (
           <div key={index}>
             <label>

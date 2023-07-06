@@ -562,14 +562,14 @@ class FormElementsEdit extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log(props)
-    console.log(props.data)
+    // console.log(props)
+    // console.log(props.data)
     this.state = {
       element: this.props.element,
       data: this.props.data,
       dirty: false,
     };
-    console.log("this.state.data", this.state.data)
+    // console.log("this.state.data", this.state.data)
 
   }
 
@@ -845,7 +845,7 @@ if(current_component.length>0){
     if (this.props.element.hasOwnProperty('label')) {
       editorState = this.convertFromHTML(this.props.element.label);
     }
-
+    console.log('this.props.manualEditModeOff', this.props.manualEditModeOff)
     return (
       <div>
         <div className="clearfix">
@@ -1147,7 +1147,7 @@ if(current_component.length>0){
         {this.props.element?.key === "MyConditionalInput" &&
           <div className="form-group">
             {/* <button onClick={() => this.handleAddCondition()}>Add Condition</button> */}
-            {JSON.stringify(this.props.preview.state)}
+            {/* {JSON.stringify(this.props.preview.state)} */}
             {/* <button onClick={() => this.handleAddCondition()}>Add Condition</button>
 
         <button onClick={() => this.handleincrementButtonClick()}>Add Condition</button>; */}

@@ -241,16 +241,18 @@
 // } = labelSlice.actions;
 // export default labelSlice.reducer;
 
+// // labelSlice.js
 
 import { createSlice } from '@reduxjs/toolkit';
 
 const labelSlice = createSlice({
   name: 'label',
   initialState: [{
-    id: "",
-    names: ['Condition', 'Condition'],
-    inputs: [['Input label'], ['Input label']],
-    inputTypes: [['text'], ['text']],
+    // id: "",
+    // names: ['Condition', 'Condition'],
+    // inputs: [['Input label'], ['Input label']],
+    // inputTypes: [['text'], ['text']],
+    // logData: ''
   }],
   reducers: {
     setLabelName(state, action) {
@@ -294,6 +296,10 @@ const labelSlice = createSlice({
         }
         i++;
       }
+      // const { index } = action.payload;
+      // state.names.splice(index, 1);
+      // state.inputs.splice(index, 1);
+      // state.inputTypes.splice(index, 1);
     },
     addInput(state, action) {
       const { index, id } = action.payload;
@@ -352,7 +358,16 @@ const labelSlice = createSlice({
       } else {
         state.push(newComponent);
       }
-    }
+    },
+    setLogData(state, action) {
+      const {logData} =action.payload
+      console.log("statessss", logData)
+      // state.logData = action.payload.logData;
+
+      // state= logData;
+      // state.logData = action.payload;
+    },
+   
   },
 });
 
@@ -366,7 +381,8 @@ export const {
   setInputType,
   updateObject,
   setID,
-  appendNewComponent
+  appendNewComponent,
+  setLogData
 } = labelSlice.actions;
 export default labelSlice.reducer;
 

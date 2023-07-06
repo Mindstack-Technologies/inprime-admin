@@ -368,7 +368,7 @@ function IncomeAssessmentPage() {
       apiUrl += `${apiUrl.includes('?') ? '&' : '?'}occupationId=${selectedOccupation}`;
     }
 
-    // console.log(apiUrl)
+    console.log("apiUrl", apiUrl)
     // const response = await fetch(`${BASE_URL}/crm/incomeAssessment/templates`,
     const response = await fetch(apiUrl,
 
@@ -395,7 +395,7 @@ function IncomeAssessmentPage() {
       //   // createdOn: new Date(item.createdAt),
       // }));
       //  console.log(newData)
-      const newDataPromises = data.data.map(async (item) => {
+      const newDataPromises = data?.data?.map(async (item) => {
         // Make API call to get occupation data using item.occupationId
         const occupationResponse = await fetch(`${BASE_URL}/crm/incomeAssessment/occupations?id=${item.occupationId}`, {
           headers: {
@@ -405,15 +405,26 @@ function IncomeAssessmentPage() {
         // console.log(occupationResponse)
         const occupationData = await occupationResponse.json();
         const occupationName = occupationData?.data?.[0]?.name;
+        // const testing = occupationData?.data?.[0]?.name;
+        
+        // // console.log(occupationName)
+        // var occupationName
+        // if (testing){
+        //   occupationName=occupationData?.data?.[0].name ;
+        // }else{
+       
+        //   occupationName="";
+        //   console.log("occupationName is undefined")
+        // }
         return {
           id: item.id,
           templateName: item.formTitle,
           version: item.version,
-          occupation: occupationName,
+          occupation: occupationName ,
           ActiveDeactive: item.active ? "Active" : "Not Active",
           createdOn: new Date(item.createdAt),
           published: item.status,
-          occupationID: item.occupationId,
+          occupationID: item.occupationId ,
           json: item.json,
           formName: item.formName,
           formDescription: item.formDescription,
@@ -421,9 +432,19 @@ function IncomeAssessmentPage() {
         };
       });
       console.log("Get is successful")
-      const newData = await Promise.all(newDataPromises);
+    
+      // const newData = await Promise.all(newDataPromises);
       // console.log(newData)
-      setData(newData);
+      // setData(newData);
+      if (newDataPromises) {
+        const newData = await Promise.all(newDataPromises);
+        setData(newData);
+      } else {
+        // Handle the case where newDataPromises is undefined
+        console.error("newDataPromises is undefined");
+      setData('');
+
+      }
     } else {
       // Handle the error
       console.error("Something went wrong");

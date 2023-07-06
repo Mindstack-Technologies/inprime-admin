@@ -143,6 +143,8 @@ export default class Demobar extends React.Component {
                     form_action="/"
                     form_method="POST"
                     onSubmit={this.submit}
+                    hide_actions={true}
+
                     variables={this.props.variables}
                     data={this.state.data}
                   />
@@ -172,9 +174,9 @@ export default class Demobar extends React.Component {
                     // back_action="/"
                     // back_name="Back"
                     answer_data={{}}
-                    // action_name="Save"
-                    // form_action="/"
-                    // form_method="POST"
+                    action_name="Save"
+                    form_action="/"
+                    form_method="POST"
                     read_only={true}
                     variables={this.props.variables}
                     hide_actions={true}
@@ -205,12 +207,12 @@ export default class Demobar extends React.Component {
                     download_path=""
                     back_action=""
                     answer_data={{}}
-                    form_action="/"
-                    form_method="POST"
+                    // form_action="/"
+                    // form_method="POST"
                     data={this.state.data}
                     display_short={true}
                     variables={this.props.variables}
-                    hide_actions={false}
+                    hide_actions={true}
                   />
                 </div>
                 <div className="modal-footer">

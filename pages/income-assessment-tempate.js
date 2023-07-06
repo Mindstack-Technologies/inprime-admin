@@ -19,14 +19,67 @@ import dynamic from 'next/dynamic';
 
 
 import MyInput from "@/components/Custom-FromBuliderTools/MyInput";
+import { useDispatch, useSelector } from 'react-redux';
 
 
-const onPost = (data) => {
-  const jsonData = JSON.stringify(data);
-  localStorage.setItem('formData', jsonData);
-  console.log("json data of the form builder" ,jsonData);
-  // console.log(data)
-};
+// const onPost = (data) => {
+//   const jsonData = JSON.stringify(data);
+//   const store = useSelector((store) => store);
+
+
+//   const label = useSelector((state) => state.label.find((label) => label.id ));
+//   const labelNames = label ? label.names : [];
+//   const  inputs = label ? label.inputs : [];
+//   const  inputTypes = label ? label.inputTypes : [];
+  
+
+//   console.log(' income assseesment template labelNames:', labelNames);
+//   console.log('income assseesment template inputs:', inputs);
+//   console.log(' income assseesment template inputTypes:', inputTypes);
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+//   // var sting = localStorage.getItem("totalData");
+//   var sting = [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
+//   var ids = localStorage.getItem('ids')
+// console.log("ids of income" ,ids)
+
+//   console.log("setting", sting)
+
+
+// const matchingObject = data.task_data.find(obj => obj.id === ids);
+// console.log("matchingObject", matchingObject)
+// if (matchingObject) {
+//   console.log("found")
+//   // matchingObject.value = sting;
+//   // matchingObject.newThing = "texting";
+//   matchingObject.required = true;
+//   var updatedData = data
+//   console.log("updated", data)
+// }
+// else{
+//   console.log("not found")
+// }
+// const jsonDataUpdated = JSON.stringify(updatedData)
+//   localStorage.setItem('formData', jsonDataUpdated);
+  
+//   console.log("json data of the form builder updated" ,jsonDataUpdated);
+
+//   console.log("json data of the form builder" ,jsonData);
+
+//   // console.log(data)
+// };
 
 const Schema = Yup.object().shape({
   occupation: Yup.string().required("occupation is required"),
@@ -39,6 +92,105 @@ const Schema = Yup.object().shape({
 
 
 export default function IncomeAssessmentTemplate() {
+
+  const [ids, setIds] = useState();
+  const store = useSelector((store) => store);
+  const total =useSelector((state) => state.label)
+  console.log('total', total)
+console.log("store", store)
+  useEffect(() => {
+    setIds(localStorage.getItem('ids'));
+    
+  }, [ids]);
+console.log("ids",ids)
+  // var label;
+  // // if (ids) {
+  // //   label = useSelector((state) => state.label.find((label) => label.id === ids));
+  // // }
+  // if (ids) {
+  //   label = useSelector((state) => {
+  //     console.log('state.label:', state.label);
+  //     const result = state.label.find((label) => label.id === ids);
+  //     console.log('result:', result);
+  //     return result;
+  //   });
+  // }
+
+
+  // var ids;
+
+  // useEffect(() => {
+  //   ids = localStorage.getItem('ids');
+  //   console.log("ids", ids)
+  // }, []);
+  // console.log("ids", ids)
+
+  // const store = useSelector((store) => store);
+  // const total =useSelector((state) => state.label)
+  // console.log('total', total)
+  console.log(useSelector((state) => state.label.find((label) => label.id === ids )))
+  // const label = useSelector((state) => state.label.find((label) => label.id === ids ));
+// console.log("store", store)
+const label = useSelector((state) => state.label);
+  const onPost = (data) => {
+    // var ids = localStorage.getItem('ids')
+  //   console.log('state.label:', label);
+
+    const jsonData = JSON.stringify(data);
+  
+  //   console.log("state", label)
+  //   const labelNames = label ? label.names : [];
+  //   const  inputs = label ? label.inputs : [];
+  //   const  inputTypes = label ? label.inputTypes : [];
+    
+  
+  //   console.log(' income assseesment template labelNames:', labelNames);
+  //   console.log('income assseesment template inputs:', inputs);
+  //   console.log(' income assseesment template inputTypes:', inputTypes);
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  //   // var sting = localStorage.getItem("totalData");
+  //   var sting = [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
+  // // console.log("ids of income" ,ids)
+  
+  //   console.log("setting", sting)
+  
+  
+  // const matchingObject = data.task_data.find(obj => obj.id === ids);
+  // console.log("matchingObject", matchingObject)
+  // if (matchingObject) {
+  //   console.log("found")
+  //   matchingObject.value = sting;
+  //   // matchingObject.newThing = "texting";
+  //   matchingObject.required = true;
+  //   var updatedData = data
+  //   console.log("updated", data)
+  // }
+  // else{
+  //   console.log("not found")
+  // }
+  // const jsonDataUpdated = JSON.stringify(updatedData)
+    localStorage.setItem('formData', jsonData);
+    
+  //   console.log("json data of the form builder updated" ,jsonDataUpdated);
+  
+    console.log("json data of the form builder" ,jsonData);
+  
+  //   // console.log(data)
+  };
+
 
   const ReactFormBuilder = dynamic(
     () => import('react-form-builder2').then((mod) => mod.ReactFormBuilder),
@@ -108,6 +260,8 @@ export default function IncomeAssessmentTemplate() {
   //         </div>
   //       )}
   //       {/* <p>hello</p> */}
+
+
   //     </div>
   //   );
   // };
@@ -129,7 +283,7 @@ export default function IncomeAssessmentTemplate() {
 
   }
   const registeredElements = Registry.list();
-  console.log(registeredElements);
+  // console.log(registeredElements);
 
 
   const items = [{
@@ -201,7 +355,11 @@ export default function IncomeAssessmentTemplate() {
   icon: 'fa fa-check-square', 
   field_name: 'my_input_MyConditionalInput', 
   type: 'custom',
+  forwardRef: true,
+  static: true,
+  props: { test: 'test_input' },
   component: MyConditionalInput,
+
   
 }, 
   { key: 'Header' },
@@ -240,7 +398,7 @@ export default function IncomeAssessmentTemplate() {
   ];
 
 
-console.log(items)
+// console.log(items)
 
 
 
@@ -283,10 +441,151 @@ console.log(items)
   const mode = router.query.mode;
 
 
+
+  // // console.log("state", label)
+  //   const labelNames = label ? label.names : [];
+  //   const  inputs = label ? label.inputs : [];
+  //   const  inputTypes = label ? label.inputTypes : [];
+    
+  
+  //   console.log(' income assseesment template labelNames:', labelNames);
+  //   console.log('income assseesment template inputs:', inputs);
+  //   console.log(' income assseesment template inputTypes:', inputTypes);
+
+
+
+  //   const [conditions, setConditions] = useState([
+  //     { active: false },
+  //     { active: false },
+  //   ]);
+  //   const [inputValues, setInputValues] = useState(
+  //     inputs?.map((inputArray) =>
+  //       inputArray.map(() => ({ textValue: '', fileValue: null }))
+  //     )
+  //   );
+
+
+//   const logData = useSelector((state) => state.label);
+
+// console.log("logData", logData)
+
   // Posting the from 
   const handleSubmit = async (values) => {
     // console.log(saveButtonIsClicked)
 
+    const fulldata = localStorage.getItem("formData")
+//  var ids = localStorage.getItem('ids')
+    // console.log('state.label:', label);
+
+  const jsonDatafulldata = JSON.parse(fulldata);
+  
+  console.log("state label",label);
+  console.log('jsonDatafulldata', jsonDatafulldata.task_data)
+
+  var i = 0;
+  jsonDatafulldata.task_data.forEach(formElement => {
+    
+   let filteredLabel =  label.filter(l=>{return l.id ==formElement.id});
+
+   console.log("jsonDatafulldata final values",filteredLabel);
+    if(filteredLabel.length > 0){
+      console.log("jsonDatafulldata final values",filteredLabel[0].names);
+      // jsonDatafulldata.task_data[i]["value"] = [ "inputs":filteredLabel[0].inputs,"inputTypes":filteredLabel[0].inputTypes, "names":filteredLabel[0].names];
+
+      // console.log()
+      let final_json = [];
+      let j = 0;
+      filteredLabel[0].names.forEach((name)=>{
+        let element = {};
+        element["label"] = name;
+        element["active"] = false;
+        element["inputs"] = [];
+
+        let k = 0;
+        filteredLabel[0].inputs[j].forEach((input)=>{
+          let inp_element ={};
+          console.log("jsonDatafulldata input type",filteredLabel[0].inputTypes[j][k]);
+          if(filteredLabel[0].inputTypes[j][k] == 'text'){
+            inp_element =  {"value":"","label":input};
+          }else if(filteredLabel[0].inputTypes[j][k] == 'file'){
+            inp_element =  {"fileAttached":"No file attached","label":input};
+          }
+          element["inputs"].push(inp_element);
+          k++;
+        });
+        
+       j++;
+
+       final_json.push(element);
+        
+      });
+
+
+      jsonDatafulldata.task_data[i]["value"] = final_json;
+
+
+
+      
+      // [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
+    }
+    i++;
+  });
+
+  console.log("jsonDatafulldata final values 1", jsonDatafulldata);
+const taskData = JSON.stringify(jsonDatafulldata);
+  
+  // console.log(taskData)
+  
+  //   const logData = conditions.map((condition, conditionIndex) => {
+  //     const conditionData = {
+  //       label: labelNames[conditionIndex],
+  //       active: condition.active,
+  //       inputs: inputs[conditionIndex]?.map((inputLabel, inputIndex) => {
+  //         const inputData = {
+  //           label: inputLabel,
+  //         };
+  //         if (inputTypes[conditionIndex][inputIndex] === 'text') {
+  //           inputData.value = inputValues[conditionIndex][inputIndex]?.textValue;
+  //         } else {
+  //           inputData.fileAttached = inputValues[conditionIndex][inputIndex].fileValue ? inputValues[conditionIndex][inputIndex]?.fileValue.name : 'No file attached';
+  //         }
+  //         return inputData;
+  //       }),
+  //     };
+  //     return conditionData;
+  //   });
+  //   console.log(JSON.stringify(logData));
+  //  var sting = JSON.stringify(logData);
+  
+  
+  
+  
+  
+  
+    
+  
+    // var sting = localStorage.getItem("totalData");
+    // var sting = [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
+  // console.log("ids of income" ,ids)
+  
+  //   console.log("setting", sting)
+  
+  
+  // const matchingObject = jsonDatafulldata.task_data.find(obj => obj.id === ids);
+  // console.log("matchingObject", matchingObject)
+  // if (matchingObject) {
+  //   console.log("found")
+  //   matchingObject.value = sting;
+  //   // matchingObject.newThing = "texting";
+  //   matchingObject.required = true;
+  //   // var updatedData = data
+  //   console.log("updated", jsonDatafulldata)
+  // }
+  // else{
+  //   console.log("not found")
+  // }
+  // const jsonDataUpdated = JSON.stringify(updatedData)
+    
 
     // save button is clicked
     if (saveButtonIsClicked === true) {
@@ -297,7 +596,7 @@ console.log(items)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
-      const taskData = localStorage.getItem("formData")
+      // const taskData = localStorage.getItem("formData")
       // console.log(taskData)
       if (taskData === null && formsData === null) {
         console.log("both are null")
@@ -474,7 +773,7 @@ console.log(items)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
-      const taskData = localStorage.getItem("formData")
+      // const taskData = localStorage.getItem("formData")
       // console.log(taskData)
       if (taskData === null && formsData === null) {
         console.log("both are null")
@@ -636,7 +935,7 @@ console.log(items)
       const occupationId = values.occupation;
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
-      const taskData = localStorage.getItem("formData")
+      // const taskData = localStorage.getItem("formData")
       // console.log(taskData)
       if (taskData === null && formsData === null) {
         console.log("both are null")
@@ -1188,11 +1487,9 @@ console.log(items)
                     Form Title <span>*</span>
                   </label>
                   <Field
-
                     type="text"
                     id="form_title"
                     name="form_title"
-
                     // value={values.form_title}
                     className="form-control"
                     placeholder="Enter Form Title"
@@ -1264,7 +1561,8 @@ console.log(items)
             }}
           //url ={url}
           // saveUrl={saveUrl}
-          />}
+          />
+          }
           {/* <Grid/> */}
           {/* <MyDataGrid/> */}
       </AdminLayout>

@@ -117,7 +117,8 @@ export default function Occupations() {
     },
     {
       name: "Version", selector: (row) => row.version,
-      width: "100px"
+      sortable: true,
+      width: "120px"
     },
     {
       name: "Category", selector: (row) => row.category,
@@ -698,12 +699,13 @@ export default function Occupations() {
       if (templatesResponse.ok) {
         // Use the templatesData to update the state of your component
         // console.log(templatesData)
-        const templatesArray = templatesData.data.map(template => ({
+        const templatesArray = templatesData.data?.map(template => ({
           version: template.version,
           id: template.id,
           templateName: template.templateName,
           formTitle: template.formTitle
         }));
+      
         setTemplatesArray(templatesArray)
         // console.log(templatesArray)
 
