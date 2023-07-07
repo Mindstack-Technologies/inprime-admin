@@ -1182,7 +1182,7 @@ export default function Occupations() {
                           disabled={isReadOnly}
                         >
                           <option value="">Select a Template Name</option>
-                          {templatesArray.map(template => (
+                          {templatesArray?.map(template => (
                             // <option key={template.id} value={`${template.templateName} (${template.version})`}>{`${template.templateName} (${template.version})`}</option>
                             // ))}
                             // <option key={template.id} value={template.templateName ? `${template.templateName} (${template.version})` : ''}>{template.templateName ? `${template.templateName} (${template.version})` : `(${template.version})`}</option>

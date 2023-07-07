@@ -870,7 +870,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setID } from '../../redux/transfer/transferDetails';
 import { updateObject } from '../../redux/transfer/transferDetails';
 
-import { appendNewComponent, setLogData } from '../../redux/transfer/transferDetails';
+import { appendNewComponent } from '../../redux/transfer/transferDetails';
 
 
 const MyConditionalInput = React.forwardRef((props, ref) => {
@@ -894,14 +894,16 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   //   inputs: [['Input label'], ['Input label']],
   //   inputTypes: [['text'], ['text']],
   // };
-  const one = data_form_props?.map(condition => condition.label);
-  const two = data_form_props?.map(condition => condition.inputs.map(input => input.label));
-  const three = data_form_props?.map(condition => condition.inputs.map(input => input.value ==""  ? 'text' : input.fileAttached ? 'file' : null));
+  const conditionLabel = data_form_props?.map(condition => condition.label);
+  const consdtionalInputLabel = data_form_props?.map(condition => condition.inputs.map(input => input.label));
+  // const condtionalInputTypes = data_form_props?.map(condition => condition.inputs.map(input => input.value ==""  ? 'text' : input.fileAttached ? 'file' : null));
+  const condtionalInputTypes = data_form_props?.map(condition => condition.inputs.map(input => input.inputType == "text" ? 'text' : input.inputType == "number" ? 'number' : input.inputType == "dropdown" ? 'dropdown' : input.file == "file" ? 'file' : null));
+
   // console.log("file or input ", one)
-//   const two = data_form_props.inputs.map(input => input[0]);
-// const three = data_form_props.inputTypes.map(inputType => inputType[0]);
-// const one = data_form_props.names;
-// conso
+  //   const two = data_form_props.inputs.map(input => input[0]);
+  // const three = data_form_props.inputTypes.map(inputType => inputType[0]);
+  // const one = data_form_props.names;
+  // conso
 
   if (data_form_props) {
     console.log('inside thsi one ')
@@ -910,13 +912,11 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       // names: data_form_props.map(condition => condition.label),
       // inputs: data_form_props.map(condition => condition.inputs.map(input => input.label)),
       // inputTypes: data_form_props.map(condition => condition.inputs.map(input => input.value== '' ? 'text' : input.fileAttached ? 'file' : null)),
-      names: one ,
-      inputs: two,
-      inputTypes: three,
-      // names: ['Condition', 'Condition'],
-      //   inputs: [['Input label'], ['Input label']],
-      //   inputTypes: [['text'], ['text']],
-      // logData: ''
+      names: conditionLabel,
+      inputs: consdtionalInputLabel,
+      inputTypes: condtionalInputTypes,
+      // inputOptions: [[['Option 1', 'Option 2']], [['Option 1', 'Option 2']]],
+
     };
   } else {
     console.log('inside another one ')
@@ -925,8 +925,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       names: ['Condition', 'Condition'],
       inputs: [['Input label'], ['Input label']],
       inputTypes: [['text'], ['text']],
-      // logData: ''
-
+      // inputOptions: [[['Option 1', 'Option 2']], [['Option 1', 'Option 2']]],
     };
   }
 
@@ -980,9 +979,9 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   const inputTypes = label ? label.inputTypes : [];
 
 
-  console.log('labelNames:', labelNames);
-  console.log('inputs:', inputs);
-  console.log('inputTypes:', inputTypes);
+  // console.log('labelNames:', labelNames);
+  // console.log('inputs:', inputs);
+  // console.log('inputTypes:', inputTypes);
 
   const [inputValues, setInputValues] = useState(
     inputs.map((inputArray) =>
@@ -1029,7 +1028,9 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
         const inputData = {
           label: inputLabel,
         };
-        if (inputTypes[conditionIndex][inputIndex] === 'text') {
+        // if (inputTypes[conditionIndex][inputIndex] === 'text') {
+        //   inputData.value = inputValues[conditionIndex][inputIndex]?.textValue;
+        if (inputTypes[conditionIndex][inputIndex] === 'text' || inputTypes[conditionIndex][inputIndex] === 'number' || inputTypes[conditionIndex][inputIndex] === "dropdown") {
           inputData.value = inputValues[conditionIndex][inputIndex]?.textValue;
         } else {
           inputData.fileAttached = inputValues[conditionIndex][inputIndex].fileValue ? inputValues[conditionIndex][inputIndex]?.fileValue.name : 'No file attached';
@@ -1039,22 +1040,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
     };
     return conditionData;
   });
-  console.log("called",JSON.stringify(logData));
-  dispatch(setLogData({ logData}));
 
-  // const [labelNames, setLabelNames] = useState([]);
-
-  // const datass = JSON.parse(props.data.value)
-  // const datass = props.data.value
-  // console.log(`datass`, datass )  
-
-  // labelNames = datass.map(condition => condition.label);
-  // inputs = datass.map(condition => condition.inputs.map(input => input.label));
-
-  // inputTypes = datass.map(condition => condition.inputs.map(input => input.value ? 'text' : input.fileAttached ? 'file' : null));
-  // inputTypes = [["text"], ["text"], ["file"]];
-  // const inputTypessss = datass.map(condition => condition.inputs.map(input => input.value ? 'text' : input.fileAttached ? 'text' : null));
-  // console.log('inputTypessss',inputTypessss)
 
 
   const totaldata = {
@@ -1141,6 +1127,30 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
                           value={inputValues[index][inputIndex].textValue}
                           onChange={handleTextChange(index, inputIndex)}
                         />
+                      ) : inputTypes[index][inputIndex] === 'number' ? (
+                        <input
+                          type="number"
+                          data="test"
+                          value={inputValues[index][inputIndex].textValue}
+                          onChange={handleTextChange(index, inputIndex)}
+                        />
+                      ) : inputTypes[index][inputIndex] === 'dropdown' ? (
+                        <select
+                          data="test"
+                          value={inputValues[index][inputIndex].textValue}
+                          onChange={handleTextChange(index, inputIndex)}
+                        >
+                          {/* Add options here */}
+                        </select>
+                        // <select
+                        //   data="test"
+                        //   value={inputValues[index][inputIndex].textValue}
+                        //   onChange={handleTextChange(index, inputIndex)}
+                        // >
+                        //   {inputOptions[index][inputIndex]?.map((option, optionIndex) => (
+                        //     <option key={optionIndex} value={option}>{option}</option>
+                        //   ))}
+                        // </select>
                       ) : (
                         <>
                           <input
@@ -1173,48 +1183,3 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
 export default MyConditionalInput;
 
 
-
-
-// import React, { forwardRef } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { updateCondition } from '../../redux/transfer/conditionalSlice';
-
-// const MyConditionalInput = forwardRef((props, ref) => {
-//   const conditions = useSelector((state) => state.conditions);
-//   const dispatch = useDispatch();
-
-//   const handleOptionChange = (index) => (event) => {
-//     dispatch(updateCondition({ index, value: event.target.value }));
-//   };
-
-//   return (
-//     <div>
-//       <div>
-//         {conditions.map((condition, index) => (
-//           <div key={index}>
-//             <label>
-//               Condition {index + 1}:
-//               <select
-//                 value={condition}
-//                 onChange={handleOptionChange(index)}
-//                 ref={ref}
-//               >
-//                 <option value="false">False</option>
-//                 <option value="true">True</option>
-//               </select>
-//             </label>
-//           </div>
-//         ))}
-//       </div>
-//       {conditions.map((condition, index) =>
-//         condition === 'true' ? (
-//           <div key={index}>
-//             <input data="test" />
-//           </div>
-//         ) : null
-//       )}
-//     </div>
-//   );
-// });
-
-// export default MyConditionalInput;

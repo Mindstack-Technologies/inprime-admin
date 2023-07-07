@@ -650,6 +650,20 @@ class FormElementsEdit extends React.Component {
 
 
 
+  // handleOptionChange = (conditionIndex, inputIndex, optionIndex) => (event) => {
+  //   // Update option in Redux store
+  // };
+  
+  // handleAddOption = (conditionIndex, inputIndex) => () => {
+  //   // Add new option in Redux store
+  // };
+  
+  // handleRemoveOption = (conditionIndex, inputIndex, optionIndex) => () => {
+  //   // Remove option from Redux store
+  // };
+
+
+
 
 
 
@@ -845,7 +859,6 @@ if(current_component.length>0){
     if (this.props.element.hasOwnProperty('label')) {
       editorState = this.convertFromHTML(this.props.element.label);
     }
-    console.log('this.props.manualEditModeOff', this.props.manualEditModeOff)
     return (
       <div>
         <div className="clearfix">
@@ -1324,9 +1337,31 @@ if(current_component.length>0){
                             onChange={this.handleInputTypeChange(index, inputIndex, id)}
                           >
                             <option value="text">Text</option>
+                            <option value="number">Number</option>
                             <option value="file">File</option>
+                            <option value="dropdown">Dropdown</option>
                           </select>
                         </label>
+                        {/* {inputTypes[index][inputIndex] === 'dropdown' && (
+      <div>
+        <label>Options:</label>
+        {inputOptions[index][inputIndex].map((option, optionIndex) => (
+          <div key={optionIndex}>
+            <input
+              type="text"
+              value={option}
+              onChange={this.handleOptionChange(index, inputIndex, optionIndex)}
+            />
+            {inputOptions[index][inputIndex].length > 1 && (
+              <button onClick={this.handleRemoveOption(index, inputIndex, optionIndex)}>
+                Remove Option
+              </button>
+            )}
+          </div>
+        ))}
+        <button onClick={this.handleAddOption(index, inputIndex)}>Add Option</button>
+      </div>
+    )} */}
                         {inputs[index].length > 1 && (
                           <button
                             onClick={this.handleRemoveInput(index, inputIndex, id)}
@@ -1411,7 +1446,9 @@ FormElementsEdit.defaultProps = { className: 'edit-element-fields' };
 // });
 
 const mapStateToProps = (state) => ({
-  label: state.label
+  label: state.label,
+  // inputOptions: state.label.inputOptions,
+
   // labelNames: state.label.names,
   // inputs: state.label.inputs,
   // inputTypes: state.label.inputTypes,

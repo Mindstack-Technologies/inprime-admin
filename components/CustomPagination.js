@@ -66,36 +66,12 @@ const CustomPagination = ({
       </div>
       {/* Render the page navigation controls in the center */}
       <div className='nextPreviousButtonPageArea'>
-        <button className="nextPreviousButtonPageSingleButton" onClick={handleFirstPage}>
+        <button className="nextPreviousButtonPageSingleButton" onClick={handleFirstPage} disabled={currentPage === 1}  style={{ opacity: currentPage === 1 ? 0.5 : 1 }}>
           <img src='images/PreviousPage.svg' /><img src='images/PreviousPage.svg' className='p-1'/>First
         </button>
-        <button className="nextPreviousButtonPageSingleButton me-2" onClick={handlePreviousPage}>
+        <button className="nextPreviousButtonPageSingleButton me-2" onClick={handlePreviousPage}disabled={currentPage === 1}  style={{ opacity: currentPage === 1 ? 0.5 : 1 }}>
         <img src='images/PreviousPage.svg' className='p-1'/>Previous
         </button>
-        {/* {[...Array(totalPages).keys()].map((pageNumber) => (
-        //   <button
-        //     key={pageNumber}
-        //     className={`btn btn-sm ${
-        //       currentPage === pageNumber + 1 ? 'btn-primary' : 'btn-outline-secondary'
-        //     } me-2`}
-        //     onClick={() => handlePageNumberClick(pageNumber + 1)}
-        //     style={{
-        //         backgroundColor: currentPage === pageNumber + 1 ? '#00357C' : '#FFFFFF',
-        //         borderRadius: '8px',
-        //       }}
-        //   >
-        //     {pageNumber + 1}
-        //   </button>
-          <button
-            key={pageNumber}
-            className={`my-button ${
-              currentPage === pageNumber + 1 ? 'my-button-primary' : 'my-button-secondary'
-            } me-2`}
-            onClick={() => handlePageNumberClick(pageNumber + 1)}
-          >
-            {pageNumber + 1}
-          </button>
-        ))} */}
         {/* Render only the relevant page number buttons */}
         {[...Array(endPage - startPage + 1).keys()].map((i) => {
           const pageNumber = startPage + i;
@@ -111,10 +87,10 @@ const CustomPagination = ({
             </button>
           );
         })}
-        <button className="nextPreviousButtonPageSingleButton me-2" onClick={handleNextPage}>
+        <button className="nextPreviousButtonPageSingleButton me-2" onClick={handleNextPage} disabled={currentPage === totalPages} style={{ opacity: currentPage === totalPages ? 0.5 : 1 }}>
           Next<img src='images/NextPage.svg' className='p-1'/>
         </button>
-        <button className="nextPreviousButtonPageSingleButton" onClick={handleLastPage}>
+        <button className="nextPreviousButtonPageSingleButton" onClick={handleLastPage} disabled={currentPage === totalPages} style={{ opacity: currentPage === totalPages ? 0.5 : 1 }}>
           Last<img src='images/NextPage.svg' className='p-1'/><img src='images/NextPage.svg' />
         </button>
       </div>

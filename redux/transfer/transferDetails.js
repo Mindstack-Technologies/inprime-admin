@@ -252,7 +252,6 @@ const labelSlice = createSlice({
     // names: ['Condition', 'Condition'],
     // inputs: [['Input label'], ['Input label']],
     // inputTypes: [['text'], ['text']],
-    // logData: ''
   }],
   reducers: {
     setLabelName(state, action) {
@@ -359,15 +358,7 @@ const labelSlice = createSlice({
         state.push(newComponent);
       }
     },
-    setLogData(state, action) {
-      const {logData} =action.payload
-      console.log("statessss", logData)
-      // state.logData = action.payload.logData;
-
-      // state= logData;
-      // state.logData = action.payload;
-    },
-   
+  
   },
 });
 
@@ -382,7 +373,6 @@ export const {
   updateObject,
   setID,
   appendNewComponent,
-  setLogData
 } = labelSlice.actions;
 export default labelSlice.reducer;
 

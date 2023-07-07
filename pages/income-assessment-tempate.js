@@ -103,92 +103,19 @@ console.log("store", store)
     
   }, [ids]);
 console.log("ids",ids)
-  // var label;
-  // // if (ids) {
-  // //   label = useSelector((state) => state.label.find((label) => label.id === ids));
-  // // }
-  // if (ids) {
-  //   label = useSelector((state) => {
-  //     console.log('state.label:', state.label);
-  //     const result = state.label.find((label) => label.id === ids);
-  //     console.log('result:', result);
-  //     return result;
-  //   });
-  // }
-
-
-  // var ids;
-
-  // useEffect(() => {
-  //   ids = localStorage.getItem('ids');
-  //   console.log("ids", ids)
-  // }, []);
-  // console.log("ids", ids)
-
-  // const store = useSelector((store) => store);
-  // const total =useSelector((state) => state.label)
-  // console.log('total', total)
-  console.log(useSelector((state) => state.label.find((label) => label.id === ids )))
-  // const label = useSelector((state) => state.label.find((label) => label.id === ids ));
-// console.log("store", store)
+ 
 const label = useSelector((state) => state.label);
   const onPost = (data) => {
-    // var ids = localStorage.getItem('ids')
-  //   console.log('state.label:', label);
+   
 
     const jsonData = JSON.stringify(data);
   
-  //   console.log("state", label)
-  //   const labelNames = label ? label.names : [];
-  //   const  inputs = label ? label.inputs : [];
-  //   const  inputTypes = label ? label.inputTypes : [];
-    
   
-  //   console.log(' income assseesment template labelNames:', labelNames);
-  //   console.log('income assseesment template inputs:', inputs);
-  //   console.log(' income assseesment template inputTypes:', inputTypes);
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    
-  
-  //   // var sting = localStorage.getItem("totalData");
-  //   var sting = [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
-  // // console.log("ids of income" ,ids)
-  
-  //   console.log("setting", sting)
-  
-  
-  // const matchingObject = data.task_data.find(obj => obj.id === ids);
-  // console.log("matchingObject", matchingObject)
-  // if (matchingObject) {
-  //   console.log("found")
-  //   matchingObject.value = sting;
-  //   // matchingObject.newThing = "texting";
-  //   matchingObject.required = true;
-  //   var updatedData = data
-  //   console.log("updated", data)
-  // }
-  // else{
-  //   console.log("not found")
-  // }
-  // const jsonDataUpdated = JSON.stringify(updatedData)
     localStorage.setItem('formData', jsonData);
     
-  //   console.log("json data of the form builder updated" ,jsonDataUpdated);
   
     console.log("json data of the form builder" ,jsonData);
   
-  //   // console.log(data)
   };
 
 
@@ -442,48 +369,28 @@ const label = useSelector((state) => state.label);
 
 
 
-  // // console.log("state", label)
-  //   const labelNames = label ? label.names : [];
-  //   const  inputs = label ? label.inputs : [];
-  //   const  inputTypes = label ? label.inputTypes : [];
-    
-  
-  //   console.log(' income assseesment template labelNames:', labelNames);
-  //   console.log('income assseesment template inputs:', inputs);
-  //   console.log(' income assseesment template inputTypes:', inputTypes);
 
-
-
-  //   const [conditions, setConditions] = useState([
-  //     { active: false },
-  //     { active: false },
-  //   ]);
-  //   const [inputValues, setInputValues] = useState(
-  //     inputs?.map((inputArray) =>
-  //       inputArray.map(() => ({ textValue: '', fileValue: null }))
-  //     )
-  //   );
-
-
-//   const logData = useSelector((state) => state.label);
-
-// console.log("logData", logData)
 
   // Posting the from 
   const handleSubmit = async (values) => {
     // console.log(saveButtonIsClicked)
+    console.log ("formsData", formsData)
 
-    const fulldata = localStorage.getItem("formData")
+  const fulldata = localStorage.getItem("formData")
 //  var ids = localStorage.getItem('ids')
     // console.log('state.label:', label);
-
+var taskData
   const jsonDatafulldata = JSON.parse(fulldata);
-  
-  console.log("state label",label);
-  console.log('jsonDatafulldata', jsonDatafulldata.task_data)
+  console.log("jsonDatafulldata", jsonDatafulldata)
+  if (jsonDatafulldata === null){
+    console.log("jsonDatafulldata === null")
+     taskData = null
+    // console.log ("formsData targetting", formsData.map(value=>value))
 
-  var i = 0;
-  jsonDatafulldata.task_data.forEach(formElement => {
+
+
+    var i = 0;
+    formsData.forEach(formElement => {
     
    let filteredLabel =  label.filter(l=>{return l.id ==formElement.id});
 
@@ -505,10 +412,69 @@ const label = useSelector((state) => state.label);
         filteredLabel[0].inputs[j].forEach((input)=>{
           let inp_element ={};
           console.log("jsonDatafulldata input type",filteredLabel[0].inputTypes[j][k]);
-          if(filteredLabel[0].inputTypes[j][k] == 'text'){
-            inp_element =  {"value":"","label":input};
-          }else if(filteredLabel[0].inputTypes[j][k] == 'file'){
-            inp_element =  {"fileAttached":"No file attached","label":input};
+          // if(filteredLabel[0].inputTypes[j][k] == 'text'){
+          //   inp_element =  {"value":"","label":input};
+          // }else if(filteredLabel[0].inputTypes[j][k] == 'file'){
+          //   inp_element =  {"fileAttached":"No file attached","label":input};
+          // }
+          if (filteredLabel[0].inputTypes[j][k] == 'text') {
+            inp_element = { "value": "", "label": input, "inputType": "text" };
+          } else if (filteredLabel[0].inputTypes[j][k] == 'number') {
+            inp_element = { "value": "", "label": input, "inputType": "number" };
+          } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
+            inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
+          }
+          element["inputs"].push(inp_element);
+          k++;
+        });
+        
+       j++;
+
+       final_json.push(element);
+        
+      });
+
+
+      formsData[i].value = final_json;
+    }
+    i++;
+  });
+
+  console.log("jsonDatafulldata final values 1", formsData);
+
+  }
+  else {
+  console.log("state label",label);
+  console.log('jsonDatafulldata', jsonDatafulldata.task_data)
+
+  var i = 0;
+  jsonDatafulldata.task_data.forEach(formElement => {
+    
+   let filteredLabel =  label.filter(l=>{return l.id ==formElement.id});
+
+   console.log("jsonDatafulldata final values",filteredLabel);
+    if(filteredLabel.length > 0){
+      console.log("jsonDatafulldata final values",filteredLabel[0].names);
+      let final_json = [];
+      let j = 0;
+      filteredLabel[0].names.forEach((name)=>{
+        let element = {};
+        element["label"] = name;
+        element["active"] = false;
+        element["inputs"] = [];
+
+        let k = 0;
+        filteredLabel[0].inputs[j].forEach((input)=>{
+          let inp_element ={};
+          console.log("jsonDatafulldata input type",filteredLabel[0].inputTypes[j][k]);
+          if (filteredLabel[0].inputTypes[j][k] == 'text') {
+            inp_element = { "value": "", "label": input, "inputType": "text" };
+          } else if (filteredLabel[0].inputTypes[j][k] == 'number') {
+            inp_element = { "value": "", "label": input, "inputType": "number" };
+          } else if (filteredLabel[0].inputTypes[j][k] == 'dropdown') {
+            inp_element = { "value": "", "label": input, "inputType": "dropdown" };
+          } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
+            inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
           }
           element["inputs"].push(inp_element);
           k++;
@@ -523,69 +489,14 @@ const label = useSelector((state) => state.label);
 
       jsonDatafulldata.task_data[i]["value"] = final_json;
 
-
-
-      
-      // [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
-    }
+      }
     i++;
   });
 
   console.log("jsonDatafulldata final values 1", jsonDatafulldata);
-const taskData = JSON.stringify(jsonDatafulldata);
-  
-  // console.log(taskData)
-  
-  //   const logData = conditions.map((condition, conditionIndex) => {
-  //     const conditionData = {
-  //       label: labelNames[conditionIndex],
-  //       active: condition.active,
-  //       inputs: inputs[conditionIndex]?.map((inputLabel, inputIndex) => {
-  //         const inputData = {
-  //           label: inputLabel,
-  //         };
-  //         if (inputTypes[conditionIndex][inputIndex] === 'text') {
-  //           inputData.value = inputValues[conditionIndex][inputIndex]?.textValue;
-  //         } else {
-  //           inputData.fileAttached = inputValues[conditionIndex][inputIndex].fileValue ? inputValues[conditionIndex][inputIndex]?.fileValue.name : 'No file attached';
-  //         }
-  //         return inputData;
-  //       }),
-  //     };
-  //     return conditionData;
-  //   });
-  //   console.log(JSON.stringify(logData));
-  //  var sting = JSON.stringify(logData);
-  
-  
-  
-  
-  
-  
-    
-  
-    // var sting = localStorage.getItem("totalData");
-    // var sting = [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
-  // console.log("ids of income" ,ids)
-  
-  //   console.log("setting", sting)
-  
-  
-  // const matchingObject = jsonDatafulldata.task_data.find(obj => obj.id === ids);
-  // console.log("matchingObject", matchingObject)
-  // if (matchingObject) {
-  //   console.log("found")
-  //   matchingObject.value = sting;
-  //   // matchingObject.newThing = "texting";
-  //   matchingObject.required = true;
-  //   // var updatedData = data
-  //   console.log("updated", jsonDatafulldata)
-  // }
-  // else{
-  //   console.log("not found")
-  // }
-  // const jsonDataUpdated = JSON.stringify(updatedData)
-    
+ taskData = JSON.stringify(jsonDatafulldata);
+  }
+console.log ('final Taskdata', taskData)
 
     // save button is clicked
     if (saveButtonIsClicked === true) {
