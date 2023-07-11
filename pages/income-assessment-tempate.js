@@ -14,6 +14,7 @@ import GeoTagging from "@/components/Custom-FromBuliderTools/GeoTagging";
 import MyDataGrid from "@/components/Custom-FromBuliderTools/Grid";
 import MyConditionalInput from "../components/Custom-FromBuliderTools/ConditonalInput";
 import MyFormElementsEdit from "../components/Custom-FromBuliderTools/MyFormElementsEdit";
+import WebcamCapture from "../components/Custom-FromBuliderTools/WebcamCapture";
 // import MyFormElementsEdit from "../node_modules/react-form-builder2/lib/form-elements-edit";
 import dynamic from 'next/dynamic';
 
@@ -31,7 +32,7 @@ import { useDispatch, useSelector } from 'react-redux';
 //   const labelNames = label ? label.names : [];
 //   const  inputs = label ? label.inputs : [];
 //   const  inputTypes = label ? label.inputTypes : [];
-  
+
 
 //   console.log(' income assseesment template labelNames:', labelNames);
 //   console.log('income assseesment template inputs:', inputs);
@@ -48,7 +49,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 
-  
+
 
 //   // var sting = localStorage.getItem("totalData");
 //   var sting = [{"label":"Nothisnf","active":false,"inputs":[{"label":"evrytad lkna","value":""}]},{"label":"fagfsgsfgdf","active":false,"inputs":[{"label":"hole vlaue ","value":""}]},{"label":"dgdsfghsdtfg","active":false,"inputs":[{"label":"ragfagatr","fileAttached":"No file attached"}]}];
@@ -73,7 +74,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // }
 // const jsonDataUpdated = JSON.stringify(updatedData)
 //   localStorage.setItem('formData', jsonDataUpdated);
-  
+
 //   console.log("json data of the form builder updated" ,jsonDataUpdated);
 
 //   console.log("json data of the form builder" ,jsonData);
@@ -95,27 +96,46 @@ export default function IncomeAssessmentTemplate() {
 
   const [ids, setIds] = useState();
   const store = useSelector((store) => store);
-  const total =useSelector((state) => state.label)
+  const total = useSelector((state) => state.label)
+
   console.log('total', total)
-console.log("store", store)
+  console.log("store", store)
   useEffect(() => {
     setIds(localStorage.getItem('ids'));
-    
-  }, [ids]);
-console.log("ids",ids)
- 
-const label = useSelector((state) => state.label);
-  const onPost = (data) => {
-   
 
+  }, [ids]);
+  console.log("ids", ids)
+
+  const label = useSelector((state) => state.label);
+
+  const multiInputs = useSelector((state) => state.multilineInput);
+
+  const [itemAdded, setItemAdded] = useState([]);
+  useEffect(() => {
+    changeDateFormat();
+  }, [itemAdded]);
+  const changeDateFormat = () => {
+    const parentContainers = document?.querySelectorAll('.react-datepicker__input-container');
+    parentContainers?.forEach(container => {
+      container.querySelector('input').setAttribute("placeholder", "dd/MM/yyyy");
+    });
+  };
+
+
+  const onPost = (data) => {
+
+
+    // const jsonData = JSON.stringify(data);
+
+
+    // localStorage.setItem('formData', jsonData);
+
+
+    // console.log("json data of the form builder" ,jsonData);
     const jsonData = JSON.stringify(data);
-  
-  
     localStorage.setItem('formData', jsonData);
-    
-  
-    console.log("json data of the form builder" ,jsonData);
-  
+    // console.log(   " setItemAdded([...itemAdded, 'new item']);", setItemAdded([...itemAdded, 'new item']));
+    setItemAdded([...itemAdded, 'new item']);
   };
 
 
@@ -194,9 +214,9 @@ const label = useSelector((state) => state.label);
   // };
 
   const TestComponent = () => <h2>Hello</h2>;
-  
 
-  
+
+
   // Registry.register('MyGeoTagging', GeoTagging);
   try {
     Registry.register('MyGeoTagging', GeoTagging);
@@ -211,7 +231,10 @@ const label = useSelector((state) => state.label);
   }
   const registeredElements = Registry.list();
   // console.log(registeredElements);
-
+  const handleRowsChange = (newRows) => {
+    // handle row changes here
+    console.log(newRows);
+  };
 
   const items = [{
     key: 'TestComponent',
@@ -236,7 +259,7 @@ const label = useSelector((state) => state.label);
     icon: 'fa fa-cog',
     props: {
       test: 'test_input',
-      myProp: 'myValue' 
+      myProp: 'myValue'
     },
     label: 'Label Input',
   },
@@ -255,40 +278,42 @@ const label = useSelector((state) => state.label);
     component: GeoTagging,
 
   },
-  { key: 'MyDataGrid', 
-  name: 'Data Grid', 
-  element: 'CustomElement',
-  type: 'custom',
-  field_name: 'my_input_MyDataGrid', 
-  icon: 'fa fa-table' ,
-  component: MyDataGrid,
+  {
+    key: 'MyDataGrid',
+    name: 'Data Grid',
+    element: 'CustomElement',
+    type: 'custom',
+    field_name: 'my_input_MyDataGrid',
+    icon: 'fa fa-table',
+    component: MyDataGrid,
+    // props: {
+    //   onRowsChange: handleRowsChange,
+    // },
 
-},
+  },
+  {
+    key: 'MyConditionalInput',
+    name: 'Conditional Input',
+    element: 'CustomElement',
+    icon: 'fa fa-check-square',
+    field_name: 'my_input_MyConditionalInput',
+    type: 'custom',
+    forwardRef: true,
+    static: true,
+    props: { test: 'test_input' },
+    component: MyConditionalInput,
+  },
+  {
+    key: 'WebcamCapture',
+    name: 'Webcam Capture',
+    element: 'CustomElement',
+    type: 'custom',
+    field_name: 'webcam_capture',
+    icon: 'fa fa-camera',
+    component: WebcamCapture, // the custom component you created
+  },
 
-// {
-//   key: 'ConditionalInput',
-//   name: 'Conditional Input',
-//   element: 'CustomElement',
-//   icon: 'fa fa-check-square',
-//   field_name: 'my_input_ConditionalInput',
-//   type: 'custom',
-//   component: MyConditionalInput,
-//   // props: { selectoptions },
-// },
-{
-  key: 'MyConditionalInput',
-  name: 'Conditional Input',
-  element: 'CustomElement',
-  icon: 'fa fa-check-square', 
-  field_name: 'my_input_MyConditionalInput', 
-  type: 'custom',
-  forwardRef: true,
-  static: true,
-  props: { test: 'test_input' },
-  component: MyConditionalInput,
 
-  
-}, 
   { key: 'Header' },
   { key: 'Label' },
   { key: 'Paragraph' },
@@ -315,7 +340,7 @@ const label = useSelector((state) => state.label);
   { key: 'Signature' },
   // { key: 'Website' },
   { key: 'HyperLink' },
-  { key: 'Download' },
+  // { key: 'Download' },
   { key: 'Range' },
   { key: 'Camera' },
   // { key: 'FileAttachment' },
@@ -325,7 +350,7 @@ const label = useSelector((state) => state.label);
   ];
 
 
-// console.log(items)
+  // console.log(items)
 
 
 
@@ -374,129 +399,225 @@ const label = useSelector((state) => state.label);
   // Posting the from 
   const handleSubmit = async (values) => {
     // console.log(saveButtonIsClicked)
-    console.log ("formsData", formsData)
+    console.log("formsData", formsData)
 
-  const fulldata = localStorage.getItem("formData")
-//  var ids = localStorage.getItem('ids')
+    const fulldata = localStorage.getItem("formData")
+    //  var ids = localStorage.getItem('ids')
     // console.log('state.label:', label);
-var taskData
-  const jsonDatafulldata = JSON.parse(fulldata);
-  console.log("jsonDatafulldata", jsonDatafulldata)
-  if (jsonDatafulldata === null){
-    console.log("jsonDatafulldata === null")
-     taskData = null
-    // console.log ("formsData targetting", formsData.map(value=>value))
+    var taskData
+    const jsonDatafulldata = JSON.parse(fulldata);
+    console.log("jsonDatafulldata", jsonDatafulldata)
+    if (jsonDatafulldata === null) {
+      console.log("jsonDatafulldata === null")
+      taskData = null
+      // console.log ("formsData targetting", formsData.map(value=>value))
 
 
 
-    var i = 0;
-    formsData.forEach(formElement => {
-    
-   let filteredLabel =  label.filter(l=>{return l.id ==formElement.id});
+      var i = 0;
+      formsData?.forEach(formElement => {
 
-   console.log("jsonDatafulldata final values",filteredLabel);
-    if(filteredLabel.length > 0){
-      console.log("jsonDatafulldata final values",filteredLabel[0].names);
-      // jsonDatafulldata.task_data[i]["value"] = [ "inputs":filteredLabel[0].inputs,"inputTypes":filteredLabel[0].inputTypes, "names":filteredLabel[0].names];
+        console.log("multiInputs", multiInputs)
 
-      // console.log()
-      let final_json = [];
-      let j = 0;
-      filteredLabel[0].names.forEach((name)=>{
-        let element = {};
-        element["label"] = name;
-        element["active"] = false;
-        element["inputs"] = [];
+        console.log("multiInputs.filter(k => { return k.id == formElement.id })", multiInputs.filter(k => { return k.id == formElement.id }))
+        let filtered_multiInputs = multiInputs.filter(k => { return k.id == formElement.id });
+        let filteredLabel = label.filter(l => { return l.id == formElement.id });
+        console.log("filtered_multiInputs", filtered_multiInputs.length > 0)
+        console.log("jsonDatafulldata final values", filteredLabel);
+        if (filteredLabel.length > 0) {
+          console.log("jsonDatafulldata final values", filteredLabel[0].names);
+          // jsonDatafulldata.task_data[i]["value"] = [ "inputs":filteredLabel[0].inputs,"inputTypes":filteredLabel[0].inputTypes, "names":filteredLabel[0].names];
 
-        let k = 0;
-        filteredLabel[0].inputs[j].forEach((input)=>{
-          let inp_element ={};
-          console.log("jsonDatafulldata input type",filteredLabel[0].inputTypes[j][k]);
-          // if(filteredLabel[0].inputTypes[j][k] == 'text'){
-          //   inp_element =  {"value":"","label":input};
-          // }else if(filteredLabel[0].inputTypes[j][k] == 'file'){
-          //   inp_element =  {"fileAttached":"No file attached","label":input};
-          // }
-          if (filteredLabel[0].inputTypes[j][k] == 'text') {
-            inp_element = { "value": "", "label": input, "inputType": "text" };
-          } else if (filteredLabel[0].inputTypes[j][k] == 'number') {
-            inp_element = { "value": "", "label": input, "inputType": "number" };
-          } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
-            inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
-          }
-          element["inputs"].push(inp_element);
-          k++;
-        });
-        
-       j++;
+          // console.log()
+          let final_json = [];
+          let j = 0;
+          filteredLabel[0].names.forEach((name) => {
+            let element = {};
+            element["label"] = name;
+            element["active"] = false;
+            element["inputs"] = [];
 
-       final_json.push(element);
-        
-      });
+            let k = 0;
+            filteredLabel[0].inputs[j].forEach((input) => {
+              let inp_element = {};
+              console.log("jsonDatafulldata input type", filteredLabel[0].inputTypes[j][k]);
+              // if(filteredLabel[0].inputTypes[j][k] == 'text'){
+              //   inp_element =  {"value":"","label":input};
+              // }else if(filteredLabel[0].inputTypes[j][k] == 'file'){
+              //   inp_element =  {"fileAttached":"No file attached","label":input};
+              // }
+              if (filteredLabel[0].inputTypes[j][k] == 'text') {
+                inp_element = { "value": "", "label": input, "inputType": "text" };
+              } else if (filteredLabel[0].inputTypes[j][k] == 'number') {
+                inp_element = { "value": "", "label": input, "inputType": "number" };
+              } else if (filteredLabel[0].inputTypes[j][k] == 'dropdown') {
+                inp_element = { "value": "", "label": input, "inputType": "dropdown" };
+              } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
+                inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
+              }
+              element["inputs"].push(inp_element);
+              k++;
+            });
 
+            j++;
 
-      formsData[i].value = final_json;
-    }
-    i++;
-  });
+            final_json.push(element);
 
-  console.log("jsonDatafulldata final values 1", formsData);
-
-  }
-  else {
-  console.log("state label",label);
-  console.log('jsonDatafulldata', jsonDatafulldata.task_data)
-
-  var i = 0;
-  jsonDatafulldata.task_data.forEach(formElement => {
-    
-   let filteredLabel =  label.filter(l=>{return l.id ==formElement.id});
-
-   console.log("jsonDatafulldata final values",filteredLabel);
-    if(filteredLabel.length > 0){
-      console.log("jsonDatafulldata final values",filteredLabel[0].names);
-      let final_json = [];
-      let j = 0;
-      filteredLabel[0].names.forEach((name)=>{
-        let element = {};
-        element["label"] = name;
-        element["active"] = false;
-        element["inputs"] = [];
-
-        let k = 0;
-        filteredLabel[0].inputs[j].forEach((input)=>{
-          let inp_element ={};
-          console.log("jsonDatafulldata input type",filteredLabel[0].inputTypes[j][k]);
-          if (filteredLabel[0].inputTypes[j][k] == 'text') {
-            inp_element = { "value": "", "label": input, "inputType": "text" };
-          } else if (filteredLabel[0].inputTypes[j][k] == 'number') {
-            inp_element = { "value": "", "label": input, "inputType": "number" };
-          } else if (filteredLabel[0].inputTypes[j][k] == 'dropdown') {
-            inp_element = { "value": "", "label": input, "inputType": "dropdown" };
-          } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
-            inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
-          }
-          element["inputs"].push(inp_element);
-          k++;
-        });
-        
-       j++;
-
-       final_json.push(element);
-        
-      });
+          });
 
 
-      jsonDatafulldata.task_data[i]["value"] = final_json;
+          formsData[i].value = final_json;
+        }
+        if (filtered_multiInputs.length > 0) {
+          console.log("jsonDatafulldata final values", filtered_multiInputs[0].names);
+          let final_multiInput_json = [];
+          let j = 0;
+          filtered_multiInputs[0].names.forEach((name) => {
+            let element = {};
+            element["label"] = name;
+            // element["active"] = false;
+            element["inputs"] = [];
+
+            let k = 0;
+            filtered_multiInputs[0].inputs[j].forEach((input) => {
+              let inp_element = {};
+              console.log("jsonDatafulldata input type", filtered_multiInputs[0].inputTypes[j][k]);
+              if (filtered_multiInputs[0].inputTypes[j][k] == 'text') {
+                inp_element = { "value": "", "label": input, "inputType": "text" };
+              } else if (filtered_multiInputs[0].inputTypes[j][k] == 'number') {
+                inp_element = { "value": "", "label": input, "inputType": "number" };
+              }
+              element["inputs"].push(inp_element);
+              k++;
+            });
+
+            j++;
+
+            final_multiInput_json.push(element);
+
+          });
+
+
+          formsData.task_data[i]["value"] = final_multiInput_json;
 
       }
-    i++;
-  });
+        i++;
+      });
 
-  console.log("jsonDatafulldata final values 1", jsonDatafulldata);
- taskData = JSON.stringify(jsonDatafulldata);
-  }
-console.log ('final Taskdata', taskData)
+      console.log("jsonDatafulldata final values 1", formsData);
+
+    }
+    else {
+      console.log("state label", label);
+      console.log('jsonDatafulldata', jsonDatafulldata.task_data)
+
+      var i = 0;
+      jsonDatafulldata.task_data.forEach(formElement => {
+        console.log("multiInputs", multiInputs)
+
+        console.log("multiInputs.filter(k => { return k.id == formElement.id })", multiInputs.filter(k => { return k.id == formElement.id }))
+        let filtered_multiInputs = multiInputs.filter(k => { return k.id == formElement.id });
+        console.log("filtered_multiInputs", filtered_multiInputs.length > 0)
+
+        let filteredLabel = label.filter(l => { return l.id == formElement.id });
+
+        console.log("jsonDatafulldata final values", filteredLabel);
+        if (filteredLabel.length > 0) {
+          console.log("jsonDatafulldata final values", filteredLabel[0].names);
+          let final_json = [];
+          let j = 0;
+          filteredLabel[0].names.forEach((name) => {
+            let element = {};
+            element["label"] = name;
+            element["active"] = false;
+            element["inputs"] = [];
+
+            let k = 0;
+            filteredLabel[0].inputs[j].forEach((input) => {
+              let inp_element = {};
+              console.log("jsonDatafulldata input type", filteredLabel[0].inputTypes[j][k]);
+              if (filteredLabel[0].inputTypes[j][k] == 'text') {
+                inp_element = { "value": "", "label": input, "inputType": "text" };
+              } else if (filteredLabel[0].inputTypes[j][k] == 'number') {
+                inp_element = { "value": "", "label": input, "inputType": "number" };
+              } else if (filteredLabel[0].inputTypes[j][k] == 'dropdown') {
+                inp_element = { "value": "", "label": input, "inputType": "dropdown" };
+              } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
+                inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
+              }
+              element["inputs"].push(inp_element);
+              k++;
+            });
+
+            j++;
+
+            final_json.push(element);
+
+          });
+
+
+          jsonDatafulldata.task_data[i]["value"] = final_json;
+
+        }
+        if (filtered_multiInputs.length > 0) {
+          console.log("jsonDatafulldata final values", filtered_multiInputs[0].names);
+          let final_multiInput_json = [];
+          let j = 0;
+          filtered_multiInputs[0].names.forEach((name) => {
+            let element = {};
+            element["label"] = name;
+            // element["active"] = false;
+            element["inputs"] = [];
+
+            let k = 0;
+            filtered_multiInputs[0].inputs[j].forEach((input) => {
+              let inp_element = {};
+              console.log("jsonDatafulldata input type", filtered_multiInputs[0].inputTypes[j][k]);
+              if (filtered_multiInputs[0].inputTypes[j][k] == 'text') {
+                inp_element = { "value": "", "label": input, "inputType": "text" };
+              } else if (filtered_multiInputs[0].inputTypes[j][k] == 'number') {
+                inp_element = { "value": "", "label": input, "inputType": "number" };
+                // } else if (filteredLabel[0].inputTypes[j][k] == 'dropdown') {
+                //   inp_element = { "value": "", "label": input, "inputType": "dropdown" };
+                // } else if (filteredLabel[0].inputTypes[j][k] == 'file') {
+                //   inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
+              }
+              element["inputs"].push(inp_element);
+              k++;
+            });
+
+            j++;
+
+            final_multiInput_json.push(element);
+
+          });
+
+
+          jsonDatafulldata.task_data[i]["value"] = final_multiInput_json;
+
+        }
+        i++;
+      });
+
+      console.log("jsonDatafulldata final values 1", jsonDatafulldata);
+      taskData = JSON.stringify(jsonDatafulldata);
+    }
+    console.log('final Taskdata', taskData)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // save button is clicked
     if (saveButtonIsClicked === true) {
@@ -685,8 +806,11 @@ console.log ('final Taskdata', taskData)
       const url = `${BASE_URL}/crm/incomeAssessment/template?occupationId=${occupationId}`;
 
       // const taskData = localStorage.getItem("formData")
-      // console.log(taskData)
-      if (taskData === null && formsData === null) {
+      // console.log("taskData", taskData)
+      // console.log("formsData", formsData)
+      // console.log("formsData check ", formsData === [] )
+
+      if (taskData === null && formsData === null || formsData.length === 0) {
         console.log("both are null")
         setShowReactgeneratorEmpty(true)
         setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
@@ -848,7 +972,7 @@ console.log ('final Taskdata', taskData)
 
       // const taskData = localStorage.getItem("formData")
       // console.log(taskData)
-      if (taskData === null && formsData === null) {
+      if (taskData === null && formsData === null || formsData.length === 0) {
         console.log("both are null")
         setShowReactgeneratorEmpty(true)
         setTimeout(() => setShowReactgeneratorEmpty(false), 10000);
@@ -1356,7 +1480,7 @@ console.log ('final Taskdata', taskData)
                     id="occupation"
                     name="occupation"
                     component="select"
-                    className="form-control"
+                    className="form-control-selection"
                     value={values.occupation}
                   >
                     <option value="" >Select an Occupation</option>
@@ -1367,10 +1491,11 @@ console.log ('final Taskdata', taskData)
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="occupation">
-                    {(msg) => <div className="form-text text-danger">{msg}</div>}
-                  </ErrorMessage>
-                  {/* {errors.occupation && touched.occupation} */}
+                  <div style={{ height: "20px" }}>
+                    <ErrorMessage name="occupation">
+                      {(msg) => <div className="form-text text-danger">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
                 </div>
                 <div className="col-lg-6">
                   <label htmlFor="templateName">
@@ -1386,10 +1511,11 @@ console.log ('final Taskdata', taskData)
                     className="form-control"
                     placeholder="Enter Form Unique Template Name"
                   />
-                  <ErrorMessage name="templateName">
-                    {(msg) => <div className="form-text text-danger">{msg}</div>}
-                  </ErrorMessage>
-                  {/* {errors.occupation && touched.occupation} */}
+                  <div style={{ height: "20px" }}>
+                    <ErrorMessage name="templateName">
+                      {(msg) => <div className="form-text text-danger">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
                 </div>
               </div>
               <div className="row">
@@ -1405,10 +1531,11 @@ console.log ('final Taskdata', taskData)
                     className="form-control"
                     placeholder="Enter Form Title"
                   />
-                  <ErrorMessage name="form_title">
-                    {(msg) => <div className="form-text text-danger">{msg}</div>}
-                  </ErrorMessage>
-                  {/* {errors.form_title && touched.form_title} */}
+                  <div style={{ height: "20px" }}>
+                    <ErrorMessage name="form_title">
+                      {(msg) => <div className="form-text text-danger">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
                 </div>
                 <div className="col-lg-6">
                   <label htmlFor="form_name">
@@ -1423,10 +1550,11 @@ console.log ('final Taskdata', taskData)
                     className="form-control"
                     placeholder="Enter Form Name"
                   />
-                  <ErrorMessage name="form_name">
-                    {(msg) => <div className="form-text text-danger">{msg}</div>}
-                  </ErrorMessage>
-                  {/* {errors.form_name && touched.form_name} */}
+                  <div style={{ height: "20px" }}>
+                    <ErrorMessage name="form_name">
+                      {(msg) => <div className="form-text text-danger">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
                 </div>
               </div>
               <div className="row">
@@ -1444,10 +1572,11 @@ console.log ('final Taskdata', taskData)
                     className="form-control"
                     placeholder="Enter Description"
                   ></Field>
-                  <ErrorMessage name="description">
-                    {(msg) => <div className="form-text text-danger">{msg}</div>}
-                  </ErrorMessage>
-                  {/* {errors.description && touched.description} */}
+                  <div style={{ height: "20px" }}>
+                    <ErrorMessage name="description">
+                      {(msg) => <div className="form-text text-danger">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
                 </div>
               </div>
             </Form>
@@ -1459,7 +1588,7 @@ console.log ('final Taskdata', taskData)
         {download &&
           <FormBuilder.ReactFormBuilder
             onPost={onPost}
-            answer_data ={registeredElements}
+            answer_data={registeredElements}
             // data={JSON.stringify(formsData)}
             data={formsData}
             toolbarItems={items}
@@ -1473,9 +1602,13 @@ console.log ('final Taskdata', taskData)
           //url ={url}
           // saveUrl={saveUrl}
           />
-          }
-          {/* <Grid/> */}
-          {/* <MyDataGrid/> */}
+        }
+        {/* <Grid/> */}
+        {/* <MyDataGrid/> */}
+        {/* <MyDataGrid
+              onRowsChange= {handleRowsChange}
+
+          /> */}
       </AdminLayout>
       {/* Success modal */}
       {/* <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>

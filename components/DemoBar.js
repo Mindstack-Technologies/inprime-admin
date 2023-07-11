@@ -77,6 +77,14 @@ export default class Demobar extends React.Component {
 
 
   render() {
+    const data=this.state.data?.map((item)=>{
+      if(item.element=="DatePicker"){
+        return {...item,dateFormat:"dd/MM/yyyy"}
+      }
+      else{
+        return item;
+      }
+    }) 
     let modalClass = "modal";
     if (this.state.previewVisible) {
       modalClass += " show d-block";
@@ -146,7 +154,7 @@ export default class Demobar extends React.Component {
                     hide_actions={true}
 
                     variables={this.props.variables}
-                    data={this.state.data}
+                    data={data}
                   />
                 </div>
                 <div className="modal-footer">
@@ -180,7 +188,7 @@ export default class Demobar extends React.Component {
                     read_only={true}
                     variables={this.props.variables}
                     hide_actions={true}
-                    data={this.state.data}
+                    data={data}
                   />
                 </div>
                 <div className="modal-footer">

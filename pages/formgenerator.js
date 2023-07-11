@@ -502,7 +502,7 @@ function MyForm() {
             }
           );
           const data = await response.json();
-          console.log(data.data[0].json);
+          // console.log(data.data[0].json);
           setFormData(data.data[0].json);
           setDomLoaded(true);
         } catch (error) {
@@ -513,6 +513,14 @@ function MyForm() {
       fetchData();
     }
   }, [router.query]);
+  const datatotal=formData?.map((item)=>{
+    if(item.element=="DatePicker"){
+      return {...item,dateFormat:"dd/MM/yyyy"}
+    }
+    else{
+      return item;
+    }
+  })
 
   const handleSubmit = (data) => {
     console.log(data);
@@ -567,7 +575,7 @@ function MyForm() {
           // form_method="POST"
           // form_action="javascript:void(0);"
           // data={jsonFormData.task_data}
-          data={formData}
+          data={datatotal}
           className="my-form"
           onSubmit={handleSubmit}
         //   answer_data={

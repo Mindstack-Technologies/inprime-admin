@@ -110,6 +110,17 @@ var json_parse
 
 
       <div>
+      {/* <div>
+      <iframe
+        title="map"
+        width="450"
+        height="450"
+        style={{ border: 0 }}
+        loading="lazy"
+        allowFullScreen
+        src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJOwg_06VPwokRYv534QaPC8g&key=AIzaSyAj2Z7eXaB4JWskXU3tH-V7O2xtUNbhM4g"
+      ></iframe>
+    </div> */}
       {/* <Map center={{ lat: 37.7749, lng: -122.4194 }} zoom={8} /> */}
     </div>
     </div>

@@ -1129,10 +1129,14 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
                         />
                       ) : inputTypes[index][inputIndex] === 'number' ? (
                         <input
-                          type="number"
+                          type="text"
                           data="test"
                           value={inputValues[index][inputIndex].textValue}
                           onChange={handleTextChange(index, inputIndex)}
+                          onInput={(e) => {
+                            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                          }}
+                        
                         />
                       ) : inputTypes[index][inputIndex] === 'dropdown' ? (
                         <select

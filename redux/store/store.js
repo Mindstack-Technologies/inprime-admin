@@ -23,11 +23,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 // import profileReducer from '../transfer/transferDetails';
 import labelReducer from '../transfer/transferDetails';
+import multilineInputReducer from '../transfer/multilineInputDetails';
+import mySliceReducer from '../transfer/mySlice';
+
 
 export default configureStore({
   reducer: {
     // profile: profileReducer,
     label: labelReducer,
+    multilineInput: multilineInputReducer,
+    // mySlice: mySliceReducer,
   },
 });
 
