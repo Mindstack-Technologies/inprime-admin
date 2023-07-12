@@ -252,6 +252,8 @@ const labelSlice = createSlice({
     // names: ['Condition', 'Condition'],
     // inputs: [['Input label'], ['Input label']],
     // inputTypes: [['text'], ['text']],
+    // inputOptions: [],
+
   }],
   reducers: {
     setLabelName(state, action) {
@@ -276,10 +278,12 @@ const labelSlice = createSlice({
       let i = 0;
       for (let s of state) {
         if (s.id == id) {
-          console.log('going inside')
+          // console.log('going inside')
           state[i].names.push('Condition');
           state[i].inputs.push(['Input label']);
           state[i].inputTypes.push(['text']);
+          state[i].inputOptions.push([['Option 1', 'Option 2']]);
+
         }
         i++;
       }
@@ -331,6 +335,8 @@ const labelSlice = createSlice({
       let i = 0;
       for (let s of state) {
         if (s.id == id) {
+          // console.log("state[i].inputOptions[conditionIndex][inputIndex] = option", state[i].inputs[conditionIndex][inputIndex] )
+
           state[i].inputs[conditionIndex][inputIndex] = name;
         }
         i++;
@@ -342,6 +348,15 @@ const labelSlice = createSlice({
       for (let s of state) {
         if (s.id == id) {
           state[i].inputTypes[conditionIndex][inputIndex] = inputType;
+          // console.log("inputType", inputType === "dropdown")
+          if (inputType === "dropdown") {
+            // console.log("if it is dropdown")
+            console.log("inputIndex", inputIndex)
+            console.log("inputIndex conditionIndex", conditionIndex)
+            if (inputIndex > "0") {
+              state[i].inputOptions[conditionIndex].push(['Option 1', 'Option 2'])
+            }
+          }
         }
         i++;
       }
@@ -355,10 +370,106 @@ const labelSlice = createSlice({
       if (state[0].id == 0) {
         state[0].id = newComponent.id;
       } else {
+        // newComponent.inputOptions = newComponent.inputs.map(inputArray =>
+        //   inputArray.map(() => ['Option 1', 'Option 2'])
+        // );
+        console.log("newComponent.inputOptions", newComponent.inputOptions)
         state.push(newComponent);
       }
     },
-  
+    // addInputOption(state, action) {
+    //   const { conditionIndex, inputIndex, option, id } = action.payload;
+    //   // console.log("conditionIndex",conditionIndex)
+    //   // let i = 0;
+    //   // for (let s of state) {
+    //   //   console.log("state id", s.id);
+    //   //   if (s.id == id) {
+    //   //     console.log("state")
+    //   //     console.log(" state[i].inputOptions[conditionIndex].push('Options');",  state[i])
+    //   //     state[i].inputOptions[conditionIndex].push('Options');
+    //   //     // state[i].inputTypes[index].push('text');
+    //   //   }
+    //   //   i++;
+    //   // }
+
+    //   state.inputOptions[conditionIndex][inputIndex].push(option);
+    // },
+    // addInputOption(state, action) {
+
+    //         // const { conditionIndex, inputIndex, option, id } = action.payload;
+    //   // if (!state.inputOptions) {
+    //   //   state.inputOptions = [];
+    //   // }
+    //   // if (!state.inputOptions[conditionIndex]) {
+    //   //   state.inputOptions[conditionIndex] = [];
+    //   // }
+    //   // if (!state.inputOptions[conditionIndex][inputIndex]) {
+    //   //   state.inputOptions[conditionIndex][inputIndex] = [];
+    //   // }
+    //   // state.inputOptions[conditionIndex][inputIndex].push(option);
+    //   const { index, conditionIndex, inputIndex, id, } = action.payload;
+    //   let i = 0;
+    //   for (let s of state) {
+    //     console.log("state id", s.id);
+    //     if (s.id == id) {
+    //       console.log("state[i].inputs[index][conditionIndex][inputIndex].push('Input label')",    state[i].inputOptions[index].push('Input label')         )
+    //       state[i].inputs[index][conditionIndex][inputIndex].push('Input label');
+
+    //       // state[i].inputs[index][].push('Input label');
+    //       // state[i].inputTypes[index].push('text');
+    //     }
+    //     i++;
+    //   }
+    // },    
+
+    // removeInputOption(state, action) {
+
+    //   const { conditionIndex, inputIndex, optionIndex, id } = action.payload;
+    //   // state.inputOptions[conditionIndex][inputIndex].splice(optionIndex, 1);
+    //   let i = 0;
+    //   for (let s of state) {
+    //     if (s.id == id) {
+    //       if (state[i].inputs[conditionIndex][inputIndex].length > 1) {
+    //         state[i].inputOptions[conditionIndex][inputIndex].splice(optionIndex, 1);
+    //         // state[i].inputTypes[conditionIndex].splice(inputIndex, 1);
+    //       }
+    //     }
+    //     i++;
+    //   }
+    // },
+    addInputOption(state, action) {
+      const { conditionIndex, inputIndex, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          state[i].inputOptions[conditionIndex][inputIndex].push('Option');
+        }
+        i++;
+      }
+    },
+    removeInputOption(state, action) {
+      const { conditionIndex, inputIndex, optionIndex, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          state[i].inputOptions[conditionIndex][inputIndex].splice(optionIndex, 1);
+        }
+        i++;
+      }
+    },
+
+    setInputOptions(state, action) {
+      // const { index, inputIndex, options } = action.payload;
+      // state.inputOptions[index][inputIndex] = options;
+      const { conditionIndex, inputIndex, optionIndex, option, id } = action.payload;
+      let i = 0;
+      for (let s of state) {
+        if (s.id == id) {
+          state[i].inputOptions[conditionIndex][inputIndex][optionIndex] = option
+        }
+        i++;
+      }
+    },
   },
 });
 
@@ -373,6 +484,9 @@ export const {
   updateObject,
   setID,
   appendNewComponent,
+  addInputOption,
+  removeInputOption,
+  setInputOptions,
 } = labelSlice.actions;
 export default labelSlice.reducer;
 

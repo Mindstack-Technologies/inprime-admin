@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic';
 
 import MyInput from "@/components/Custom-FromBuliderTools/MyInput";
 import { useDispatch, useSelector } from 'react-redux';
+import { addInputOption } from "@/redux/transfer/transferDetails";
 
 
 // const onPost = (data) => {
@@ -513,27 +514,32 @@ export default function IncomeAssessmentTemplate() {
 
       var i = 0;
       jsonDatafulldata.task_data.forEach(formElement => {
-        console.log("multiInputs", multiInputs)
+        // console.log("multiInputs", multiInputs)
 
-        console.log("multiInputs.filter(k => { return k.id == formElement.id })", multiInputs.filter(k => { return k.id == formElement.id }))
+        // console.log("multiInputs.filter(k => { return k.id == formElement.id })", multiInputs.filter(k => { return k.id == formElement.id }))
         let filtered_multiInputs = multiInputs.filter(k => { return k.id == formElement.id });
-        console.log("filtered_multiInputs", filtered_multiInputs.length > 0)
+        // console.log("filtered_multiInputs", filtered_multiInputs.length > 0)
 
         let filteredLabel = label.filter(l => { return l.id == formElement.id });
 
         console.log("jsonDatafulldata final values", filteredLabel);
         if (filteredLabel.length > 0) {
-          console.log("jsonDatafulldata final values", filteredLabel[0].names);
+          console.log("jsonDatafulldata final values ", filteredLabel[0].inputs)
+          console.log("jsonDatafulldata final values inputOptions", filteredLabel[0].inputOptions);
           let final_json = [];
           let j = 0;
           filteredLabel[0].names.forEach((name) => {
+            // console.log(inputOptions)
             let element = {};
             element["label"] = name;
             element["active"] = false;
             element["inputs"] = [];
+            element["inputOptions"]=[];
+
 
             let k = 0;
             filteredLabel[0].inputs[j].forEach((input) => {
+              console.log(`${j} + ${k} , j + k`)
               let inp_element = {};
               console.log("jsonDatafulldata input type", filteredLabel[0].inputTypes[j][k]);
               if (filteredLabel[0].inputTypes[j][k] == 'text') {
@@ -546,7 +552,16 @@ export default function IncomeAssessmentTemplate() {
                 inp_element = { "fileAttached": "No file attached", "label": input, "inputType": "file" };
               }
               element["inputs"].push(inp_element);
+              // console.log ("inp_element", element["inputs"].push(inp_element))
               k++;
+            });
+            let l = 0;
+          
+            filteredLabel[0].inputOptions[j].forEach((inputOption) => {
+              console.log("inputOption", inputOption)
+              console.log ("inp_element", element["inputOptions"])
+              element["inputOptions"].push(inputOption);
+              l++;
             });
 
             j++;
@@ -560,6 +575,7 @@ export default function IncomeAssessmentTemplate() {
 
         }
         if (filtered_multiInputs.length > 0) {
+          console.log("entering to filtered_multiInputs")
           console.log("jsonDatafulldata final values", filtered_multiInputs[0].names);
           let final_multiInput_json = [];
           let j = 0;

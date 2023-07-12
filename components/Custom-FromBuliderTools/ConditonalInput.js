@@ -898,8 +898,9 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   const consdtionalInputLabel = data_form_props?.map(condition => condition.inputs.map(input => input.label));
   // const condtionalInputTypes = data_form_props?.map(condition => condition.inputs.map(input => input.value ==""  ? 'text' : input.fileAttached ? 'file' : null));
   const condtionalInputTypes = data_form_props?.map(condition => condition.inputs.map(input => input.inputType == "text" ? 'text' : input.inputType == "number" ? 'number' : input.inputType == "dropdown" ? 'dropdown' : input.file == "file" ? 'file' : null));
-
-  // console.log("file or input ", one)
+  // const consdtionalinputOptions =data_form_props?.map(condition => condition.inputOptions.map(inputOption => inputOption))
+  const consdtionalinputOptions =data_form_props?.map(condition => condition.inputOptions)
+  // console.log("file or input ", consdtionalinputOptions)
   //   const two = data_form_props.inputs.map(input => input[0]);
   // const three = data_form_props.inputTypes.map(inputType => inputType[0]);
   // const one = data_form_props.names;
@@ -915,7 +916,9 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       names: conditionLabel,
       inputs: consdtionalInputLabel,
       inputTypes: condtionalInputTypes,
-      // inputOptions: [[['Option 1', 'Option 2']], [['Option 1', 'Option 2']]],
+      // inputOptions: [[['Option 1', 'Option 2']]],
+
+      inputOptions: consdtionalinputOptions,
 
     };
   } else {
@@ -925,7 +928,8 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       names: ['Condition', 'Condition'],
       inputs: [['Input label'], ['Input label']],
       inputTypes: [['text'], ['text']],
-      // inputOptions: [[['Option 1', 'Option 2']], [['Option 1', 'Option 2']]],
+      inputOptions: [[['Option 1', 'Option 2']], [['Option 1', 'Option 2']]],
+      // inputOptions: [],
     };
   }
 
@@ -977,6 +981,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   const labelNames = label ? label.names : [];
   const inputs = label ? label.inputs : [];
   const inputTypes = label ? label.inputTypes : [];
+  const inputOptions =label ? label.inputOptions : [];
 
 
   // console.log('labelNames:', labelNames);
@@ -1002,19 +1007,57 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       )
     );
   };
+  async function uploadFile(file, fileType) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileType', fileType);
+  
+    const response = await fetch('https://staging-api.inprime.in/loanApplication/file/upload', {
+      method: 'POST',
+      body: formData
+    });
+  
+    if (response.ok) {
+      const uploadedFile = await response.json();
+      console.log(uploadedFile.data.fileUrl);
+    } else {
+      console.error('An error occurred while uploading the file');
+    }
+  }
+  
+  
 
-  const handleFileChange = (conditionIndex, inputIndex) => (event) => {
-    setInputValues((inputValues) =>
-      inputValues.map((inputArray, i) =>
-        i === conditionIndex
-          ? inputArray.map((inputValue, j) =>
-            j === inputIndex
-              ? { ...inputValue, fileValue: event.target.files[0] }
-              : inputValue
-          )
-          : inputArray
-      )
-    );
+  // const handleFileChange = (conditionIndex, inputIndex) => (event) => {
+  //   setInputValues((inputValues) =>
+  //     inputValues.map((inputArray, i) =>
+  //       i === conditionIndex
+  //         ? inputArray.map((inputValue, j) =>
+  //           j === inputIndex
+  //             ? { ...inputValue, fileValue: event.target.files[0] }
+  //             : inputValue
+  //         )
+  //         : inputArray
+  //     )
+  //   );
+  // };
+  const handleFileChange = (conditionIndex, inputIndex) => async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Upload the selected file
+      const uploadedFile = await uploadFile(file, 'INCOME_ASSESSMENT');
+      // Update the inputValues state with the uploaded file
+      setInputValues((inputValues) =>
+        inputValues.map((inputArray, i) =>
+          i === conditionIndex
+            ? inputArray.map((inputValue, j) =>
+              j === inputIndex
+                ? { ...inputValue, fileValue: uploadedFile }
+                : inputValue
+            )
+            : inputArray
+        )
+      );
+    }
   };
 
   console.log('inputValues:', inputValues);
@@ -1136,16 +1179,24 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
                           onInput={(e) => {
                             e.target.value = e.target.value.replace(/[^0-9]/g, '');
                           }}
-                        
                         />
                       ) : inputTypes[index][inputIndex] === 'dropdown' ? (
+                        // <select
+                        //   data="test"
+                        //   value={inputValues[index][inputIndex].textValue}
+                        //   onChange={handleTextChange(index, inputIndex)}
+                        // >
+                        //   {/* Add options here */}
+                        // </select>
                         <select
-                          data="test"
-                          value={inputValues[index][inputIndex].textValue}
-                          onChange={handleTextChange(index, inputIndex)}
-                        >
-                          {/* Add options here */}
-                        </select>
+                        data="test"
+                        value={inputValues[index][inputIndex].textValue}
+                        onChange={handleTextChange(index, inputIndex)}
+                      >
+                        {inputOptions[index][inputIndex].map((option, optionIndex) => (
+                          <option key={optionIndex} value={option}>{option}</option>
+                        ))}
+                      </select>
                         // <select
                         //   data="test"
                         //   value={inputValues[index][inputIndex].textValue}

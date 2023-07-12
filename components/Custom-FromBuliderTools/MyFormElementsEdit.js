@@ -554,6 +554,9 @@ import {
   removeInput,
   setInputName,
   setInputType,
+  addInputOption,
+  removeInputOption,
+  setInputOptions,
 } from '../../redux/transfer/transferDetails';
 
 
@@ -654,37 +657,24 @@ class FormElementsEdit extends React.Component {
 
   handleLabelNameChange = (index, id) => (event) => {
     console.log(index);
-    // console.log(this.props.label[0].names)
-
-    // console.log("ID", id);
-    // console.log(event.target.value);
     this.props.setLabelName({ index, id, name: event.target.value });
-
-    // try{
-    //   this.props.setLabelName({ index,id, name: event.target.value});
-
-    // }catch(e){
-    //   this.props.setLabelName({ index,id, name: event.target.value});
-
-    // }
-
-    // this.props.label[0].setLabelName({ index, name: event.target.value,  });
-
   };
 
   handleAddLabelName = (id) => () => {
     // console.log
-    console.log("ID", id);
+    // console.log("ID", id);
+    console.log('Option 1, Option 2')
+
     this.props.addLabelName(id);
   };
 
   handleRemoveLabelName = (index, id) => () => {
-    console.log("id", id)
+    // console.log("id", id)
     this.props.removeLabelName({ index, id });
   };
 
   handleAddInput = (index, id) => () => {
-    console.log('id', id)
+    // console.log('id', id)
     this.props.addInput({ index, id });
   };
 
@@ -692,8 +682,7 @@ class FormElementsEdit extends React.Component {
     this.props.removeInput({ conditionIndex, inputIndex, id });
   };
   handleInputNameChange = (conditionIndex, inputIndex, id) => (event) => {
-    console.log("ID", id);
-
+    // console.log("ID", id);
     this.props.setInputName({
       conditionIndex,
       inputIndex,
@@ -709,6 +698,47 @@ class FormElementsEdit extends React.Component {
     });
   };
 
+
+  // handleAddOption = (index, conditionIndex, inputIndex, id) => () => {
+  //  console.log("conditionIndex",conditionIndex)
+  //  console.log("inputIndex", inputIndex)
+  //  console.log("index", index)
+  //  this.props.addInputOption({ conditionIndex, index, inputIndex, id, });
+
+  //   // this.props.addInputOption({ conditionIndex, inputIndex, id, option: 'Option' });
+  // };
+
+  // handleRemoveOption = (index, conditionIndex, inputIndex, optionIndex, id) => () => {
+  //   // this.props.removeInput({ conditionIndex, inputIndex, id });
+
+  //   this.props.removeInputOption({ index, conditionIndex, inputIndex, optionIndex, id });
+  // };
+  handleAddOption = (conditionIndex, inputIndex) => () => {
+    this.props.addInputOption({ conditionIndex, inputIndex, id: this.props.element.id });
+  };
+  
+  handleRemoveOption = (conditionIndex, inputIndex, optionIndex) => () => {
+    this.props.removeInputOption({ conditionIndex, inputIndex, optionIndex, id: this.props.element.id });
+  };
+  
+
+  handleOptionChange = (conditionIndex, inputIndex, optionIndex, id) => (event) => {
+    console.log("event.target.value", event.target.value)
+    this.props.setInputOptions({
+      conditionIndex,
+      inputIndex,
+      optionIndex,
+      option: event.target.value, id
+    });
+    
+    // const options = [...this.props.inputOptions[index][inputIndex]];
+    // // console.log("options",options)
+    // options[optionIndex] = event.target.value;
+    // this.props.setInputOptions({ index, inputIndex, options });
+    // const options = [...this.props.inputOptions[conditionIndex][inputIndex]];
+    // options[optionIndex] = event.target.value;
+    // this.props.setInputOptions({ conditionIndex, inputIndex, options });
+  };
 
 
   // handleOptionChange = (conditionIndex, inputIndex, optionIndex) => (event) => {
@@ -863,30 +893,34 @@ class FormElementsEdit extends React.Component {
 
 
     const { label } = this.props;
-    const {multilineInput} = this.props;
+    // console.log("label", label)
+    const { multilineInput } = this.props;
+    // const { inputOptions } = this.props;
+    // console.log("inputOptions", inputOptions)
 
     console.log(this.props)
-    var current_component_MultiInput = multilineInput.filter((val)=> {return val.id == this.props.element.id})
-console.log(current_component_MultiInput, "current_component_MultiInput")
-var multiLabelNames =[];
-var multiInputs = [];
-var multiInputTypes = [];
-var multiId ="";
-if (current_component_MultiInput.length > 0) {
-  multiId = current_component_MultiInput[0].id;
-  multiLabelNames = current_component_MultiInput[0].names;
- multiInputs = current_component_MultiInput[0].inputs;
- multiInputTypes = current_component_MultiInput[0].inputTypes;
+    var current_component_MultiInput = multilineInput.filter((val) => { return val.id == this.props.element.id })
+    console.log(current_component_MultiInput, "current_component_MultiInput")
+    var multiLabelNames = [];
+    var multiInputs = [];
+    var multiInputTypes = [];
+    var multiId = "";
+    if (current_component_MultiInput.length > 0) {
+      multiId = current_component_MultiInput[0].id;
+      multiLabelNames = current_component_MultiInput[0].names;
+      multiInputs = current_component_MultiInput[0].inputs;
+      multiInputTypes = current_component_MultiInput[0].inputTypes;
 
 
-  console.log("label name filtered", multiLabelNames)
-  console.log('My element edit  inputs', multiId);
+      console.log("label name filtered", multiLabelNames)
+      console.log('My element edit  inputs', multiId);
 
-}
+    }
 
     var current_component = label.filter((val) => { return val.id == this.props.element.id })
 
-    console.log(current_component);
+    console.log("current_component" , current_component);
+    var inputOptions = []
     var labelNames = [];
     var inputs = [];
     var inputTypes = [];
@@ -897,6 +931,7 @@ if (current_component_MultiInput.length > 0) {
       labelNames = current_component[0].names;
       inputs = current_component[0].inputs;
       inputTypes = current_component[0].inputTypes;
+      inputOptions = current_component[0].inputOptions
 
 
       console.log("label name filtered", labelNames)
@@ -1236,7 +1271,7 @@ if (current_component_MultiInput.length > 0) {
         {console.log(this.props.element.hasOwnProperty('options'))}
         {console.log(this.props.element.key)}
         {/* {this.props.element.hasOwnProperty('custom')&& */}
-        
+
         {this.props.element?.key === "MyDataGrid" &&
           <div className="form-group">
             <div>
@@ -1363,6 +1398,78 @@ if (current_component_MultiInput.length > 0) {
         <button onClick={this.handleAddOption(index, inputIndex)}>Add Option</button>
       </div>
     )} */}
+                        {/* {inputTypes[index][inputIndex] === 'dropdown' && (
+  <div>
+    <h4>Options:</h4>
+    {inputOptions[index][inputIndex].map((option, optionIndex) => (
+      <div key={optionIndex}>
+        <label>
+          Option {optionIndex + 1}:
+          <input
+            type="text"
+            value={option}
+            onChange={this.handleOptionChange(index, inputIndex, optionIndex)}
+          />
+        </label>
+        {inputOptions[index][inputIndex].length > 1 && (
+          <button onClick={this.handleRemoveOption(index, inputIndex, optionIndex)}>
+            Remove Option
+          </button>
+        )}
+      </div>
+    ))}
+    <button onClick={this.handleAddOption(index, inputIndex)}>Add Option</button>
+  </div>
+)} */}
+                        {/* {inputTypes[index][inputIndex] === 'dropdown' && (
+                          <div>
+                            <h4>Options:</h4>
+                            {console.log("inputOptions?.[index]?.[inputIndex]", inputOptions)}
+                            {inputOptions?.[index]?.[inputIndex]?.map((option, optionIndex) => (
+                              <div key={optionIndex}>
+                                <label>
+                                  Option {optionIndex + 1}:
+                                  <input
+                                    type="text"
+                                    value={option}
+                                    onChange={this.handleOptionChange(index, inputIndex, optionIndex)}
+                                  />
+                                </label>
+                                {inputOptions[index][inputIndex].length > 1 && (
+                                  <button onClick={this.handleRemoveOption(index, inputIndex, optionIndex)}>
+                                    Remove Option
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button onClick={this.handleAddOption(index, inputIndex, id)}>Add Option</button>
+                          </div>
+                        )} */}
+                        {inputTypes[index][inputIndex] === 'dropdown' && (
+  <div>
+    <h4>Options:</h4>
+    {/* {console.log(inputOptions[index][inputIndex], "inputOptions[index][inputIndex]")} */}
+    {console.log("inputOptions", inputOptions)}
+    {inputOptions[index][inputIndex]?.map((option, optionIndex) => (
+      <div key={optionIndex}>
+        <label>
+          Option {optionIndex + 1}:
+          <input
+            type="text"
+            value={option}
+            onChange={this.handleOptionChange(index, inputIndex, optionIndex, id)}
+          />
+        </label>
+        {inputOptions[index][inputIndex].length > 2 && (
+          <button onClick={this.handleRemoveOption(index, inputIndex, optionIndex, id)}>
+            Remove Option
+          </button>
+        )}
+      </div>
+    ))}
+    <button onClick={this.handleAddOption(index, inputIndex, id)}>Add Option</button>
+  </div>
+)}
                         {inputs[index].length > 1 && (
                           <button
                             onClick={this.handleRemoveInput(index, inputIndex, id)}
@@ -1448,6 +1555,10 @@ FormElementsEdit.defaultProps = { className: 'edit-element-fields' };
 const mapStateToProps = (state) => ({
   label: state.label,
   multilineInput: state.multilineInput,
+  // inputOptions: state.inputOptions,
+  // inputTypes: state.inputTypes,
+
+  // inputOptions: state.inputOptions,
 
   // inputOptions: state.label.inputOptions,
 
@@ -1465,6 +1576,9 @@ const mapDispatchToProps = {
   removeInput,
   setInputName,
   setInputType,
+  addInputOption,
+  removeInputOption,
+  setInputOptions,
   setLabelNamemultilineInput,
   addLabelNamemultilineInput,
   removeLabelNamemultilineInput,
