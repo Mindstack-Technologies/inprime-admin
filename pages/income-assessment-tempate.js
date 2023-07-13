@@ -426,7 +426,7 @@ export default function IncomeAssessmentTemplate() {
         console.log("filtered_multiInputs", filtered_multiInputs.length > 0)
         console.log("jsonDatafulldata final values", filteredLabel);
         if (filteredLabel.length > 0) {
-          console.log("jsonDatafulldata final values", filteredLabel[0].names);
+          console.log("jsonDatafulldata final values", filteredLabel[0].inputOptions);
           // jsonDatafulldata.task_data[i]["value"] = [ "inputs":filteredLabel[0].inputs,"inputTypes":filteredLabel[0].inputTypes, "names":filteredLabel[0].names];
 
           // console.log()
@@ -437,6 +437,8 @@ export default function IncomeAssessmentTemplate() {
             element["label"] = name;
             element["active"] = false;
             element["inputs"] = [];
+            element["inputOptions"]=[];
+
 
             let k = 0;
             filteredLabel[0].inputs[j].forEach((input) => {
@@ -458,6 +460,15 @@ export default function IncomeAssessmentTemplate() {
               }
               element["inputs"].push(inp_element);
               k++;
+            });
+            let l = 0;
+            // console.log("filteredLabel[0].inputOptions[j].forEach((inputOption)", filteredLabel[0].inputOptions[j]);
+
+            filteredLabel[0].inputOptions[j].forEach((inputOption) => {
+              console.log("inputOption", inputOption)
+              console.log ("inp_element", element["inputOptions"])
+              element["inputOptions"].push(inputOption);
+              l++;
             });
 
             j++;
@@ -491,6 +502,7 @@ export default function IncomeAssessmentTemplate() {
               element["inputs"].push(inp_element);
               k++;
             });
+            
 
             j++;
 
@@ -556,8 +568,7 @@ export default function IncomeAssessmentTemplate() {
               k++;
             });
             let l = 0;
-          
-            filteredLabel[0].inputOptions[j].forEach((inputOption) => {
+            filteredLabel[0].inputOptions[j]?.forEach((inputOption) => {
               console.log("inputOption", inputOption)
               console.log ("inp_element", element["inputOptions"])
               element["inputOptions"].push(inputOption);

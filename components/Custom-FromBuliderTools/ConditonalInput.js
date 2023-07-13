@@ -900,7 +900,7 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
   const condtionalInputTypes = data_form_props?.map(condition => condition.inputs.map(input => input.inputType == "text" ? 'text' : input.inputType == "number" ? 'number' : input.inputType == "dropdown" ? 'dropdown' : input.file == "file" ? 'file' : null));
   // const consdtionalinputOptions =data_form_props?.map(condition => condition.inputOptions.map(inputOption => inputOption))
   const consdtionalinputOptions =data_form_props?.map(condition => condition.inputOptions)
-  // console.log("file or input ", consdtionalinputOptions)
+  console.log("file or input ", consdtionalinputOptions)
   //   const two = data_form_props.inputs.map(input => input[0]);
   // const three = data_form_props.inputTypes.map(inputType => inputType[0]);
   // const one = data_form_props.names;
@@ -916,8 +916,8 @@ const MyConditionalInput = React.forwardRef((props, ref) => {
       names: conditionLabel,
       inputs: consdtionalInputLabel,
       inputTypes: condtionalInputTypes,
-      // inputOptions: [[['Option 1', 'Option 2']]],
-
+      // inputOptions: [[['Option 1', 'Option 2', 'Option 2', 'Option 2'], ['Option 1', 'Option 2'], ['Option 1', 'Option 2']]],
+      // inputOptions: [[['Option 1', 'Option 2', 'Option 2', 'Option 2']]],
       inputOptions: consdtionalinputOptions,
 
     };
